@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+    "key": "1",
+    "item": "View Profile Section"
+  },
+  {
+    "key": "2",
+    "item": "View Subscription Section"
+  },
+  {
+    "key": "3",
+    "item": "View Manage File Section"
+  }
+]
+}
