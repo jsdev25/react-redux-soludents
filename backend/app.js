@@ -8,6 +8,8 @@ const path=require("path");
 const users = require('./routes/user'); 
 const subscriptions = require('./routes/subscription'); 
 const documents = require('./routes/document'); 
+const operators = require('./routes/operator'); 
+
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     () => {console.log('Database is connected') },
@@ -24,6 +26,7 @@ app.use(express.static(path.join(__dirname,"public")));
 app.use('/api/users', users);
 app.use('/api/subscriptions', subscriptions);
 app.use('/api/documents', documents);
+app.use('/api/operators', operators);
 
 app.get('/', function(req, res) {
     res.send('hello');

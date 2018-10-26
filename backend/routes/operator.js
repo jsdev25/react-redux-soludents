@@ -7,12 +7,12 @@ const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 
-const User = require('../models/User');
+const Operator = require('../models/Operator');
 
 router.get('/', function(req,res){
-    User.find(function(err, users){
+    Operator.find(function(err, operators){
         if(err) return res.status(500).send({error: 'database failure'});
-        res.json(users);
+        res.json(operators);
     })
   });
 
@@ -23,34 +23,22 @@ router.post('/register', function(req, res) {
     if(!isValid) {
         return res.status(400).json(errors);
     }
-    User.findOne({
+    Operator.findOne({
         email: req.body.email
-    }).then(user => {
-        if(user) {
+    }).then(operator => {
+        if(operator) {
             return res.status(400).json({
                 email: 'Email already exists'
             });
         }
         else {
-            const avatar = gravatar.url(req.body.email, {
-                s: '200',
-                r: 'pg',
-                d: 'mm'
-            });
-            const newUser = new User({
+          
+            const newUser = new Operator({
                 name: req.body.name,
                 email: req.body.email,
                 password: req.body.password,
-
-                lastname: req.body.lastname,
-                phone: req.body.phone,
-                address: req.body.address,
-                number: req.body.number,
-                admin: req.body.admin,
-
-
-                avatar
-            });
+                real_password: req.body.password,
+                });
             
             bcrypt.genSalt(10, (err, salt) => {
                 if(err) console.error('There was an error', err);
@@ -61,8 +49,8 @@ router.post('/register', function(req, res) {
                             newUser.password = hash;
                             newUser
                                 .save()
-                                .then(user => {
-                                    res.json(user)
+                                .then(operators => {
+                                    res.json(operators)
                                 }); 
                         }
                     });
@@ -83,19 +71,18 @@ router.post('/login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    User.findOne({email})
-        .then(user => {
-            if(!user) {
-                errors.email = 'User not found'
+    Operator.findOne({email})
+        .then(operator => {
+            if(!operator) {
+                errors.email = 'Operator not found'
                 return res.status(404).json(errors);
             }
-            bcrypt.compare(password, user.password)
+            bcrypt.compare(password, operator.password)
                     .then(isMatch => {
                         if(isMatch) {
                             const payload = {
-                                id: user.id,
-                                name: user.name,
-                                avatar: user.avatar
+                                id: operator.id,
+                                name: operator.name,
                             }
                             jwt.sign(payload, 'secret', {
                                 expiresIn: 3600
@@ -105,7 +92,7 @@ router.post('/login', (req, res) => {
                                     res.json({
                                         success: true,
                                         token: `Bearer ${token}`,
-                                        user:user,
+                                        operator:operator,
                                     });
                                 }
                             });
@@ -120,10 +107,10 @@ router.post('/login', (req, res) => {
 
 router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
     return res.json({
-        id: req.user.id,
-        name: req.user.name,
-        email: req.user.email,
-        admin:req.user.admin
+        id: req.operator.id,
+        name: req.operator.name,
+        email: req.operator.email,
+        admin:req.operator.admin
     });
 });
 

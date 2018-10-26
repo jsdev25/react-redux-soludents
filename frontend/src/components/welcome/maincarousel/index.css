@@ -1,0 +1,47 @@
+/* @import '../../../../resources/mixins'; */
+iframe{
+  border: 4px solid #000;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+}
+.hero-image1{
+
+    background-image: url("https://carruthcapital.com/wp-content/uploads/2017/02/500-old-connecticut-path-building-b-1-1740x960-c-center.jpg");
+    height:700px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.hero-image2{
+
+  background-image: url("https://www.republica.com/wp-content/uploads/2017/12/panda-Thatcher-se-neg%C3%B3-a-compartir-avi%C3%B3n-con-un-oso-panda-en-1981.jpg");
+  height:700px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.hero-image3{
+
+  background-image: url("https://c.o0bg.com/rf/image_960w/Boston/2011-2020/2014/06/27/BostonGlobe.com/Regional/Images/framingham2.jpg");
+  height:700px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 700px;
+  line-height: 700px;
+  background: #364d79;
+  overflow: hidden;
+}
+
+.ant-carousel .slick-slide h3 {
+  color: #fff;
+}

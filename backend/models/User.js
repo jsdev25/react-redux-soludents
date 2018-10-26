@@ -15,6 +15,9 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    real_password: {
+        type: String,
+    },
     lastname: {
         type: String
     },
@@ -33,10 +36,6 @@ const UserSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
-    },
-    admin:{
-        type:Number,
-        default:0
     }
 });
 

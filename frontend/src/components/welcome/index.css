@@ -1,0 +1,5 @@
+.price-view{
+    display:flex;
+    flex-direction: row;
+    text-align: center
+}
