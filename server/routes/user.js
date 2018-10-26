@@ -9,6 +9,13 @@ const validateLoginInput = require('../validation/login');
 
 const User = require('../models/User');
 
+router.get('/', function(req,res){
+    User.find(function(err, users){
+        if(err) return res.status(500).send({error: 'database failure'});
+        res.json(users);
+    })
+  });
+
 router.post('/register', function(req, res) {
 
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -97,7 +104,8 @@ router.post('/login', (req, res) => {
                                 else {
                                     res.json({
                                         success: true,
-                                        token: `Bearer ${token}`
+                                        token: `Bearer ${token}`,
+                                        user:user,
                                     });
                                 }
                             });
