@@ -96,7 +96,7 @@ class LoginDentist extends Component {
 
                 <div className="form-group" style={{marginTop:10,marginBottom:40}}>
                     <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
-                        <strong style={{fontSize:23}}>LOGIN USER</strong>
+                        <strong style={{fontSize:20}}>LOGIN USER</strong>
                     </button>
                 </div>
 
@@ -105,7 +105,7 @@ class LoginDentist extends Component {
                 <div className="form-group" style={{marginTop:10}}>
                    <Link to="/register">
                         <button className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
-                            <strong style={{fontSize:23}}>CREATE ACCOUNT</strong>
+                            <strong style={{fontSize:20}}>CREATE ACCOUNT</strong>
                         </button>
                    </Link>
                 </div>

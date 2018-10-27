@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 import { registerUser } from '../actions/authentication';
 import classnames from 'classnames';
 import Navbar from './Navbar';
+import { Row, Col } from 'antd';
+import { Link } from 'react-router-dom';
 
 class Register extends Component {
 
@@ -184,9 +186,22 @@ class Register extends Component {
                     {errors.address && (<div className="invalid-feedback">{errors.address}</div>)}
                 </div>
                 <div className="form-group">
-                    <button type="submit" className="btn btn-primary">
-                        Register User
-                    </button>
+
+                     <Row gutter={12}>
+                        <Col span={12}>
+                            <Link to="/logindentist">
+                                <button type="submit" className="btn btn-danger" style={{width:'100%',backgroundColor:'#ce2828'}}>
+                                    <strong style={{fontSize:20}}>CANCEL</strong>
+                                </button>
+                            </Link>                            
+                        </Col>
+
+                        <Col span={12}>
+                                <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
+                                    <strong style={{fontSize:20}}>REGISTER</strong>
+                                </button>
+                        </Col>
+                     </Row>   
                 </div>
             </form>
         </div>

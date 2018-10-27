@@ -4,19 +4,32 @@ iframe{
   -moz-border-radius: 15px;
   border-radius: 15px;
 }
+.heoo-text{
+  padding-left:20% ;
+  padding-right:20% 
+}
+
+p.carousel-text{
+  font-family: 'Shrikhand', cursive;
+  height: 100px;
+  font-size: 60px;
+  color:#000;
+}
 .hero-image1{
 
-    background-image: url("https://carruthcapital.com/wp-content/uploads/2017/02/500-old-connecticut-path-building-b-1-1740x960-c-center.jpg");
+    background-image: url("https://www.thepikecompany.com/wp-content/uploads/2015/09/slide1-70.jpg");
     height:700px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+
+
 }
 
 .hero-image2{
 
-  background-image: url("https://www.republica.com/wp-content/uploads/2017/12/panda-Thatcher-se-neg%C3%B3-a-compartir-avi%C3%B3n-con-un-oso-panda-en-1981.jpg");
+  background-image: url("https://www.peoplestrong.com/wp-content/themes/peoplestrong/images/business-park.jpg");
   height:700px;
   background-position: center;
   background-repeat: no-repeat;
@@ -26,7 +39,7 @@ iframe{
 
 .hero-image3{
 
-  background-image: url("https://c.o0bg.com/rf/image_960w/Boston/2011-2020/2014/06/27/BostonGlobe.com/Regional/Images/framingham2.jpg");
+  background-image: url("https://blog.ipleaders.in/wp-content/uploads/2016/06/Company_picture.jpg");
   height:700px;
   background-position: center;
   background-repeat: no-repeat;

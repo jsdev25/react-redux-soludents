@@ -10,20 +10,20 @@ export class MainCarousel extends React.Component {
        
        <Carousel autoplay>
           <div className="ProfileHeadCard" >
-              <div className="ProfileHeadCard__head hero-image1">
-                <p style={{fontSize:50,color:'#fff'}}>Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed</p>
+              <div className="hero-image1 heoo-text">
+                <p class="carousel-text">Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed</p>
               </div>
           </div>
           
           <div className="ProfileHeadCard" >
-              <div className="ProfileHeadCard__head hero-image2">
-                <p style={{fontSize:50,color:'#fff'}}>Hello How are you? adipiscing elit, sed</p>
+              <div className=" hero-image2 heoo-text">
+                <p class="carousel-text">Hello How are you? adipiscing elit, sed</p>
               </div>
           </div>
 
           <div className="ProfileHeadCard">
-              <div className="ProfileHeadCard__head hero-image3">
-                <p style={{fontSize:50,color:'#fff'}}>Very Well Thanks ,consectetur adipiscing elit, sed</p>
+              <div className=" hero-image3 heoo-text">
+                <p class="carousel-text">Very Well Thanks ,consectetur adipiscing elit, sed</p>
               </div>
           </div>
         </Carousel>
