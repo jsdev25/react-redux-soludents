@@ -20,6 +20,7 @@ class AdminManage extends React.Component {
     super();
     this.state = {
         data_document : [],
+        data_operators : [],
         model_view: false,
         visible_editMange:false,
         status:'In progress',
@@ -31,7 +32,7 @@ class AdminManage extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
 
-    
+
     this.columns = [{
       title: 'File',
       dataIndex: 'Filename',
@@ -71,11 +72,18 @@ class AdminManage extends React.Component {
   }
 
   componentDidMount(){
-    return axios.get('http://localhost:5000/api/documents/')
+    axios.get('/api/documents/')
     .then(res => {
         const data_document = res.data;
         this.setState({ data_document });
         console.log("documents", this.state.data_document)
+    });
+
+    axios.get('/api/operators/')
+    .then(res => {
+        const data_operators = res.data;
+        this.setState({ data_operators });
+        console.log("operators", this.state.data_operators)
     });
   }
 
@@ -213,15 +221,16 @@ class AdminManage extends React.Component {
                           <Select
                             showSearch
                             style={{ width: 200 }}
-                            placeholder="Select a person"
+                            placeholder="Select status"
                             optionFilterProp="children"
                             onChange={this.handleChange.bind(this)}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                           >
-                            <Option value="0">In progress</Option>
-                            <Option value="1">Un Successful</Option>
-                            <Option value="2">Successful</Option>
-                          </Select>
+                            <Option value="In progress">In progress</Option>
+                            <Option value="Un Successful">Un Successful</Option>
+                            <Option value="Successful">Successful</Option>
+
+                          </Select>              
                           <br/>
                       <br/> 
                   </Panel>
@@ -229,22 +238,35 @@ class AdminManage extends React.Component {
 
                 <Collapse bordered={false}>
                     <Panel header="Operator Name: " key="1">
-                            <span style={{marginLeft:20}}>Edit:  </span>
-                            <input name = "operator_id" value={this.state.operator_id} onChange={ this.handleInputChange }/>
-                            <br/>
+                    <span style={{marginLeft:20}}>Edit: </span>
+                    <Select
+                            showSearch
+                            style={{ width: 200 }}
+                            placeholder="Select Opearator"
+                            optionFilterProp="children"
+                            onChange={this.handleChange.bind(this)}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                          >
+                            {
+                              this.state.data_operators.map(function(item, i){
+                                return <Option key={i} value={item._id}>{item.name}</Option>;
+                              })
+                            }
+
+                          </Select>  
+                          <br/>
                         <br/> 
                     </Panel>
                 </Collapse>
 
-                <Collapse bordered={false}>
+                {/* <Collapse bordered={false}>
                     <Panel header="Remarks: " key="1">
                             <span style={{marginLeft:20}}>Edit: </span>
                             <input name = "remarks" value={this.state.remarks} onChange={ this.handleInputChange }/>
                             <br/>
-                      
                         <br/> 
                     </Panel>
-                </Collapse>
+                </Collapse> */}
                 
                   <button style={{width:'100%', marginTop:20}} onClick={this.handleClick.bind(this)} className="btn btn-primary" >
                     Save

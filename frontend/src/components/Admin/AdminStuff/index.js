@@ -199,7 +199,7 @@ class AdminStuff extends React.Component {
                                             <Panel
                                               header={
                                                 <div>
-                                                  <Avatar src={item.image} size="large"/>
+                                                  <Avatar src={'https://www.logolynx.com/images/logolynx/80/806ea60a1cae8046972d737107c2c8df.png'} size="large"/>
                                                   <span style={{marginLeft:15}}>{item.name}</span>
                                                 </div>
                                                 
@@ -243,7 +243,9 @@ class AdminStuff extends React.Component {
                                             <Panel
                                               header={
                                                 <div>
-                                                  <Avatar src={item.image} size="large"/>
+                                                  {/* <Avatar src={item.image} size="large"/> */}
+                                                  <Avatar src={'https://www.shareicon.net/data/2015/12/21/690827_office_512x512.png'} size="large"/>
+                                                  
                                                   <span style={{marginLeft:15}}>{item.name}</span>
                                                 </div>
                                                 

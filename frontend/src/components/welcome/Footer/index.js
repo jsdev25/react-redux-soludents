@@ -11,7 +11,9 @@ export class Footer extends React.Component {
             <Col md={8} xs={24}>
                 <div className="mb-5">
                 <h1 className="text-black">
-                    <strong>Logo</strong>
+                    <strong>
+                      <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} /> 
+                    </strong>
                 </h1>
                 <br/>
                 <div style={{paddingRight:30}}>
