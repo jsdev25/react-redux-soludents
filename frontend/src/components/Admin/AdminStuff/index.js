@@ -40,7 +40,7 @@ class AdminStuff extends React.Component {
 
     state = {
         visible:false,
-        visible_opertor:false
+        visible_opertor:false,
       }
 
     componentDidMount(){
@@ -369,6 +369,8 @@ class AdminStuff extends React.Component {
                         </Row>
                     </div>
                     </Modal>
+
+                    
            
          </div>
     );

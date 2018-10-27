@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { loginUser } from '../actions/authentication';
 import classnames from 'classnames';
 import Navbar from './Navbar';
+import { Checkbox } from 'antd';
+import { Link } from 'react-router-dom';
 
 class LoginDentist extends Component {
 
@@ -44,9 +46,6 @@ class LoginDentist extends Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.auth.isAuthenticated) {
 
-           // console.log("email",this.state.email)
-           // console.log("password",this.state.password)
-           // console.log("user",this.state.admin)
             localStorage.setItem("admin",this.state.admin);
             this.props.history.push('/dentist ')
             window.location.href='/dentist'
@@ -63,7 +62,7 @@ class LoginDentist extends Component {
         return(
             <div>
              <Navbar/>
-             <div className="container" style={{ marginTop: '50px', width: '700px'}}>
+             <div className="container" style={{ marginTop: 150, width: '700px'}}>
             <h2 style={{marginBottom: '40px'}}>Login with Dentist</h2>
             <form onSubmit={ this.handleSubmit }>
                 <div className="form-group">
@@ -92,10 +91,23 @@ class LoginDentist extends Component {
                     />
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
-                <div className="form-group">
-                    <button type="submit" className="btn btn-primary">
-                        Login User
+
+                <Checkbox>Keep me signed in </Checkbox>
+
+                <div className="form-group" style={{marginTop:10,marginBottom:40}}>
+                    <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
+                        <strong style={{fontSize:23}}>LOGIN USER</strong>
                     </button>
+                </div>
+
+                <p>If you don't already have an account click the button below to create your account.</p>
+
+                <div className="form-group" style={{marginTop:10}}>
+                   <Link to="/register">
+                        <button className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
+                            <strong style={{fontSize:23}}>CREATE ACCOUNT</strong>
+                        </button>
+                   </Link>
                 </div>
             </form>
         </div>

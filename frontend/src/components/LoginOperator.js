@@ -32,7 +32,7 @@ class LoginOperator extends Component {
             password: this.state.password,
             admin:this.state.admin
         }
-      //  this.props.LoginOperatorfunc(opearator);
+        // this.props.LoginOperatorfunc(opearator);
         this.props.LoginOperatorfunc(user);
 
     }
@@ -46,10 +46,8 @@ class LoginOperator extends Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.auth.isAuthenticated) {
 
-           // console.log("email",this.state.email)
-           // console.log("password",this.state.password)
-           // console.log("user",this.state.admin)
             localStorage.setItem("admin",this.state.admin);
+
             this.props.history.push('/operator ')
             window.location.href='/operator'
 
@@ -66,7 +64,7 @@ class LoginOperator extends Component {
         return(
             <div>
               <Navbar/>
-              <div className="container" style={{ marginTop: '50px', width: '700px'}}>
+              <div className="container" style={{ marginTop: 150, width: '700px'}}>
             <h2 style={{marginBottom: '40px'}}>Login with Operator</h2>
             <form onSubmit={ this.handleSubmit }>
                 <div className="form-group">
@@ -96,8 +94,8 @@ class LoginOperator extends Component {
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
                 <div className="form-group">
-                    <button type="submit" className="btn btn-primary">
-                        Login User
+                   <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
+                        Login
                     </button>
                 </div>
             </form>

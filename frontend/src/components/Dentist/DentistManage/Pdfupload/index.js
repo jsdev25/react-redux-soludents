@@ -23,6 +23,12 @@ class ManageFile extends Component {
     })
   }
   handleUpload = () => {
+
+    if(this.state.selectedFile == null){
+      alert('please input file!');
+      return true;
+    }
+
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
 
@@ -48,7 +54,7 @@ class ManageFile extends Component {
     return (
       <div className="App">
         <input type="file" name="" id="" onChange={this.handleselectedFile} />
-        <button onClick={this.handleUpload}>Upload</button>
+        <button onClick={this.handleUpload.bind(this)}>File Upload</button>
         <div> {Math.round(this.state.loaded, 2)} %</div>
       </div>
     )

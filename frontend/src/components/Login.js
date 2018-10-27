@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loginUser } from '../actions/authentication';
+import { loginAdmin } from '../actions/authentication';
 import classnames from 'classnames';
 import Navbar from '../components/Navbar'
 
@@ -27,12 +27,12 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const user = {
+        const admin = {
             email: this.state.email,
             password: this.state.password,
             admin:this.state.admin
         }
-        this.props.loginUser(user);
+        this.props.loginAdmin(admin);
     }
 
     componentDidMount() {
@@ -43,11 +43,6 @@ class Login extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.auth.isAuthenticated) {
-
-           // console.log("email",this.state.email)
-           // console.log("password",this.state.password)
-           // console.log("user",this.state.admin)
-
             localStorage.setItem("admin",this.state.admin);
             this.props.history.push('/admin ')
             window.location.href='/admin'
@@ -64,7 +59,7 @@ class Login extends Component {
         return(
             <div>
                 <Navbar/>
-                <div className="container" style={{ marginTop: '50px', width: '700px'}}>
+                <div className="container" style={{ marginTop: 150, width: '700px'}}>
             <h2 style={{marginBottom: '40px'}}>Login with Admin</h2>
             <form onSubmit={ this.handleSubmit }>
                 <div className="form-group">
@@ -94,9 +89,9 @@ class Login extends Component {
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
                 <div className="form-group">
-                    <button type="submit" className="btn btn-primary">
-                        Login User
-                    </button>
+                       <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
+                            <strong style={{fontSize:23}}>Login</strong>
+                        </button>
                 </div>
             </form>
         </div>
@@ -106,7 +101,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-    loginUser: PropTypes.func.isRequired,
+    loginAdmin: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
 }
@@ -116,4 +111,4 @@ const mapStateToProps = (state) => ({
     errors: state.errors
 })
 
-export  default connect(mapStateToProps, { loginUser })(Login)
+export  default connect(mapStateToProps, { loginAdmin })(Login)

@@ -1,13 +1,18 @@
 import React from 'react';
-import { Avatar , Row, Col, Card, Table , Button} from 'antd';
+import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse ,Select} from 'antd';
 import { logoutUser } from '../../../actions/authentication';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import AdminStuff from '../AdminStuff'
-
+const Panel = Collapse.Panel;
+var newData;
+var item,index
 const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
+const Option = Select.Option;
+
+
 
 class AdminManage extends React.Component {
 
@@ -15,8 +20,17 @@ class AdminManage extends React.Component {
     super();
     this.state = {
         data_document : [],
-        model_view: false
+        model_view: false,
+        visible_editMange:false,
+        status:'In progress',
+        remarks:'Nothing',
+        operator_id:'',
+        file_name: localStorage.getItem('files'),
+        file_directory:localStorage.getItem('directory'),
     }
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+
     
     this.columns = [{
       title: 'File',
@@ -65,34 +79,80 @@ class AdminManage extends React.Component {
     });
   }
 
-  handleView = (row) => {
+  handleClick(){
+    const update_data = {
 
-    const newData = [...this.state.data_document];
-    const index = newData.findIndex(item=>item._id === row._id);
+      status: this.state.status,
+      operator_id: this.state.operator_id,
+      remarks: this.state.remarks,
+  }
 
-    const item = newData[index];
-    console.log(item);
-    console.log(row);
-
-    const getDate = {dentist_id: "Eugene", status: "Successful", _id: "546ytrg534534r3454", Filename: "Rapunzel Story", created_date: "2018-09-03", operator_id:"0o03043i"}
+  const getDate = {dentist_id: item.dentist_id, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_id:this.state.operator_id}
 
     newData.splice(index, 1, {
 
       ...getDate,
       ...null,
 
-      // ...item,
-      // ...row,
     });
 
-    this.setState({ data_document: newData });
+  this.setState({ data_document: newData,visible_editMange:false });
+
+  console.log("update_data", update_data)
+
+  }
+
+  handleView = (row) => {
+
+    this.setState({
+      visible_editMange:!this.state.visible_editMange
+    })
+
+    newData = [...this.state.data_document];
+    index = newData.findIndex(item=>item._id === row._id);
+    localStorage.setItem("directory", row.directory);
+    localStorage.setItem("files", row.Filename);
+    console.log(row.directory,"++++++++++++++++++==")
+
+    item = newData[index];
+    console.log(item);
+    console.log(row);
+
+    
     console.log('@@@@@@@@@@@@@@', this.state.data_document);
   }
+
+  handleInputChange(e) {
+    this.setState({
+        [e.target.name]: e.target.value
+    })
+}
 
   onLogout(e) {
     e.preventDefault();
     this.props.logoutUser(this.props.history);
     localStorage.setItem("admin",500)
+  }
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible_editMange: false,
+    });
+  }
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible_editMange:false,
+
+    });
+  }
+
+  handleChange = (value) => {
+    this.setState({
+      status : value
+    })
   }
     
   render() {
@@ -134,6 +194,62 @@ class AdminManage extends React.Component {
 
           </Col>
         </Row>
+
+        <Modal
+            centered={true}
+            title={"File Manage"}
+            visible={this.state.visible_editMange}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[]}
+            >
+                 <a href={this.state.file_directory} download="proposed_file_name" type="file">FileName: {this.state.file_name}</a>
+              
+                <Collapse bordered={false}>
+                  
+                  <Panel header="Status In Progress: " key="1">
+                       
+                          <span style={{marginLeft:20}}>Edit: </span>
+                          <Select
+                            showSearch
+                            style={{ width: 200 }}
+                            placeholder="Select a person"
+                            optionFilterProp="children"
+                            onChange={this.handleChange.bind(this)}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                          >
+                            <Option value="0">In progress</Option>
+                            <Option value="1">Un Successful</Option>
+                            <Option value="2">Successful</Option>
+                          </Select>
+                          <br/>
+                      <br/> 
+                  </Panel>
+                </Collapse>
+
+                <Collapse bordered={false}>
+                    <Panel header="Operator Name: " key="1">
+                            <span style={{marginLeft:20}}>Edit:  </span>
+                            <input name = "operator_id" value={this.state.operator_id} onChange={ this.handleInputChange }/>
+                            <br/>
+                        <br/> 
+                    </Panel>
+                </Collapse>
+
+                <Collapse bordered={false}>
+                    <Panel header="Remarks: " key="1">
+                            <span style={{marginLeft:20}}>Edit: </span>
+                            <input name = "remarks" value={this.state.remarks} onChange={ this.handleInputChange }/>
+                            <br/>
+                      
+                        <br/> 
+                    </Panel>
+                </Collapse>
+                
+                  <button style={{width:'100%', marginTop:20}} onClick={this.handleClick.bind(this)} className="btn btn-primary" >
+                    Save
+                  </button>
+        </Modal>
 
       </div>
     );

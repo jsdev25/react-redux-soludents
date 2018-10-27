@@ -43,6 +43,25 @@ export const loginUser = (user) => dispatch => {
                 const { token } = res.data;
                 localStorage.setItem('jwtToken', token);
                 localStorage.setItem('UserAdmin', JSON.stringify(res.data.user));
+                
+                setAuthToken(token);
+                const decoded = jwt_decode(token);
+                dispatch(setCurrentUser(decoded));
+            })
+            .catch(err => {
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: err.response.data
+                });
+            });
+}
+
+export const loginAdmin = (user) => dispatch => {
+    axios.post('/api/admins/login', user)
+            .then(res => {
+                const { token } = res.data;
+                localStorage.setItem('jwtToken', token);
+                localStorage.setItem('UserAdmin', JSON.stringify(res.data.admin));
                 setAuthToken(token);
                 const decoded = jwt_decode(token);
                 dispatch(setCurrentUser(decoded));
@@ -56,7 +75,6 @@ export const loginUser = (user) => dispatch => {
 }
 
 export const LoginOperatorfunc = (user) => dispatch => {
-    console.log("token=========================")
 
     axios.post('/api/operators/login', user)
             .then(res => {

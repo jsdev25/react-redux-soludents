@@ -9,7 +9,7 @@ const users = require('./routes/user');
 const subscriptions = require('./routes/subscription'); 
 const documents = require('./routes/document'); 
 const operators = require('./routes/operator'); 
-
+const admins = require('./routes/admin'); 
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     () => {console.log('Database is connected') },
@@ -27,11 +27,11 @@ app.use('/api/users', users);
 app.use('/api/subscriptions', subscriptions);
 app.use('/api/documents', documents);
 app.use('/api/operators', operators);
+app.use('/api/admins', admins);
 
 app.get('/', function(req, res) {
     res.send('hello');
 });
-
 
 const PORT = process.env.PORT || 5000;
 
