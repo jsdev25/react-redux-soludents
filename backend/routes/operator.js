@@ -14,7 +14,35 @@ router.get('/', function(req,res){
         if(err) return res.status(500).send({error: 'database failure'});
         res.json(operators);
     })
-  });
+});
+
+router.get('/:name', function(req, res){
+    Operator.findOne({_id: req.params.name}, function(err, general){
+
+        if(err){
+            res.status(500).json({ code:'500',message:'fail',error: err });
+        }else if(!general){
+            res.status(404).json({code:'404',message:'fail',error:"Not Found General!-requested resource is not available now" });
+        }
+        else {
+            res.status(200).json({ code:'200',message:'success',data:general });
+        }
+    })
+});
+
+
+router.delete('/:name', function(req, res){
+    Operator.deleteOne({ _id: req.params.name }, function(err, general){
+        if(err){
+            res.status(500).json({ code:'500',message:'fail',error: err });
+        }else if(!general){
+            res.status(404).json({code:'404',message:'fail',error:"Not Found Operator" });
+        }
+        else {
+            res.status(204);
+        }
+    })
+});
 
 router.post('/register', function(req, res) {
 

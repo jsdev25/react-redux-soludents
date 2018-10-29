@@ -36,7 +36,7 @@ router.delete('/:name', function(req, res){
         if(err){
             res.status(500).json({ code:'500',message:'fail',error: err });
         }else if(!general){
-            res.status(404).json({code:'404',message:'fail',error:"Not Found General" });
+            res.status(404).json({code:'404',message:'fail',error:"Not Found User" });
         }
         else {
             res.status(204);

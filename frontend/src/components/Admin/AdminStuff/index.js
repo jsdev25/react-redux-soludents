@@ -7,8 +7,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { addDentist } from '../../../actions/authentication';
 import axios from 'axios';
-
-
+import update from 'react-addons-update';
 
 const Panel = Collapse.Panel;
 function callback(key) {
@@ -30,13 +29,16 @@ class AdminStuff extends React.Component {
             users_list:[],
             data_dentists:[],
             data_operators:[],
+            selectKey:-1,
             errors: {}
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSubmitO = this.handleSubmitO.bind(this);
-        
+        this.DeleteDentist = this.DeleteDentist.bind(this);
+        this.DeleteOperator = this.DeleteOperator.bind(this);
+
     }
 
     state = {
@@ -142,6 +144,68 @@ class AdminStuff extends React.Component {
 
     }
 
+    DeleteDentist(e, wholedata){
+      let that = this;
+      console.log('Selected ID:', e._id,"this is my key");
+      const index = wholedata.findIndex(item=>item._id === e._id); 
+      console.log("my index", index);
+
+      axios({    
+        method: 'delete',
+        url: `/api/users/` + e._id
+    })
+        .then(function (response) {
+
+            if (response.status === 200) {
+                console.log("Delete Success");
+                console.log(response);
+            }
+
+        })
+
+        .catch(function (response) {
+            console.log(response);
+            return
+        });
+        
+        var array = [...that.state.data_dentists];
+        array.splice(index, 1);
+        that.setState({data_dentists: array});
+      
+        console.log('hello', this.state.data_dentists);
+    }
+
+    DeleteOperator(e, wholedata){
+        let that = this;
+        console.log('Selected ID:', e._id,"this is my key");
+        const index = wholedata.findIndex(item=>item._id === e._id); 
+        console.log("my index", index);
+  
+        axios({    
+          method: 'delete',
+          url: `/api/operators/` + e._id
+      })
+          .then(function (response) {
+  
+              if (response.status === 200) {
+                  console.log("Delete Success");
+                  console.log(response);
+              }
+  
+          })
+  
+          .catch(function (response) {
+              console.log(response);
+              return
+          });
+          
+          var array = [...that.state.data_operators];
+          array.splice(index, 1);
+          that.setState({data_operators: array});
+        
+          console.log('Delete Operator', this.state.data_operators);
+      }
+
     handleSubmitO(e) {
         e.preventDefault();
         
@@ -214,7 +278,7 @@ class AdminStuff extends React.Component {
                                                 <Icon type="form" theme="outlined" style={{color:'#666',float:'right'}}/>
                                                 <br/>
                                                 <span style={{marginLeft:50}}>Delete Account</span>
-                                                <Icon type="delete" theme="outlined" style={{color:'#666',float:'right'}} />
+                                                <Icon onClick={(e,data) => this.DeleteOperator(item,  this.state.data_operators)} type="delete" theme="outlined" style={{color:'#666',float:'right'}} />
                                             </Panel>
                                         </Collapse>
                                     }
@@ -236,8 +300,8 @@ class AdminStuff extends React.Component {
                         <List
                             itemLayout="horizontal"
                             dataSource={this.state.data_dentists}
-                            renderItem={item => (
-                            <List.Item>
+                            renderItem={(item) => (
+                            <List.Item >
                                 <List.Item.Meta
                                     title={
                                         <Collapse bordered={false} onChange={callback}>
@@ -250,7 +314,7 @@ class AdminStuff extends React.Component {
                                                 
                                               }
                                               style={customPanelStyle}
-                                              key="1">
+                                              key={1}>
                                                 <span style={{marginLeft:50}}>Manage Subscriptions </span>
                                                 <Icon type="file-pdf" theme="outlined" style={{color:'#666',float:'right'}}/>
                                                 <br/>
@@ -258,7 +322,7 @@ class AdminStuff extends React.Component {
                                                 <Icon type="form" theme="outlined" style={{color:'#666',float:'right'}}/>
                                                 <br/>
                                                 <span style={{marginLeft:50}}>Delete Account</span>
-                                                <Icon type="delete" theme="outlined" style={{color:'#666',float:'right'}} />
+                                                <Icon onClick={(e,data) => this.DeleteDentist(item,  this.state.data_dentists)} type="delete" theme="outlined" style={{color:'#666',float:'right'}} />
                                             </Panel>
                                         </Collapse>
                                     }
