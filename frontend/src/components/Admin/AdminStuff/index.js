@@ -243,9 +243,7 @@ class AdminStuff extends React.Component {
                                             <Panel
                                               header={
                                                 <div>
-                                                  {/* <Avatar src={item.image} size="large"/> */}
                                                   <Avatar src={'https://www.shareicon.net/data/2015/12/21/690827_office_512x512.png'} size="large"/>
-                                                  
                                                   <span style={{marginLeft:15}}>{item.name}</span>
                                                 </div>
                                                 
@@ -339,12 +337,12 @@ class AdminStuff extends React.Component {
                     </Modal>
 
                     <Modal
-                    centered={true}
-                    title={"Operator Information"}
-                    visible={this.state.visible_opertor}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    footer={[]}
+                        centered={true}
+                        title={"Operator Information"}
+                        visible={this.state.visible_opertor}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                        footer={[]}
                     >
                     <div>
                         <Row gutter={48} style={{padding:0,margin:0}}>
@@ -371,9 +369,6 @@ class AdminStuff extends React.Component {
                         </Row>
                     </div>
                     </Modal>
-
-                    
-           
          </div>
     );
   }

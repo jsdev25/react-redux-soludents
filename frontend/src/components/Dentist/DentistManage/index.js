@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Avatar , Row, Col, Card, Button, Modal, Input, Divider, Collapse, Checkbox} from 'antd';
 import { payAction, logoutUser } from '../../../actions/authentication';
 import { connect } from 'react-redux';
@@ -11,8 +12,8 @@ const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
 
 class DentistManage extends React.Component {
 
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       offer1:false,
       offer2:false,
@@ -54,7 +55,7 @@ class DentistManage extends React.Component {
     this.setState({
       profile:false,
       subscription:false,
-      manage:false
+      manage:false,
     });
   }
 
@@ -63,7 +64,7 @@ class DentistManage extends React.Component {
     this.setState({
       profile:false,
       subscription:false,
-      manage:false
+      manage:false,
     });
   }
 
@@ -169,7 +170,12 @@ class DentistManage extends React.Component {
                   <Button style={{float:"right", backgroundColor:'#00a99d',color:'#fff'}} onClick={this.showManage}>Click Here</Button>
                 </Card>              
             </div>
+            <Link to="/">
+              <Button style={{marginLeft:90, backgroundColor:'#00a99d',color:'#fff',width:120, height:50}}>Back</Button>
+            </Link>
           </Col>
+
+          
         </Row>
 
         <Modal
@@ -269,10 +275,13 @@ class DentistManage extends React.Component {
             visible={this.state.manage}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
+            width={820} 
             footer={[]}
             >
               <Managefile />
         </Modal>
+
+        
         
       </div>
     );

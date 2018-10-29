@@ -14,14 +14,9 @@ import { OurPartnerSlider } from './OurPartnerSlider';
 export default class Welcome extends React.Component {
   render() {
     return(
-        <div id="main" className="container-fluid">
-        <div id="header">
+        <div className="container-fluid">
           <MainCarousel/>
-        </div>
-        
-        <div id="video">
           <Videoview />
-        </div>
         
         <div id="choose">
           <Autionview title='Choose your package' description='But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth'/>
@@ -76,7 +71,7 @@ export default class Welcome extends React.Component {
         </div>
 
         <div style={{position:'absolute', bottom: 10, right: 10, position:'fixed'}}>
-          <a href="#main"><img src="https://www.qi-a.com/images/up-arrow-icon.png" width="70"/></a>
+          <a href="#"><img src="https://www.qi-a.com/images/up-arrow-icon.png" width="70"/></a>
         </div>
         
       </div>

@@ -23,19 +23,13 @@ const menu = (
   const menu_list = (
     <Menu>
       <Menu.Item>
-        <a href="#header">Header</a>
+        <a href="#choose">Our Offers</a>
       </Menu.Item>
       <Menu.Item>
-        <a href="#video">Video</a>
+        <a href="#team">Our Team</a>
       </Menu.Item>
       <Menu.Item>
-        <a href="#choose">package</a>
-      </Menu.Item>
-      <Menu.Item>
-        <a href="#team">Team</a>
-      </Menu.Item>
-      <Menu.Item>
-        <a href="#contact">Contact</a>
+        <a href="#contact">Contact Us</a>
       </Menu.Item>
     </Menu>
   );

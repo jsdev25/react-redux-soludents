@@ -27,6 +27,14 @@ router.get('/', function(req,res){
   })
 });
 
+router.get('/:dentist_id', function(req, res){
+  Document.find({dentist_id: req.params.dentist_id}, function(err, dentist){
+      if(err) return res.status(500).json({error: err});
+      if(!dentist) return res.status(404).json({error: 'Dentist not found'});
+      res.json(dentist);
+  })
+});
+
 router.post('/upload', (req, res, next) => {
   let uploadFile = req.files.file
   fileName = req.files.file.name
