@@ -1,5 +1,6 @@
 import React from 'react';
 import { Avatar ,Button, Row, Col, Card, List, Collapse,Icon,Input,Divider,Modal } from 'antd';
+import { Link } from 'react-router-dom';
 import {customPanelStyle} from './const'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -250,7 +251,7 @@ class AdminStuff extends React.Component {
                                               }
                                               style={customPanelStyle}
                                               key="1">
-                                                <span style={{marginLeft:50}}>Dental Work History</span>
+                                                <span style={{marginLeft:50}}>Manage Subscriptions </span>
                                                 <Icon type="file-pdf" theme="outlined" style={{color:'#666',float:'right'}}/>
                                                 <br/>
                                                 <span style={{marginLeft:50}}>Edit Account</span>
@@ -272,7 +273,12 @@ class AdminStuff extends React.Component {
                         </div>
                         </Card>
                     </Col>
-
+                    <Col xs={24}>
+                        <br/><br/><br/>
+                        <Link to="/">
+                           <Button style={{marginLeft:10, backgroundColor:'#00a99d',color:'#fff',width:120, height:50}}>Back</Button>
+                        </Link> 
+                    </Col>                          
                 </Row>
 
                 <Modal

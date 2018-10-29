@@ -70,7 +70,9 @@ export default class Welcome extends React.Component {
          <Footer/>
         </div>
 
-        <div style={{position:'absolute', bottom: 10, right: 10, position:'fixed'}}>
+        
+
+        <div style={{bottom: 10, right: 10, position:'fixed'}}>
           <a href="#"><img src="https://www.qi-a.com/images/up-arrow-icon.png" width="70"/></a>
         </div>
         
