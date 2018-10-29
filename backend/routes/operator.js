@@ -44,6 +44,20 @@ router.delete('/:name', function(req, res){
     })
 });
 
+router.put('/:name', function(req, res){
+    Operator.updateOne({ _id: req.params.name }, { $set: req.body }, function(err, operator){
+
+        if(err){
+            res.status(500).json({ code:'500',message:'fail',error: err });
+        }else if(!operator){
+            res.status(400).json({code:'404',message:'fail',error:"Not Found Operator" });
+        }
+        else {
+            res.status(200).json({ code:'200',message:'success',data:req.body });
+        }
+    })
+});
+
 router.post('/register', function(req, res) {
 
     const { errors, isValid } = validateRegisterInput(req.body);
