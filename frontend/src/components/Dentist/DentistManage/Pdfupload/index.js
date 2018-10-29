@@ -16,7 +16,7 @@ class ManageFile extends Component {
       selectedFile: null,
       loaded: 0,
       hidden:true,
-      data_lists:[]
+      data_lists:[],
     }
   }
 
@@ -36,6 +36,8 @@ class ManageFile extends Component {
   }
 
   handleUpload = () => {
+
+    let that = this;
 
     if(this.state.selectedFile == null){
       alert('please input file!');
@@ -58,9 +60,18 @@ class ManageFile extends Component {
           Filename: "",
           directory: "",
           dentist_id: useradmin._id,
-          operator_id: ""
+          operator_id: "",
+      }
+      var today = new Date().toJSON().slice(0,24).replace(/-/g,'/');
+
+        const NewData = {
+          Filename: "New File",
+          created_date: today,
+          status: "In Progress",
       }
           this.props.addDocument(document, this.props.history);
+          that.setState({data_lists: [...that.state.data_lists, NewData]}, () => {
+          });
       })
   }
 

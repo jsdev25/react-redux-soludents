@@ -121,10 +121,10 @@ class AdminManage extends React.Component {
     index = newData.findIndex(item=>item._id === row._id);
     localStorage.setItem("directory", row.directory);
     localStorage.setItem("files", row.Filename);
-    console.log(row.directory,"++++++++++++++++++==")
+    //console.log(row.directory,"++++++++++++++++++==")
 
     item = newData[index];
-    console.log('@@@@@@@@@@@@@@', this.state.data_document);
+    //console.log('@@@@@@@@@@@@@@', this.state.data_document);
   }
 
   handleInputChange(e) {
@@ -161,19 +161,16 @@ class AdminManage extends React.Component {
   }
 
   handleChangeOperator = (e,array) => {
-    console.log("element>>>>>>>>>>>>",e);
-    console.log("element>>>>>>>>>>>>",array);
+    //console.log("element>>>>>>>>>>>>",e);
+    //console.log("element>>>>>>>>>>>>",array);
     for(let i=0;i<array.length;i++){
       if(array[i]._id===e){
- this.setState({
-      operator_id : array[i].name
-    })
-      }
-    }
-  
-
-   
-  }
+          this.setState({
+            operator_id : array[i].name
+          })
+            }
+          }
+     }
     
   render() {
     return(
@@ -191,7 +188,6 @@ class AdminManage extends React.Component {
                     <span className="text-muted" style={{color:'#fff'}}>{useradmin.name}</span>
                     <br />
                     <strong style={{color:'#fff'}}>{useradmin.email}</strong>
-
                 </div>
                 <a style={{position:'absolute',bottom:20,color:'#fff',left:'40%',cursor:'point'}} onClick={this.onLogout.bind(this)}>sign out</a>
            </div>
