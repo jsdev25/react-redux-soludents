@@ -26,12 +26,13 @@ class AdminManage extends React.Component {
         status:'In progress',
         remarks:'Nothing',
         operator_id:'',
+        store:'',
         file_name: localStorage.getItem('files'),
         file_directory:localStorage.getItem('directory'),
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
-
+    this.handleChangeOperator=this.handleChangeOperator.bind(this);
 
     this.columns = [{
       title: 'File',
@@ -123,10 +124,6 @@ class AdminManage extends React.Component {
     console.log(row.directory,"++++++++++++++++++==")
 
     item = newData[index];
-    console.log(item);
-    console.log(row);
-
-    
     console.log('@@@@@@@@@@@@@@', this.state.data_document);
   }
 
@@ -161,6 +158,21 @@ class AdminManage extends React.Component {
     this.setState({
       status : value
     })
+  }
+
+  handleChangeOperator = (e,array) => {
+    console.log("element>>>>>>>>>>>>",e);
+    console.log("element>>>>>>>>>>>>",array);
+    for(let i=0;i<array.length;i++){
+      if(array[i]._id===e){
+ this.setState({
+      operator_id : array[i].name
+    })
+      }
+    }
+  
+
+   
   }
     
   render() {
@@ -244,7 +256,7 @@ class AdminManage extends React.Component {
                             style={{ width: 200 }}
                             placeholder="Select Opearator"
                             optionFilterProp="children"
-                            onChange={this.handleChange.bind(this)}
+                            onChange={(e)=>this.handleChangeOperator(e,this.state.data_operators)}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                           >
                             {

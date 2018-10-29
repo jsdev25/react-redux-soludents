@@ -20,6 +20,26 @@ const menu = (
     </Menu>
   );
 
+  const menu_list = (
+    <Menu>
+      <Menu.Item>
+        <a href="#header">Header</a>
+      </Menu.Item>
+      <Menu.Item>
+        <a href="#video">Video</a>
+      </Menu.Item>
+      <Menu.Item>
+        <a href="#choose">package</a>
+      </Menu.Item>
+      <Menu.Item>
+        <a href="#team">Team</a>
+      </Menu.Item>
+      <Menu.Item>
+        <a href="#contact">Contact</a>
+      </Menu.Item>
+    </Menu>
+  );
+
 class Navbar extends Component {
 
     onLogout(e) {
@@ -34,9 +54,7 @@ class Navbar extends Component {
         const authLinks = (
             <ul className="navbar-nav ml-auto">
                 <a href="" className="nav-link" onClick={this.onLogout.bind(this)}>
-                    <img src={localStorage.getItem('avatar')} alt={user.name} title={user.name}
-                        className="rounded-circle"
-                        style={{ width: '25px', marginRight: '5px'}} />
+                   
                             Logout
                 </a>
             </ul>
@@ -55,6 +73,10 @@ class Navbar extends Component {
       )
         return(
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
+             
+                <Dropdown overlay={menu_list}>
+                  <Link className="nav-link" to="#"><Icon  style={{ fontSize: '32px'}} type="align-left" theme="outlined" /></Link>
+                </Dropdown>
                 <Link className="navbar-brand" to="/">
                   <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} />
                 </Link>

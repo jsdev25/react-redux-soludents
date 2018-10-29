@@ -14,11 +14,18 @@ import { OurPartnerSlider } from './OurPartnerSlider';
 export default class Welcome extends React.Component {
   render() {
     return(
-      <div className="container-fluid">
-        <MainCarousel/>
-        <Videoview />
-        <Autionview title='Choose your package' description='But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth'/>
-        <div className="price-view container">
+        <div id="main" className="container-fluid">
+        <div id="header">
+          <MainCarousel/>
+        </div>
+        
+        <div id="video">
+          <Videoview />
+        </div>
+        
+        <div id="choose">
+          <Autionview title='Choose your package' description='But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth'/>
+          <div className="price-view container">
           <Row>
               <Col xs={24} md={8}>
                 <center>
@@ -55,13 +62,23 @@ export default class Welcome extends React.Component {
               </Col>
           </Row>
         </div>
-        <Autionview title='Our Team' description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'/>
+        </div>
 
+        <div id="team">
+          <Autionview title='Our Team' description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'/>
+        </div>
         <OurPartnerSlider />
         <TeamMemberSlider />
         <ContactView />
-        <Footer/>
 
+        <div id="contact">
+         <Footer/>
+        </div>
+
+        <div style={{position:'absolute', bottom: 10, right: 10, position:'fixed'}}>
+          <a href="#main"><img src="https://www.qi-a.com/images/up-arrow-icon.png" width="70"/></a>
+        </div>
+        
       </div>
     );
   }
