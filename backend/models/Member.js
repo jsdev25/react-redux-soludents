@@ -15,7 +15,7 @@ const MemberSchema = new Schema({
             type: String,
             required: true
          },
-        real_passwird:{ 
+        real_password:{ 
             type: String, 
             required: true 
         },
@@ -23,21 +23,41 @@ const MemberSchema = new Schema({
     img: String,
     document_count: {
         type: Number,
-        max:10
+        max:10,
+        default: 0
     },
     subscription: {
-        offer1:Boolean,
-        offer2:Boolean,
-        offer3:Boolean,
-        offer4:Boolean,
-        offer5:Boolean,
-        offer6:Boolean
+        offer1:{ 
+            type: Number,
+            default: 1
+        },
+        offer2:{ 
+            type: Number, 
+            default: 0
+        },
+        offer3:{ 
+            type: Number,   
+            default: 0
+        },
+        offer4:{ 
+            type: Number, 
+            default: 0
+        },
+        offer5:{ 
+            type: Number, 
+            default: 0
+        },
+        offer6:{ 
+            type: Number, 
+            default: 0
+        },
     },
     admin: {
         type: Number,
         min: 0,
         max: 2,
-        required: true
+        required: true,
+        default: 2
     },
     created_date: {
         type: Date,
@@ -49,5 +69,4 @@ const MemberSchema = new Schema({
 });
 
 const Member = mongoose.model('members', MemberSchema);
-
 module.exports = Member;
