@@ -12,8 +12,6 @@ import Home from './components/Home';
 import Admin from './components/Admin';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import LoginDentist from './components/LoginDentist';
-import LoginOperator from './components/LoginOperator';
 import Operator from './components/Operator';
 import Dentist from './components/Dentist';
 
@@ -38,8 +36,6 @@ class App extends Component {
                   <Route exact path="/" component={ Home } />
                   <Route exact path="/register" component={ Register } />
                   <Route exact path="/login" component={ Login } />
-                  <Route exact path="/loginoperator" component={ LoginOperator } />
-                  <Route exact path="/logindentist" component={ LoginDentist } />
                   <Route exact path="/admin" component={ Admin } />
                   <Route exact path="/operator" component={ Operator } />
                   <Route exact path="/dentist" component={ Dentist } />

@@ -10,7 +10,7 @@ export class Videoview extends React.Component {
                 <Col span={12} style={{height:570}}>
                     <iframe style={{width:'100%',height:'100%'}}
                             src="https://www.youtube.com/embed/zYpb_4rcWl4" 
-                            id="_dytid_3140">
+                            >
                     </iframe>
                 </Col>
 

@@ -181,7 +181,7 @@ class AdminManage extends React.Component {
 
            <div>
                 <div style={{textAlign:'center',marginTop:20}}>
-                    <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} />
+                    <image src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} />
                     <br/><br/>
                     <Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" style={{width:110,height:110}} />
                     <br /><br/><br/>

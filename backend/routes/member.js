@@ -44,6 +44,7 @@ router.delete('/:name', function(req, res){
     })
 });
 
+//perfect-member register
 router.post('/register', function(req, res) {
 
     console.log('0');
@@ -126,13 +127,12 @@ router.post('/login', (req, res) => {
                 errors.email = 'Member not found'
                 return res.status(404).json(errors);
             }
-            bcrypt.compare(password, member.password)
+            bcrypt.compare(password, member.password.hash_password)
                     .then(isMatch => {
                         if(isMatch) {
                             const payload = {
                                 id: member.id,
                                 name: member.name,
-                                avatar: member.avatar
                             }
                             jwt.sign(payload, 'secret', {
                                 expiresIn: 3600

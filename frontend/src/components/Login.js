@@ -60,41 +60,41 @@ class Login extends Component {
             <div>
                 <Navbar/>
                 <div className="container" style={{ marginTop: 150, width: '700px'}}>
-            <h2 style={{marginBottom: '40px'}}>Login with Admin</h2>
-            <form onSubmit={ this.handleSubmit }>
-                <div className="form-group">
-                    <input
-                    type="email"
-                    placeholder="Email"
-                    className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.email
-                    })}
-                    name="email"
-                    onChange={ this.handleInputChange }
-                    value={ this.state.email }
-                    />
-                    {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
-                </div>
-                <div className="form-group">
-                    <input
-                    type="password"
-                    placeholder="Password"
-                    className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.password
-                    })} 
-                    name="password"
-                    onChange={ this.handleInputChange }
-                    value={ this.state.password }
-                    />
-                    {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
-                </div>
-                <div className="form-group">
-                       <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
-                            <strong style={{fontSize:20}}>LOGIN</strong>
-                        </button>
-                </div>
-            </form>
-        </div>
+                <h2 style={{marginBottom: '40px'}}>Login</h2>
+                <form onSubmit={ this.handleSubmit }>
+                    <div className="form-group">
+                        <input
+                        type="email"
+                        placeholder="Email"
+                        className={classnames('form-control form-control-lg', {
+                            'is-invalid': errors.email
+                        })}
+                        name="email"
+                        onChange={ this.handleInputChange }
+                        value={ this.state.email }
+                        />
+                        {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
+                    </div>
+                    <div className="form-group">
+                        <input
+                        type="password"
+                        placeholder="Password"
+                        className={classnames('form-control form-control-lg', {
+                            'is-invalid': errors.password
+                        })} 
+                        name="password"
+                        onChange={ this.handleInputChange }
+                        value={ this.state.password }
+                        />
+                        {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
+                    </div>
+                    <div className="form-group">
+                        <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
+                                <strong style={{fontSize:20}}>LOGIN</strong>
+                            </button>
+                    </div>
+                </form>
+            </div>
             </div>
        )
     }

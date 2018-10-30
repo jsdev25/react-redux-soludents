@@ -6,20 +6,6 @@ import { logoutUser } from '../actions/authentication';
 import { withRouter } from 'react-router-dom';
 import { Menu, Dropdown, Icon } from 'antd';
 
-const menu = (
-    <Menu>
-      <Menu.Item>
-        <Link className="nav-link" to="/login">Admin</Link>
-      </Menu.Item>
-      <Menu.Item>
-        <Link className="nav-link" to="/logindentist">Dentist</Link>
-      </Menu.Item>
-      <Menu.Item>
-        <Link className="nav-link" to="/loginoperator">Operator</Link>
-      </Menu.Item>
-    </Menu>
-  );
-
   const menu_list = (
     <Menu>
       <Menu.Item>
@@ -43,7 +29,7 @@ class Navbar extends Component {
     }
 
     render() {
-        const {isAuthenticated, user} = this.props.auth;
+        const {isAuthenticated} = this.props.auth;
         console.log("=======================", localStorage.getItem('UserAdmin'));
         const authLinks = (
             <ul className="navbar-nav ml-auto">
@@ -59,9 +45,7 @@ class Navbar extends Component {
                 <Link className="nav-link" to="/register">Sign Up</Link>
             </li>
             <li className="nav-item">
-                <Dropdown overlay={menu}>
-                  <Link className="nav-link" to="#">Sign In</Link>
-                </Dropdown>
+                <Link className="nav-link" to="/login">Log In</Link>
             </li>
         </ul>
       )
@@ -72,7 +56,7 @@ class Navbar extends Component {
                   <Link className="nav-link" to="#"><Icon  style={{ fontSize: '32px'}} type="align-left" theme="outlined" /></Link>
                 </Dropdown>
                 <Link className="navbar-brand" to="/">
-                  <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} />
+                  <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" alt="Smiley face" width="120" height="50" ></img>
                 </Link>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     {isAuthenticated ? authLinks : guestLinks}

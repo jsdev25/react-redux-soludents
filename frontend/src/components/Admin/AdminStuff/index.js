@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { addDentist } from '../../../actions/authentication';
 import axios from 'axios';
-import update from 'react-addons-update';
 
 const Panel = Collapse.Panel;
 function callback(key) {

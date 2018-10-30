@@ -37,24 +37,6 @@ export const addDentist = (user, history) => dispatch => {
             });
 }
 
-export const loginUser = (user) => dispatch => {
-    axios.post('/api/users/login', user)
-            .then(res => {
-                const { token } = res.data;
-                localStorage.setItem('jwtToken', token);
-                localStorage.setItem('UserAdmin', JSON.stringify(res.data.user));
-                
-                setAuthToken(token);
-                const decoded = jwt_decode(token);
-                dispatch(setCurrentUser(decoded));
-            })
-            .catch(err => {
-                dispatch({
-                    type: GET_ERRORS,
-                    payload: err.response.data
-                });
-            });
-}
 
 export const loginAdmin = (user) => dispatch => {
     axios.post('/api/admins/login', user)
@@ -62,26 +44,6 @@ export const loginAdmin = (user) => dispatch => {
                 const { token } = res.data;
                 localStorage.setItem('jwtToken', token);
                 localStorage.setItem('UserAdmin', JSON.stringify(res.data.admin));
-                setAuthToken(token);
-                const decoded = jwt_decode(token);
-                dispatch(setCurrentUser(decoded));
-            })
-            .catch(err => {
-                dispatch({
-                    type: GET_ERRORS,
-                    payload: err.response.data
-                });
-            });
-}
-
-export const LoginOperatorfunc = (user) => dispatch => {
-
-    axios.post('/api/operators/login', user)
-            .then(res => {
-                const { token } = res.data;
-                console.log("token",res.data)
-                localStorage.setItem('jwtToken', token);
-                localStorage.setItem('UserAdmin', JSON.stringify(res.data.operator));
                 setAuthToken(token);
                 const decoded = jwt_decode(token);
                 dispatch(setCurrentUser(decoded));

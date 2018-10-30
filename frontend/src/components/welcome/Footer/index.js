@@ -12,7 +12,7 @@ export class Footer extends React.Component {
                 <div className="mb-5">
                 <h1 className="text-black">
                     <strong>
-                      <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} /> 
+                      <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" alt="Smiley face" width="120" height="50" ></img>
                     </strong>
                 </h1>
                 <br/>

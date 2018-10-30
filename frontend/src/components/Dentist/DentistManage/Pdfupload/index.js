@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, List, Card, Button} from 'antd';
+import { Row, Col, List, Card} from 'antd';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
