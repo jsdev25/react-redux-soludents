@@ -5,11 +5,7 @@ const passport = require('passport');
 const config = require('./db');
 const path=require("path");
 
-const users = require('./routes/user'); 
-const subscriptions = require('./routes/subscription'); 
 const documents = require('./routes/document'); 
-const operators = require('./routes/operator'); 
-const admins = require('./routes/admin'); 
 const members = require('./routes/member'); 
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -24,13 +20,8 @@ require('./passport')(passport);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,"public")));
-app.use('/api/users', users);
-app.use('/api/subscriptions', subscriptions);
 app.use('/api/documents', documents);
-app.use('/api/operators', operators);
-app.use('/api/admins', admins);
 app.use('/api/members', members);
-
 app.get('/', function(req, res) {
     res.send('hello');
 });
