@@ -6,19 +6,25 @@ const MemberSchema = new Schema({
        type: String,
        required: true
     },
+    lastname:{
+        type: String
+    },
+    phone:{
+        type: String
+     },
+    adli_number:{
+        type: String
+    },
+    address:{
+        type: String
+    },
     email:{
         type: String,
         required: true
      },
     password:{
-        hash_password:{ 
-            type: String,
-            required: true
-         },
-        real_password:{ 
-            type: String, 
-            required: true 
-        },
+        type: String,
+        required: true
     },
     img: String,
     document_count: {

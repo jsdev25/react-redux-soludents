@@ -30,6 +30,19 @@ router.get('/:name', function(req, res){
     })
 });
 
+router.put('/update/:name', function(req, res){
+    Member.updateOne({ _id: req.params.name }, { $set: req.body }, function(err, member){
+
+        if(err){
+            res.status(500).json({ code:'500',message:'fail',error: err });
+        }else if(!member){
+            res.status(400).json({code:'404',message:'fail',error:"Not Found Member" });
+        }
+        else {
+            res.status(200).json({ code:'200',message:'success',data:req.body });
+        }
+    })
+});
 
 router.delete('/:name', function(req, res){
     Member.deleteOne({ _id: req.params.name }, function(err, member){
@@ -70,11 +83,12 @@ router.post('/register', function(req, res) {
            
             const newMember = new Member({
                     name: req.body.name,
+                    lastname: req.body.lastname,
                     email: req.body.email,
-                    password: {
-                        hash_password: req.body.password.hash_password,
-                        real_password: req.body.password.real_password
-                    },
+                    phone: req.body.phone,
+                    address: req.body.address,
+                    adli_number: req.body.adli_number,
+                    password:  req.body.password,
                     img: req.body.img,
                     document_count: req.body.document_count,
                     subscription: {
@@ -87,16 +101,14 @@ router.post('/register', function(req, res) {
                     },
                     admin: req.body.admin
             });
-
-            console.log('1234');
             
             bcrypt.genSalt(10, (err, salt) => {
                 if(err) console.error('There was an error', err);
                 else {
-                    bcrypt.hash(newMember.password.hash_password, salt, (err, hash) => {
+                    bcrypt.hash(newMember.password, salt, (err, hash) => {
                         if(err) console.error('There was an error', err);
                         else {
-                            newMember.password.hash_password = hash;
+                            newMember.password = hash;
                             newMember
                                 .save()
                                 .then(member => {
@@ -110,6 +122,7 @@ router.post('/register', function(req, res) {
     });
 });
 
+//perfect-member login
 router.post('/login', (req, res) => {
 
     const { errors, isValid } = validateLoginInput(req.body);
@@ -127,7 +140,7 @@ router.post('/login', (req, res) => {
                 errors.email = 'Member not found'
                 return res.status(404).json(errors);
             }
-            bcrypt.compare(password, member.password.hash_password)
+            bcrypt.compare(password, member.password)
                     .then(isMatch => {
                         if(isMatch) {
                             const payload = {
@@ -143,6 +156,7 @@ router.post('/login', (req, res) => {
                                         success: true,
                                         token: `Bearer ${token}`,
                                         member:member,
+                                        password:password
                                     });
                                 }
                             });
