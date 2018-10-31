@@ -90,8 +90,8 @@ class Login extends Component {
                     </div>
                     <div className="form-group">
                         <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
-                                <strong style={{fontSize:20}}>LOGIN</strong>
-                            </button>
+                            <strong style={{fontSize:20}}>LOGIN</strong>
+                        </button>
                     </div>
                 </form>
             </div>

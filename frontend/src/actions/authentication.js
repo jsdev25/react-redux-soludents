@@ -37,16 +37,28 @@ export const addDentist = (user, history) => dispatch => {
             });
 }
 
-
-export const loginAdmin = (user) => dispatch => {
-    axios.post('/api/admins/login', user)
+////////////////////////////////////////////////////////login admin
+export const loginAdmin = (user, history) => dispatch => {
+    axios.post('/api/members/login', user)
             .then(res => {
                 const { token } = res.data;
                 localStorage.setItem('jwtToken', token);
-                localStorage.setItem('UserAdmin', JSON.stringify(res.data.admin));
+                localStorage.setItem('UserAdmin', JSON.stringify(res.data.member));
+
+                if( res.data.member.admin == 0) {
+                    localStorage.setItem('admin', 0);
+                    window.location.href = '/dentist'
+                } else if (res.data.member.admin == 1){
+                    localStorage.setItem('admin', 1);
+                    window.location.href = '/operator'
+                } else {
+                    localStorage.setItem('admin', 2);
+                    window.location.href = '/admin'
+                }
+
                 setAuthToken(token);
                 const decoded = jwt_decode(token);
-                dispatch(setCurrentUser(decoded));
+               
             })
             .catch(err => {
                 dispatch({
