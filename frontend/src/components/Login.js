@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { loginAdmin } from '../actions/authentication';
 import classnames from 'classnames';
 import Navbar from '../components/Navbar'
+import { Link } from 'react-router-dom';
 
 class Login extends Component {
 
@@ -92,6 +93,12 @@ class Login extends Component {
                         <button type="submit" className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563'}}>
                             <strong style={{fontSize:20}}>LOGIN</strong>
                         </button>
+                        <br/>
+                        <Link to="/register">
+                            <button className="btn btn-success" style={{width:'100%',backgroundColor:'#00d563',marginTop:10}}>
+                                <strong style={{fontSize:20}}>CREATE ACCOUNT</strong>
+                            </button>
+                        </Link>
                     </div>
                 </form>
             </div>

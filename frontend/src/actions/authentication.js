@@ -2,9 +2,10 @@ import axios from 'axios';
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
+const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
 
-export const registerUser = (user, history) => dispatch => {
-    axios.post('/api/users/register', user)
+export const registerUser = (member, history) => dispatch => {
+    axios.post('/api/members/register', member)
             .then(res => {
                 alert('Success Sign Up!!!')
                 history.push('/login')
@@ -43,7 +44,8 @@ export const loginAdmin = (user, history) => dispatch => {
             .then(res => {
                 const { token } = res.data;
                 localStorage.setItem('jwtToken', token);
-                localStorage.setItem('UserAdmin', JSON.stringify(res.data.member));
+                localStorage.setItem('UserAdmin', JSON.stringify(res.data.member._id));
+                localStorage.setItem('pwa', JSON.stringify(res.data.password));
 
                 if( res.data.member.admin == 0) {
                     localStorage.setItem('admin', 0);
@@ -119,4 +121,24 @@ export const logoutUser = (history) => dispatch => {
     setAuthToken(false);
     dispatch(setCurrentUser({}));
     history.push('/');
+}
+
+//////////////////////////////dentist//////////////////
+export const UpdateDentist = (dentist, history) => dispatch => {
+    console.log('-------11--------');
+    axios.put('/api/members/update/'+useradmin._id, dentist)
+            .then(res => {
+                alert('Success Update Dentist')
+
+                history.push('/dentist')        
+                console.log('res',res.data)})
+                
+            .catch(err => {
+                alert('Fail Update Dentist')
+                console.log(err)
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: err.response.data
+                });
+            });
 }

@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar , Row, Col, Card, Button, Modal, Input, Divider, Collapse, Checkbox} from 'antd';
-import { payAction, logoutUser } from '../../../actions/authentication';
+import { payAction, logoutUser, UpdateDentist } from '../../../actions/authentication';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Managefile from './Pdfupload'
+import Managefile from './Pdfupload';
+import axios from 'axios';
 import './index.css';
 const Panel = Collapse.Panel;
 const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
+const pwa=JSON.parse(localStorage.getItem("pwa"));
 
 class DentistManage extends React.Component {
 
@@ -20,10 +22,34 @@ class DentistManage extends React.Component {
       offer3:false,
       offer4:false,
       offer5:false,
-      offer6:false
+      offer6:false,
+      name: '',
+      lastname: '',
+      email: '',
+      address: '',
+      adli_number: '',
+      password: pwa, 
+      phone: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
 
+  componentDidMount(){
+    axios.get('/api/users/' + useradmin)
+    .then(res => {
+       // const data_dentists = res.data;
+       console.log('eeeeeeeeeeeeeeeeeeeeee', res.data)
+        this.setState({ 
+          name: res.data.name,
+          lastname: res.data.lastname,
+          email: res.data.email,
+          address: res.data.address,
+          adli_number: res.data.adli_number,
+          phone: res.data.phone,
+         });
+    });
   }
 
   state = {
@@ -68,7 +94,7 @@ class DentistManage extends React.Component {
     });
   }
 
-  handleChange1(){
+  handleChange1() {
     this.setState({
       offer1: ! this.state.offer1,
     });
@@ -120,10 +146,32 @@ class DentistManage extends React.Component {
     this.props.payAction(subscription, this.props.history);
   }
 
+  handleUpdate() {
+    //e.preventDefault();
+    const dentist = {
+      name: this.state.name,
+      lastname: this.state.lastname,
+      address: this.state.address,
+      phone: this.state.phone,
+      adli_number: this.state.adli_number,
+      email: this.state.email,
+      password: this.state.password,
+  }
+    console.log('-------1--------');
+    this.props.UpdateDentist(dentist, this.props.history);
+    console.log('-------2--------');
+  }
+
   onLogout(e) {
     e.preventDefault();
     this.props.logoutUser(this.props.history);
     localStorage.setItem("admin",500)
+  }
+
+  handleInputChange(e) {
+    this.setState({
+        [e.target.name]: e.target.value
+    })
   }
     
   render() {
@@ -184,48 +232,53 @@ class DentistManage extends React.Component {
             visible={this.state.profile}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
+            footer={[]}
             >
             <div>
                 <Row gutter={48} style={{padding:0,margin:0}}>
 
-                    <Col span={24}>
-                    <label style={{fontWeight:'800'}}>Full Name</label>
-                        <Input value={useradmin.name} style={{border: 'none'}}/>
+                    <Col span={12}>
+                        <label style={{fontWeight:'800'}}>First Name</label>
+                        <Input style={{border: 'none'}} name="name" onChange={ this.handleInputChange } value={ this.state.name }/>
+                    </Col>
+
+                    <Col span={12}>
+                        <label style={{fontWeight:'800'}}>Last Name</label>
+                        <Input style={{border: 'none'}} name="lastname" onChange={ this.handleInputChange } value={ this.state.lastname }/>
                     </Col>
                     <Divider style={{padding:0,marginTop:5,marginBottom:15}}/>
 
                     <Col span={24}>
-                    <label style={{fontWeight:'800'}}>Password</label>
-                        <Input value={useradmin.real_password} style={{border: 'none'}}/>
+                        <label style={{fontWeight:'800'}}>Password</label>
+                        <Input value={useradmin.password} style={{border: 'none'}} name="lastname" onChange={ this.handleInputChange } value={ this.state.password }/>
                     </Col>
                     <Divider style={{padding:0,marginTop:5,marginBottom:15}}/>
 
                     <Col span={12}>
-                    <label style={{fontWeight:'800'}}>Phone</label>
-                        <Input value={useradmin.phone} style={{border: 'none'}}/>
+                        <label style={{fontWeight:'800'}}>Phone</label>
+                        <Input value={useradmin.phone} style={{border: 'none'}} name="phone" onChange={ this.handleInputChange } value={ this.state.phone }/>
                     </Col>
 
                     <Col span={12}>
-                    <label style={{fontWeight:'800'}}>Email</label>
-                        <Input value={useradmin.email} style={{border: 'none'}}/>
-                    </Col>
-                    <Divider style={{padding:0,marginTop:5,marginBottom:15}}/>
-
-                    <Col span={24}>
-                    <label style={{fontWeight:'800'}}>Address</label>
-                        <Input value={useradmin.address} style={{border: 'none'}}/>
+                        <label style={{fontWeight:'800'}}>Email</label>
+                        <Input value={useradmin.email} style={{border: 'none'}} name="email" onChange={ this.handleInputChange } value={ this.state.email }/>
                     </Col>
                     <Divider style={{padding:0,marginTop:5,marginBottom:15}}/>
 
                     <Col span={12}>
-                    <label style={{fontWeight:'800'}}>Adzli Number</label>
-                        <Input value={useradmin.number} style={{border: 'none'}}/>
+                        <label style={{fontWeight:'800'}}>Address</label>
+                        <Input value={useradmin.address} style={{border: 'none'}} name="address" onChange={ this.handleInputChange } value={ this.state.address }/>
                     </Col>
 
                     <Col span={12}>
-                        <label style={{fontWeight:'800'}}>Input</label>
-                        <Input value="abc def ghki" style={{border: 'none'}}/>
+                        <label style={{fontWeight:'800'}}>Adzli Number</label>
+                        <Input value={useradmin.number} style={{border: 'none'}} name="adli_number" onChange={ this.handleInputChange } value={ this.state.adli_number }/>
                     </Col>
+
+                    <button className="btn btn-danger" onClick={this.handleUpdate} style={{width:'100%',backgroundColor:'#ce2828'}}>
+                        <strong style={{fontSize:20}}>Update</strong>
+                    </button>
+
                     </Row>
                     </div>
         </Modal>
@@ -291,7 +344,7 @@ class DentistManage extends React.Component {
 DentistManage.propTypes = {
   payAction: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
-
+  UpdateDentist: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -299,4 +352,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps,{ payAction,logoutUser })(withRouter(DentistManage))
+export default connect(mapStateToProps,{ payAction,logoutUser,UpdateDentist })(withRouter(DentistManage))
