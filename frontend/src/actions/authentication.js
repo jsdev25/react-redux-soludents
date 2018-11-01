@@ -70,19 +70,6 @@ export const loginAdmin = (user, history) => dispatch => {
             });
 }
 
-export const payAction = (user, history) => dispatch => {
-    axios.post('/api/subscriptions/subscription', user)
-            .then(res =>{
-              history.push('/login')
-            })
-            .catch(err => {
-                alert('fail');
-                dispatch({
-                    type: GET_ERRORS,
-                    payload: err.response.data
-                });
-            });
-}
 
 export const addDocument = (document, history) => dispatch => {
     axios.post('/api/documents/document', document)
@@ -126,7 +113,7 @@ export const logoutUser = (history) => dispatch => {
 //////////////////////////////dentist//////////////////
 export const UpdateDentist = (dentist, history) => dispatch => {
     console.log('-------11--------');
-    axios.put('/api/members/update/'+useradmin._id, dentist)
+    axios.put('/api/members/update/'+  JSON.parse( localStorage.getItem('UserAdmin')), dentist)
             .then(res => {
                 alert('Success Update Dentist')
 
@@ -135,7 +122,7 @@ export const UpdateDentist = (dentist, history) => dispatch => {
                 
             .catch(err => {
                 alert('Fail Update Dentist')
-                console.log(err)
+                console.log(err, dentist)
                 dispatch({
                     type: GET_ERRORS,
                     payload: err.response.data
