@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar , Row, Col, Card, Button, Modal, Input, Divider, Collapse, Checkbox} from 'antd';
-import { payAction, logoutUser, UpdateDentist } from '../../../actions/authentication';
+import { logoutUser, UpdateDentist } from '../../../actions/authentication';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -37,17 +37,25 @@ class DentistManage extends React.Component {
   }
 
   componentDidMount(){
-    axios.get('/api/users/' + useradmin)
+
+    axios.get('/api/members/' + useradmin)
     .then(res => {
-       // const data_dentists = res.data;
-       console.log('eeeeeeeeeeeeeeeeeeeeee', res.data)
+        const data_dentists = res.data.data;
+        console.log('okkkkkkkkkkkk', data_dentists);
         this.setState({ 
-          name: res.data.name,
-          lastname: res.data.lastname,
-          email: res.data.email,
-          address: res.data.address,
-          adli_number: res.data.adli_number,
-          phone: res.data.phone,
+          name: res.data.data.name,
+          lastname: res.data.data.lastname,
+          email: res.data.data.email,
+          address: res.data.data.address,
+          adli_number: res.data.data.adli_number,
+          phone: res.data.data.phone,
+          offer1:!!res.data.data.subscription.offer1,
+          offer2:!!res.data.data.subscription.offer2,
+          offer3:!!res.data.data.subscription.offer3,
+          offer4:!!res.data.data.subscription.offer4,
+          offer5:!!res.data.data.subscription.offer5,
+          offer6:!!res.data.data.subscription.offer6
+
          });
     });
   }
@@ -67,6 +75,7 @@ class DentistManage extends React.Component {
   showSubscription = () => {
     this.setState({
       subscription: true,
+      
     });
   }
 
@@ -134,16 +143,28 @@ class DentistManage extends React.Component {
   handleSubmit() {
     //e.preventDefault();
     console.log("--",this.state.offer1);
-    const subscription = {
-        dentist_id: useradmin._id,
-        offer1: this.state.offer1,
-        offer2: this.state.offer2,
-        offer3: this.state.offer3,
-        offer4: this.state.offer4,
-        offer5: this.state.offer5,
-        offer6: this.state.offer6,
+    const dentist = {
+      subscription: {        
+        offer1: + this.state.offer1,
+        offer2: + this.state.offer2,
+        offer3: + this.state.offer3 ,
+        offer4: + this.state.offer4,
+        offer5: + this.state.offer5,
+        offer6: + this.state.offer6
+      }
     }
-    this.props.payAction(subscription, this.props.history);
+
+    console.log('------------------+_____________', dentist);
+    this.props.UpdateDentist(dentist, this.props.history);
+    this.setState({
+      offer1 : this.state.offer1,
+      offer2 : this.state.offer2,
+      offer3 : this.state.offer3,
+      offer4 : this.state.offer4,
+      offer5 : this.state.offer5,
+      offer6 : this.state.offer6,
+      subscription: !this.state.subscription
+    })
   }
 
   handleUpdate() {
@@ -155,11 +176,12 @@ class DentistManage extends React.Component {
       phone: this.state.phone,
       adli_number: this.state.adli_number,
       email: this.state.email,
-      password: this.state.password,
+      //password: this.state.password,
   }
-    console.log('-------1--------');
     this.props.UpdateDentist(dentist, this.props.history);
-    console.log('-------2--------');
+    this.setState({
+      profile:false
+    })
   }
 
   onLogout(e) {
@@ -187,9 +209,9 @@ class DentistManage extends React.Component {
                     <br/><br/>
                     <Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" style={{width:110,height:110}} />
                     <br /><br/><br/>
-                    <span className="text-muted" style={{color:'#fff'}}>{useradmin.name}</span>
+                    <span className="text-muted" style={{color:'#fff'}}>{this.state.name}</span>
                     <br />
-                    <strong style={{color:'#fff'}}>{useradmin.email}</strong>
+                    <strong style={{color:'#fff'}}>{this.state.email}</strong>
 
                 </div>
                 <a style={{position:'absolute',bottom:20,color:'#fff',left:'40%',cursor:'point'}} onClick={this.onLogout.bind(this)}>sign out</a>
@@ -250,32 +272,32 @@ class DentistManage extends React.Component {
 
                     <Col span={24}>
                         <label style={{fontWeight:'800'}}>Password</label>
-                        <Input value={useradmin.password} style={{border: 'none'}} name="lastname" onChange={ this.handleInputChange } value={ this.state.password }/>
+                        <Input type = "password" disabled style={{border: 'none'}} name="password" onChange={ this.handleInputChange } value={ this.state.password }/>
                     </Col>
                     <Divider style={{padding:0,marginTop:5,marginBottom:15}}/>
 
                     <Col span={12}>
                         <label style={{fontWeight:'800'}}>Phone</label>
-                        <Input value={useradmin.phone} style={{border: 'none'}} name="phone" onChange={ this.handleInputChange } value={ this.state.phone }/>
+                        <Input style={{border: 'none'}} name="phone" onChange={ this.handleInputChange } value={ this.state.phone }/>
                     </Col>
 
                     <Col span={12}>
                         <label style={{fontWeight:'800'}}>Email</label>
-                        <Input value={useradmin.email} style={{border: 'none'}} name="email" onChange={ this.handleInputChange } value={ this.state.email }/>
+                        <Input style={{border: 'none'}} type="email" name="email" onChange={ this.handleInputChange } value={ this.state.email }/>
                     </Col>
                     <Divider style={{padding:0,marginTop:5,marginBottom:15}}/>
 
                     <Col span={12}>
                         <label style={{fontWeight:'800'}}>Address</label>
-                        <Input value={useradmin.address} style={{border: 'none'}} name="address" onChange={ this.handleInputChange } value={ this.state.address }/>
+                        <Input style={{border: 'none'}} name="address" onChange={ this.handleInputChange } value={ this.state.address }/>
                     </Col>
 
                     <Col span={12}>
                         <label style={{fontWeight:'800'}}>Adzli Number</label>
-                        <Input value={useradmin.number} style={{border: 'none'}} name="adli_number" onChange={ this.handleInputChange } value={ this.state.adli_number }/>
+                        <Input style={{border: 'none'}} name="adli_number" onChange={ this.handleInputChange } value={ this.state.adli_number }/>
                     </Col>
 
-                    <button className="btn btn-danger" onClick={this.handleUpdate} style={{width:'100%',backgroundColor:'#ce2828'}}>
+                    <button className="btn btn-info" onClick={this.handleUpdate} style={{width:'100%',backgroundColor:'#0089dc',marginTop:20}}>
                         <strong style={{fontSize:20}}>Update</strong>
                     </button>
 
@@ -293,30 +315,28 @@ class DentistManage extends React.Component {
             >
             <Collapse bordered={false}>
               <Panel header="Choose an offer" key="1">
-                <form onSubmit={ this.handleSubmit }>
                     <span style={{marginLeft:20}}>Offer 1</span>
-                    <Checkbox name="offer1"  onChange={this.handleChange1.bind(this)} value={this.state.offer1} style={{color:'#666',float:'right'}}></Checkbox>
+                      <Checkbox name="offer1"  onChange={this.handleChange1.bind(this)} value={this.state.offer1} style={{color:'#666',float:'right'}} checked={this.state.offer1}></Checkbox>
                     <br/>
                     <span style={{marginLeft:20}}>Offer 2</span>
-                    <Checkbox name="offer2" onChange={this.handleChange2.bind(this)} value={this.state.offer2} style={{color:'#666',float:'right'}}></Checkbox>
+                      <Checkbox name="offer2" onChange={this.handleChange2.bind(this)} value={this.state.offer2} style={{color:'#666',float:'right'}} checked={this.state.offer2}></Checkbox>
                     <br/>
                     <span style={{marginLeft:20}}>Offer 3</span>
-                    <Checkbox name="offer3" onChange={this.handleChange3.bind(this)} value={this.state.offer3} style={{color:'#666',float:'right'}}></Checkbox>
+                      <Checkbox name="offer3" onChange={this.handleChange3.bind(this)} value={this.state.offer3} style={{color:'#666',float:'right'}} checked={this.state.offer3}></Checkbox>
                     <br/>  
                     <span style={{marginLeft:20}}>Offer 4</span>
-                    <Checkbox name="offer4" onChange={this.handleChange4.bind(this)} value={this.state.offer4} style={{color:'#666',float:'right'}}></Checkbox>
+                      <Checkbox name="offer4" onChange={this.handleChange4.bind(this)} value={this.state.offer4} style={{color:'#666',float:'right'}} checked={this.state.offer4}></Checkbox>
                     <br/>
                     <span style={{marginLeft:20}}>Offer 5</span>
-                    <Checkbox name="offer5" onChange={this.handleChange5.bind(this)} value={this.state.offer5} style={{color:'#666',float:'right'}}></Checkbox>
+                      <Checkbox name="offer5" onChange={this.handleChange5.bind(this)} value={this.state.offer5} style={{color:'#666',float:'right'}} checked={this.state.offer5}></Checkbox>
                     <br/>
                     <span style={{marginLeft:20}}>Offer 6</span>
-                    <Checkbox name="offer6" onChange={this.handleChange6.bind(this)} value={this.state.offer6} style={{color:'#666',float:'right'}}></Checkbox>
+                      <Checkbox name="offer6" onChange={this.handleChange6.bind(this)} value={this.state.offer6} style={{color:'#666',float:'right'}} checked={this.state.offer6}></Checkbox>
                     <br/><br/>
 
-                    <button style={{width:'100%'}} type="submit" className="btn btn-primary" >
+                    <button style={{width:'100%'}} onClick={this.handleSubmit} className="btn btn-primary" >
                         Pay
                     </button>
-                </form>
                 <br/> 
               </Panel>
           </Collapse>
@@ -331,7 +351,7 @@ class DentistManage extends React.Component {
             width={820} 
             footer={[]}
             >
-              <Managefile />
+              <Managefile  username = {this.state.name} />
         </Modal>
 
         
@@ -342,7 +362,6 @@ class DentistManage extends React.Component {
 }
 
 DentistManage.propTypes = {
-  payAction: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   UpdateDentist: PropTypes.func.isRequired,
 };
@@ -352,4 +371,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps,{ payAction,logoutUser,UpdateDentist })(withRouter(DentistManage))
+export default connect(mapStateToProps,{ logoutUser,UpdateDentist })(withRouter(DentistManage))

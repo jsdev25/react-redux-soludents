@@ -10,18 +10,19 @@ const endpoint = 'http://localhost:5000/api/documents/upload'
 const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
 
 class ManageFile extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       selectedFile: null,
       loaded: 0,
       hidden:true,
       data_lists:[],
+      username:''
     }
   }
 
   componentDidMount(){
-    axios.get('/api/documents/'+ useradmin._id)
+    axios.get('/api/documents/'+ useradmin)
     .then(res => {
         const data_lists = res.data;
         this.setState({ data_lists });
@@ -59,7 +60,8 @@ class ManageFile extends Component {
         const document = {
           Filename: "",
           directory: "",
-          dentist_id: useradmin._id,
+          dentist_id: useradmin,
+          dentist_name :this.props.username,
           operator_id: "",
       }
       var today = new Date().toJSON().slice(0,24).replace(/-/g,'/');
@@ -70,6 +72,7 @@ class ManageFile extends Component {
           status: "In Progress",
       }
           this.props.addDocument(document, this.props.history);
+          console.log('document================', document);
           that.setState({data_lists: [...that.state.data_lists, NewData]}, () => {
           });
       })

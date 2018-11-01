@@ -16,6 +16,27 @@ router.get('/', function(req,res){
     })
   });
 
+  router.get('/admin', function(req,res){
+    Member.find({ admin: 2 }, function(err, members){
+        if(err) return res.status(500).send({error: 'database failure'});
+        res.json(members);
+    })
+  });
+
+  router.get('/operator', function(req,res){
+    Member.find({ admin: 1 }, function(err, members){
+        if(err) return res.status(500).send({error: 'database failure'});
+        res.json(members);
+    })
+  });
+
+  router.get('/dentist', function(req,res){
+    Member.find({ admin: 0 }, function(err, members){
+        if(err) return res.status(500).send({error: 'database failure'});
+        res.json(members);
+    })
+  });
+
 router.get('/:name', function(req, res){
     Member.findOne({_id: req.params.name}, function(err, members){
 
@@ -32,19 +53,19 @@ router.get('/:name', function(req, res){
 
 router.put('/update/:name', function(req, res){
 
-    bcrypt.genSalt(10, (err, salt) => {
-        if(err) console.error('There was an error', err);
-        else {
-            console.log('-----------2-----------',req.body.password)
-            bcrypt.hash(req.body.password, salt, (err, hash) => {
-                if(err) console.error('There was an error', err);
-                else {
-                    req.body.password = hash;
-                    console.log('------------000----------', req.body.password)
-                }
-            });
-        }
-    });
+    // bcrypt.genSalt(10, (err, salt) => {
+    //     if(err) console.error('There was an error', err);
+    //     else {
+    //         console.log('-----------2-----------',req.body.password)
+    //         bcrypt.hash(req.body.password, salt, (err, hash) => {
+    //             if(err) console.error('There was an error', err);
+    //             else {
+    //                 req.body.password = hash;
+    //                 console.log('------------000----------', req.body.password)
+    //             }
+    //         });
+    //     }
+    // });
 
     Member.updateOne({ _id: req.params.name }, { $set: req.body }, function(err, member){
 
@@ -58,6 +79,7 @@ router.put('/update/:name', function(req, res){
         }
     })
 });
+
 
 router.delete('/:name', function(req, res){
     Member.deleteOne({ _id: req.params.name }, function(err, member){

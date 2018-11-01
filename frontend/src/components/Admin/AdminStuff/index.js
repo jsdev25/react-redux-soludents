@@ -46,13 +46,13 @@ class AdminStuff extends React.Component {
       }
 
     componentDidMount(){
-        axios.get('/api/users/')
+        axios.get('/api/members/dentist')
         .then(res => {
             const data_dentists = res.data;
             this.setState({ data_dentists });
         });
 
-        axios.get('/api/operators/')
+        axios.get('/api/members/operator')
         .then(res => {
             const data_operators = res.data;
             this.setState({ data_operators });

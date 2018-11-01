@@ -27,6 +27,9 @@ class AdminManage extends React.Component {
         remarks:'Nothing',
         operator_id:'',
         store:'',
+        admin_info:[],
+        name:'',
+        email:'',
         file_name: localStorage.getItem('files'),
         file_directory:localStorage.getItem('directory'),
     }
@@ -40,8 +43,8 @@ class AdminManage extends React.Component {
       key: 'Filename',
     }, {
       title: 'Dentist',
-      dataIndex: 'dentist_id',
-      key: 'dentist_id',
+      dataIndex: 'dentist_name',
+      key: 'dentist_name',
     }, {
       title: 'Status',
       dataIndex: 'status',
@@ -72,22 +75,6 @@ class AdminManage extends React.Component {
     manage:false,
   }
 
-  componentDidMount(){
-    axios.get('/api/documents/')
-    .then(res => {
-        const data_document = res.data;
-        this.setState({ data_document });
-        console.log("documents", this.state.data_document)
-    });
-
-    axios.get('/api/operators/')
-    .then(res => {
-        const data_operators = res.data;
-        this.setState({ data_operators });
-        console.log("operators", this.state.data_operators)
-    });
-  }
-
   handleClick(){
     const update_data = {
 
@@ -96,7 +83,7 @@ class AdminManage extends React.Component {
       remarks: this.state.remarks,
   }
 
-  const getDate = {dentist_id: item.dentist_id, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_id:this.state.operator_id}
+  const getDate = {dentist_name: item.dentist_name, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_id:this.state.operator_id}
 
     newData.splice(index, 1, {
 
@@ -109,6 +96,33 @@ class AdminManage extends React.Component {
 
   console.log("update_data", update_data)
 
+  }
+
+  componentDidMount(){
+
+    axios.get('/api/documents/')
+    .then(res => {
+        const data_document = res.data;
+        this.setState({ data_document });
+        console.log("-------------documents-----------------", this.state.data_document)
+    });
+
+    axios.get('/api/members/' + useradmin)
+    .then(res => {
+        const admin_info = res.data.data;
+        console.log('okkkkkkkkkkkk', admin_info);
+        this.setState({ 
+          name: res.data.data.name,
+          email: res.data.data.email,
+         });
+    });
+
+    axios.get('/api/members/operator')
+    .then(res => {
+      const data_operators = res.data;
+      this.setState({ data_operators });
+      console.log('operators', this.state.data_operators)
+    });
   }
 
   handleView = (row) => {
@@ -181,13 +195,13 @@ class AdminManage extends React.Component {
 
            <div>
                 <div style={{textAlign:'center',marginTop:20}}>
-                    <image src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} />
+                    <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} />
                     <br/><br/>
                     <Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" style={{width:110,height:110}} />
                     <br /><br/><br/>
-                    <span className="text-muted" style={{color:'#fff'}}>{useradmin.name}</span>
+                    <span className="text-muted" style={{color:'#fff'}}>{this.state.name}</span>
                     <br />
-                    <strong style={{color:'#fff'}}>{useradmin.email}</strong>
+                    <strong style={{color:'#fff'}}>{this.state.email}</strong>
                 </div>
                 <a style={{position:'absolute',bottom:20,color:'#fff',left:'40%',cursor:'point'}} onClick={this.onLogout.bind(this)}>sign out</a>
            </div>
@@ -205,7 +219,7 @@ class AdminManage extends React.Component {
             </div>
 
             <div className="card-view" style={{marginTop:-150}} >
-               <AdminStuff />
+               <AdminStuff/>
             </div>
 
           </Col>

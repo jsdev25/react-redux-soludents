@@ -16,6 +16,10 @@ const DocumentSchema = new Schema({
         type: String,
         required: true
     },
+    dentist_name: {
+        type: String,
+        required: true
+    },
     operator_id: {
         type: String,
         default: 'Not assignment'
