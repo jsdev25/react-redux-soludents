@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse ,Select} from 'antd';
-import { logoutUser } from '../../../actions/authentication';
+import { logoutUser, UpdateDocument } from '../../../actions/authentication';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -74,12 +74,12 @@ class AdminManage extends React.Component {
   }
 
   handleClick(){
-  //   const update_data = {
+    const update_data = {
 
-  //     status: this.state.status,
-  //     operator_id: this.state.operator_id,
-  //     remarks: this.state.remarks,
-  // }
+      status: this.state.status,
+      operator_id: this.state.operator_id,
+    //  remarks: this.state.remarks,
+  }
 
   const getDate = {dentist_name: item.dentist_name, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_id:this.state.operator_id}
 
@@ -91,6 +91,7 @@ class AdminManage extends React.Component {
     });
 
   this.setState({ data_document: newData,visible_editMange:false });
+  this.props.UpdateDocument(update_data, item._id,this.props.history);
 
   }
 
@@ -290,6 +291,7 @@ class AdminManage extends React.Component {
 
 AdminManage.propTypes = {
   logoutUser: PropTypes.func.isRequired,
+  UpdateDocument: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -297,4 +299,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps,{ logoutUser })(withRouter(AdminManage))
+export default connect(mapStateToProps,{ logoutUser,UpdateDocument })(withRouter(AdminManage))

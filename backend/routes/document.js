@@ -61,10 +61,8 @@ router.post('/upload', (req, res, next) => {
 router.post('/document', function(req, res){
 
   var document = new Document(req.body);
-
   document.directory = directory;
   document.Filename = fileName;
-
   document.save(function(err){
         if(err){
             res.status(500).json({ code:'500',message:'fail',error: err });
@@ -75,3 +73,17 @@ router.post('/document', function(req, res){
 });
 
 module.exports = router;
+
+router.put('/:name', function(req, res){
+  Document.updateOne({ _id: req.params.name }, { $set: req.body }, function(err, member){
+
+      if(err){
+          res.status(500).json({ code:'500',message:'fail',error: err });
+      }else if(!member){
+          res.status(400).json({code:'404',message:'fail',error:"Not Found Document" });
+      }
+      else {
+          res.status(200).json({ code:'200',message:'success',data:req.body });
+      }
+  })
+});
