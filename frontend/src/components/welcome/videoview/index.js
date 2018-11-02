@@ -8,10 +8,11 @@ export class Videoview extends React.Component {
          <Row gutter={48} style={{padding:0,margin:0,marginTop:40}}>
 
                 <Col span={12} style={{height:570}}>
-                    <iframe style={{width:'100%',height:'100%'}}
+                    {/* <iframe style={{width:'100%',height:'100%'}}
                             src="https://www.youtube.com/embed/zYpb_4rcWl4" 
                             >
-                    </iframe>
+                    </iframe> */}
+                    <div style={{width:'100%', height:'100%', backgroundColor:'#5cb4fb', borderRadius: 20}}></div>
                 </Col>
 
                 <Col span={12} >

@@ -10,8 +10,8 @@ import axios from 'axios';
 
 const Panel = Collapse.Panel;
 function callback(key) {
-    console.log(key);
-  }
+
+}
 
 class AdminStuff extends React.Component {
 
@@ -78,14 +78,12 @@ class AdminStuff extends React.Component {
       }
     
       handlePayment = (e) => {
-        console.log(e);
         this.setState({
           hidden: !this.state.hidden,
         });
       }
     
       handleOk = (e) => {
-        console.log(e);
         this.setState({
           visible: false,
           visible_opertor:false,
@@ -93,7 +91,6 @@ class AdminStuff extends React.Component {
       }
     
       handleCancel = (e) => {
-        console.log(e);
         this.setState({
           visible: false,
           visible_opertor:false,
@@ -101,9 +98,7 @@ class AdminStuff extends React.Component {
         });
       }
 
-      handleSubmit(e) {
-        e.preventDefault();
-        
+      handleSubmit() {        
         let that = this;
         const InserData  = {
 
@@ -114,21 +109,22 @@ class AdminStuff extends React.Component {
             'number': this.state.number,
             'email': this.state.email,
             'password': this.state.password,
-            'password_confirm': this.state.password,
-
+            'admin': 0,
+            'subscription': {
+                'offer1' : 0
+            }
         }
 
         axios({
             method: 'post',
-            url: `/api/users/register`,
+            url: `/api/members/register`,
             data: InserData,
             config: {headers: {'Content-Type': 'multipart/form-data'}}
         })
             .then(function (response) {
 
                 if (response.status === 200) {
-                    console.log("Insert Success");
-                    console.log(response);
+
                 }
 
                 that.setState({data_dentists: [...that.state.data_dentists, InserData], visible: false}, () => {
@@ -137,7 +133,6 @@ class AdminStuff extends React.Component {
             })
 
             .catch(function (response) {
-                console.log(response);
                 return
             });
 
@@ -145,25 +140,21 @@ class AdminStuff extends React.Component {
 
     DeleteDentist(e, wholedata){
       let that = this;
-      console.log('Selected ID:', e._id,"this is my key");
       const index = wholedata.findIndex(item=>item._id === e._id); 
-      console.log("my index", index);
 
       axios({    
         method: 'delete',
-        url: `/api/users/` + e._id
+        url: `/api/members/` + e._id
     })
         .then(function (response) {
 
             if (response.status === 200) {
-                console.log("Delete Success");
-                console.log(response);
+            
             }
 
         })
 
         .catch(function (response) {
-            console.log(response);
             return
         });
         
@@ -171,30 +162,24 @@ class AdminStuff extends React.Component {
         array.splice(index, 1);
         that.setState({data_dentists: array});
       
-        console.log('hello', this.state.data_dentists);
     }
 
     DeleteOperator(e, wholedata){
         let that = this;
-        console.log('Selected ID:', e._id,"this is my key");
         const index = wholedata.findIndex(item=>item._id === e._id); 
-        console.log("my index", index);
   
         axios({    
           method: 'delete',
-          url: `/api/operators/` + e._id
+          url: `/api/members/` + e._id
       })
           .then(function (response) {
   
               if (response.status === 200) {
-                  console.log("Delete Success");
-                  console.log(response);
               }
   
           })
   
           .catch(function (response) {
-              console.log(response);
               return
           });
           
@@ -202,11 +187,9 @@ class AdminStuff extends React.Component {
           array.splice(index, 1);
           that.setState({data_operators: array});
         
-          console.log('Delete Operator', this.state.data_operators);
       }
 
-    handleSubmitO(e) {
-        e.preventDefault();
+    handleSubmitO() {
         
         let that = this;
         const InserDataO  = {
@@ -214,23 +197,21 @@ class AdminStuff extends React.Component {
             'name': this.state.Oname,
             'email': this.state.Oemail,
             'password': this.state.Opassword,
-            'password_confirm': this.state.Opassword,
-
+            'admin': 1,
+            'subscription': {
+                'offer1': 0
+            }
         }
-
-        console.log("==============+==================",InserDataO)
 
         axios({
             method: 'post',
-            url: `/api/operators/register`,
+            url: `/api/members/register`,
             data: InserDataO,
             config: {headers: {'Content-Type': 'multipart/form-data'}}
         })
             .then(function (response) {
 
                 if (response.status === 200) {
-                    console.log("Insert Success");
-                    console.log(response);
                 }
 
                 that.setState({data_operators: [...that.state.data_operators, InserDataO], visible_opertor: false,}, () => {
@@ -239,7 +220,6 @@ class AdminStuff extends React.Component {
             })
 
             .catch(function (response) {
-                console.log(response);
                 return
             });
 
@@ -354,7 +334,7 @@ class AdminStuff extends React.Component {
                     >
                     <div>
                         <Row gutter={48} style={{padding:0,margin:0}}>
-                          <form onSubmit={ this.handleSubmit }>
+                        
                             <Col span={12}>
                             <label style={{fontWeight:'800'}}>First Name</label>
                                 <Input placeholder="Jammy" style={{border: 'none'}} name="name" value={this.state.name} onChange={ this.handleInputChange }/>
@@ -399,8 +379,8 @@ class AdminStuff extends React.Component {
                                 <Input placeholder="abc def ghki" style={{border: 'none'}} onChange={ this.handleInputChange }/>
                             </Col>
 
-                            <button type="submit" style={{width:'100%'}}>Register</button>
-                          </form>
+                            <button onClick={this.handleSubmit.bind(this)} style={{width:'100%'}}>Register</button>
+                         
                         </Row>
                     </div>
                     </Modal>
@@ -415,7 +395,6 @@ class AdminStuff extends React.Component {
                     >
                     <div>
                         <Row gutter={48} style={{padding:0,margin:0}}>
-                          <form onSubmit={ this.handleSubmitO }>
                             <Col span={12}>
                             <label style={{fontWeight:'800'}}>Name</label>
                                 <Input placeholder="Jammy" style={{border: 'none'}} name="Oname" value={this.state.Oname} onChange={ this.handleInputChange }/>
@@ -433,8 +412,7 @@ class AdminStuff extends React.Component {
                             </Col>
                             <Divider style={{padding:0,marginTop:5,marginBottom:15}}/> 
 
-                            <button type="submit" style={{width:'100%'}}>Register</button>
-                          </form>
+                            <button onClick={this.handleSubmitO.bind(this)}  style={{width:'100%'}}>Register</button>
                         </Row>
                     </div>
                     </Modal>

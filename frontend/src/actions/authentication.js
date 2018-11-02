@@ -1,15 +1,14 @@
 import axios from 'axios';
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 import setAuthToken from '../setAuthToken';
-import jwt_decode from 'jwt-decode';
-const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
+// import jwt_decode from 'jwt-decode';
 
 export const registerUser = (member, history) => dispatch => {
     axios.post('/api/members/register', member)
             .then(res => {
                 alert('Success Sign Up!!!')
                 history.push('/login')
-                console.log('res',res)})
+            })
                 
             .catch(err => {
                 
@@ -21,16 +20,15 @@ export const registerUser = (member, history) => dispatch => {
 }
 
 export const addDentist = (user, history) => dispatch => {
-    axios.post('/api/users/register', user)
+    axios.post('/api/members/register', user)
             .then(res => {
                 alert('Success Add Dentist')
 
                 history.push('/admin')
-                console.log('res',res)})
+            })
                 
             .catch(err => {
                 alert('Fail Add Dentist')
-                console.log(err)
                 dispatch({
                     type: GET_ERRORS,
                     payload: err.response.data
@@ -38,7 +36,6 @@ export const addDentist = (user, history) => dispatch => {
             });
 }
 
-////////////////////////////////////////////////////////login admin
 export const loginAdmin = (user, history) => dispatch => {
     axios.post('/api/members/login', user)
             .then(res => {
@@ -47,10 +44,10 @@ export const loginAdmin = (user, history) => dispatch => {
                 localStorage.setItem('UserAdmin', JSON.stringify(res.data.member._id));
                 localStorage.setItem('pwa', JSON.stringify(res.data.password));
 
-                if( res.data.member.admin == 0) {
+                if( res.data.member.admin === 0) {
                     localStorage.setItem('admin', 0);
                     window.location.href = '/dentist'
-                } else if (res.data.member.admin == 1){
+                } else if (res.data.member.admin === 1){
                     localStorage.setItem('admin', 1);
                     window.location.href = '/operator'
                 } else {
@@ -59,7 +56,7 @@ export const loginAdmin = (user, history) => dispatch => {
                 }
 
                 setAuthToken(token);
-                const decoded = jwt_decode(token);
+                // const decoded = jwt_decode(token);
                
             })
             .catch(err => {
@@ -86,7 +83,7 @@ export const addDocument = (document, history) => dispatch => {
 }
 
 export const addOpeartor = (user, history) => dispatch => {
-    axios.post('/api/users/register', user)
+    axios.post('/api/members/register', user)
             .then(res => history.push('/login'))
             .catch(err => {
                 dispatch({
@@ -112,17 +109,14 @@ export const logoutUser = (history) => dispatch => {
 
 //////////////////////////////dentist//////////////////
 export const UpdateDentist = (dentist, history) => dispatch => {
-    console.log('-------11--------');
     axios.put('/api/members/update/'+  JSON.parse( localStorage.getItem('UserAdmin')), dentist)
             .then(res => {
                 alert('Success Update Dentist')
 
-                history.push('/dentist')        
-                console.log('res',res.data)})
+                history.push('/dentist') })      
                 
             .catch(err => {
                 alert('Fail Update Dentist')
-                console.log(err, dentist)
                 dispatch({
                     type: GET_ERRORS,
                     payload: err.response.data

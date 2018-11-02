@@ -30,7 +30,6 @@ class Navbar extends Component {
 
     render() {
         const {isAuthenticated} = this.props.auth;
-        console.log("=======================", localStorage.getItem('UserAdmin'));
         const authLinks = (
             <ul className="navbar-nav ml-auto">
                 <a href="" className="nav-link" onClick={this.onLogout.bind(this)}>

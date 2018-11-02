@@ -40,8 +40,6 @@ class DentistManage extends React.Component {
 
     axios.get('/api/members/' + useradmin)
     .then(res => {
-        const data_dentists = res.data.data;
-        console.log('okkkkkkkkkkkk', data_dentists);
         this.setState({ 
           name: res.data.data.name,
           lastname: res.data.data.lastname,
@@ -86,7 +84,6 @@ class DentistManage extends React.Component {
   }
 
   handleOk = (e) => {
-    console.log(e);
     this.setState({
       profile:false,
       subscription:false,
@@ -95,7 +92,6 @@ class DentistManage extends React.Component {
   }
 
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       profile:false,
       subscription:false,
@@ -142,7 +138,6 @@ class DentistManage extends React.Component {
 
   handleSubmit() {
     //e.preventDefault();
-    console.log("--",this.state.offer1);
     const dentist = {
       subscription: {        
         offer1: + this.state.offer1,
@@ -154,7 +149,6 @@ class DentistManage extends React.Component {
       }
     }
 
-    console.log('------------------+_____________', dentist);
     this.props.UpdateDentist(dentist, this.props.history);
     this.setState({
       offer1 : this.state.offer1,

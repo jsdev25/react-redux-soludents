@@ -72,7 +72,6 @@ class ManageFile extends Component {
           status: "In Progress",
       }
           this.props.addDocument(document, this.props.history);
-          console.log('document================', document);
           that.setState({data_lists: [...that.state.data_lists, NewData]}, () => {
           });
       })

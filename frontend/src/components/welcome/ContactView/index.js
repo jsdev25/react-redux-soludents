@@ -20,13 +20,8 @@ export class ContactView extends React.Component {
 
         <h4 style={{float:'left',marginTop:50}} className="text-white">How we can help you?</h4>
         <TextArea rows={4} />
-
-
         <Button style={{marginTop:70,borderRadius:20}}>SEND MESSAGE</Button>
 
-        <Button shape={'circle'} style={{position:'absolute',right:'10%',bottom:5,backgroundColor:'#fff',color:'#2ace57', fontSize:30,width:70,height:70 }} onClick={this.showModal}>
-            <span className={'icmn icmn-bubbles'} style={{color:'#2ace57',fontSize:35}}/>
-        </Button>
       </div>
       </div>
     );

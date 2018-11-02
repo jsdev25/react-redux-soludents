@@ -9,11 +9,9 @@ import Error from '../Error'
 class Operator extends Component {
     render() {
         const { isAuthenticated } = this.props.auth;
-        console.log("-------------------------", localStorage.getItem("admin"));
-
         return (
             <div>
-                {isAuthenticated && localStorage.getItem("admin") == 1 ? <OpearatorManage/> : <Error/>}
+                {isAuthenticated ? <OpearatorManage/> : <Error/>}
             </div>
         );
     }

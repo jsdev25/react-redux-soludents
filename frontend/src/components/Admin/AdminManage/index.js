@@ -12,8 +12,6 @@ var item,index
 const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
 const Option = Select.Option;
 
-
-
 class AdminManage extends React.Component {
 
   constructor(){
@@ -76,12 +74,12 @@ class AdminManage extends React.Component {
   }
 
   handleClick(){
-    const update_data = {
+  //   const update_data = {
 
-      status: this.state.status,
-      operator_id: this.state.operator_id,
-      remarks: this.state.remarks,
-  }
+  //     status: this.state.status,
+  //     operator_id: this.state.operator_id,
+  //     remarks: this.state.remarks,
+  // }
 
   const getDate = {dentist_name: item.dentist_name, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_id:this.state.operator_id}
 
@@ -94,8 +92,6 @@ class AdminManage extends React.Component {
 
   this.setState({ data_document: newData,visible_editMange:false });
 
-  console.log("update_data", update_data)
-
   }
 
   componentDidMount(){
@@ -104,13 +100,11 @@ class AdminManage extends React.Component {
     .then(res => {
         const data_document = res.data;
         this.setState({ data_document });
-        console.log("-------------documents-----------------", this.state.data_document)
     });
 
     axios.get('/api/members/' + useradmin)
     .then(res => {
-        const admin_info = res.data.data;
-        console.log('okkkkkkkkkkkk', admin_info);
+        // const admin_info = res.data.data;
         this.setState({ 
           name: res.data.data.name,
           email: res.data.data.email,
@@ -121,7 +115,6 @@ class AdminManage extends React.Component {
     .then(res => {
       const data_operators = res.data;
       this.setState({ data_operators });
-      console.log('operators', this.state.data_operators)
     });
   }
 
@@ -135,10 +128,8 @@ class AdminManage extends React.Component {
     index = newData.findIndex(item=>item._id === row._id);
     localStorage.setItem("directory", row.directory);
     localStorage.setItem("files", row.Filename);
-    //console.log(row.directory,"++++++++++++++++++==")
 
     item = newData[index];
-    //console.log('@@@@@@@@@@@@@@', this.state.data_document);
   }
 
   handleInputChange(e) {
@@ -154,14 +145,12 @@ class AdminManage extends React.Component {
   }
 
   handleOk = (e) => {
-    console.log(e);
     this.setState({
       visible_editMange: false,
     });
   }
 
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       visible_editMange:false,
 
@@ -175,8 +164,7 @@ class AdminManage extends React.Component {
   }
 
   handleChangeOperator = (e,array) => {
-    //console.log("element>>>>>>>>>>>>",e);
-    //console.log("element>>>>>>>>>>>>",array);
+
     for(let i=0;i<array.length;i++){
       if(array[i]._id===e){
           this.setState({
@@ -195,7 +183,7 @@ class AdminManage extends React.Component {
 
            <div>
                 <div style={{textAlign:'center',marginTop:20}}>
-                    <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} />
+                    <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" alt="Smiley face" height="50" width="120"></img>
                     <br/><br/>
                     <Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" style={{width:110,height:110}} />
                     <br /><br/><br/>

@@ -52,7 +52,6 @@ router.post('/upload', (req, res, next) => {
       })
 
       directory = __dirname + '/public/files/' + fileName;
-      console.log("fileName",fileName);
 
     },
   )

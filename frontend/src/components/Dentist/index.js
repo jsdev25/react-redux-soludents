@@ -9,11 +9,10 @@ import Error from '../Error'
 class Dentist extends Component {
     render() {
         const { isAuthenticated } = this.props.auth;
-        console.log("-------------------------", localStorage.getItem("admin"));
 
         return (
             <div style={{backgroundColor:'red'}}>
-                {isAuthenticated && localStorage.getItem("admin") == 0 ? <DentistManage/> : <Error/>}
+                {isAuthenticated ? <DentistManage/> : <Error/>}
             </div>
         );
     }

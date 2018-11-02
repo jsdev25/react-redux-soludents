@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row,Col} from 'antd'
+import {Row,Col,Icon} from 'antd'
 import './index.css';
 
 export class Footer extends React.Component {
@@ -68,9 +68,10 @@ export class Footer extends React.Component {
                     <strong>Follow us</strong>
                 </h3>
                 <br/>
-                <span className={'icmn icmn-facebook'} style={{color:'#323232',fontSize:35,marginLeft:5}}/>
-                <span className={'icmn icmn-twitter'} style={{color:'#323232',fontSize:35,marginLeft:20}}/>
-                <span className={'icmn icmn-linkedin2'} style={{color:'#323232',fontSize:35,marginLeft:20}}/>
+                <Icon type="twitter" theme="outlined" style={{color:'#323232',fontSize:35,marginLeft:15}}/>
+                <Icon type="google" theme="outlined" style={{color:'#323232',fontSize:35,marginLeft:15}}/>
+                <Icon type="instagram" theme="outlined" style={{color:'#323232',fontSize:35,marginLeft:15}}/>
+                <Icon type="facebook" theme="outlined" style={{color:'#323232',fontSize:35,marginLeft:15}}/>
                 </div>
             </Col>
             </Row>

@@ -97,26 +97,20 @@ router.delete('/:name', function(req, res){
 //perfect-member register
 router.post('/register', function(req, res) {
 
-    console.log('0');
-
     const { errors, isValid } = validateRegisterInput(req.body);
 
     if(!isValid) {
         return res.status(400).json(errors);
-        console.log('1');
     }
     Member.findOne({
         email: req.body.email
     }).then(member => {
         if(member) {
-            console.log('12');
             return res.status(400).json({
                 email: 'Email already exists'
             });
         }
         else {
-
-            console.log('123');
            
             const newMember = new Member({
                     name: req.body.name,

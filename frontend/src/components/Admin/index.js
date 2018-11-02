@@ -10,11 +10,10 @@ import AdminManage from './AdminManage';
 class Admin extends Component {
     render() {
         const { isAuthenticated } = this.props.auth;
-        console.log("-----------ddd--------------", localStorage.getItem("UserAdmin"));
        
         return (
             <div>
-                {isAuthenticated && localStorage.getItem("admin") == 2 ? <AdminManage/> : <Error/>}
+                {isAuthenticated ? <AdminManage/> : <Error/>}
             </div>
         );
     }
