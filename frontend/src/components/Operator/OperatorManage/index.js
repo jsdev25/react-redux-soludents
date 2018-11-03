@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse ,Select, Input} from 'antd';
+import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse , Input} from 'antd';
 import { logoutUser, AddRemarkDocument } from '../../../actions/authentication';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -10,7 +10,6 @@ const Panel = Collapse.Panel;
 var newData;
 var item,index
 const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
-const Option = Select.Option;
 const { TextArea } = Input;
 
 class OperatorManage extends React.Component {
