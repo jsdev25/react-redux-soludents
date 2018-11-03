@@ -24,10 +24,18 @@ const DocumentSchema = new Schema({
         type: String,
         default: 'Not assignment'
     },
+    operator_name: {
+        type: String
+    },
     status: {
         type: String,
         default:'In Progress'
     },
+    remarks: [{
+        operator_id:String,
+        operator_name:String,
+        content:String
+    }],
     created_date: {
         type: Date,
         default: Date.now

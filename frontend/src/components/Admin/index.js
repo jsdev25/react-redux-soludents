@@ -13,7 +13,7 @@ class Admin extends Component {
        
         return (
             <div>
-                {isAuthenticated ? <AdminManage/> : <Error/>}
+                {isAuthenticated && localStorage.getItem('admin') == 2 ? <AdminManage/> : <Error/>}
             </div>
         );
     }

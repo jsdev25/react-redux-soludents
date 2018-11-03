@@ -19,11 +19,15 @@ class AdminManage extends React.Component {
     this.state = {
         data_document : [],
         data_operators : [],
+        data_remarks:[],
         model_view: false,
         visible_editMange:false,
         status:'In progress',
         remarks:'Nothing',
-        operator_id:'',
+        remarks_name:'',
+        remarks_content:'',
+        selected_operator:'',
+      
         store:'',
         admin_info:[],
         name:'',
@@ -53,8 +57,8 @@ class AdminManage extends React.Component {
       dataIndex: 'created_date',
     }, {
       title: 'Opeartor',
-      key: 'operator_id',
-      dataIndex: 'operator_id',
+      key: 'operator_name',
+      dataIndex: 'operator_name',
     }, {
       title: 'Action',
       key: 'action',
@@ -76,12 +80,14 @@ class AdminManage extends React.Component {
   handleClick(){
     const update_data = {
 
-      status: this.state.status,
-      operator_id: this.state.operator_id,
-    //  remarks: this.state.remarks,
+      operator_id: this.state.selected_operator,
+      operator_name: this.state.operator_id,
+      status:this.state.status
   }
+  console.log('rrrrrrrrrrrrrrrrrrr', update_data)
 
-  const getDate = {dentist_name: item.dentist_name, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_id:this.state.operator_id}
+
+  const getDate = {dentist_name: item.dentist_name, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_name:this.state.operator_id}
 
     newData.splice(index, 1, {
 
@@ -131,6 +137,12 @@ class AdminManage extends React.Component {
     localStorage.setItem("files", row.Filename);
 
     item = newData[index];
+    axios.get('/api/documents/align/remarks/'+ row._id)
+    .then(res => {
+        const data_remarks = res.data.remarks;
+        this.setState({ data_remarks });
+        console.log('____👠👠👠____', data_remarks);
+    });
   }
 
   handleInputChange(e) {
@@ -165,11 +177,11 @@ class AdminManage extends React.Component {
   }
 
   handleChangeOperator = (e,array) => {
-
     for(let i=0;i<array.length;i++){
       if(array[i]._id===e){
           this.setState({
-            operator_id : array[i].name
+            operator_id : array[i].name,
+            selected_operator : e
           })
             }
           }
@@ -270,14 +282,25 @@ class AdminManage extends React.Component {
                     </Panel>
                 </Collapse>
 
-                {/* <Collapse bordered={false}>
+                <Collapse bordered={false}>
                     <Panel header="Remarks: " key="1">
-                            <span style={{marginLeft:20}}>Edit: </span>
-                            <input name = "remarks" value={this.state.remarks} onChange={ this.handleInputChange }/>
-                            <br/>
+                          <ul>
+                           {
+                              this.state.data_remarks.map(function(item, i){
+                                return (
+                                     <li key={i}>
+                                       <span style={{color:'red'}}>{item.operator_name}: </span>
+                                       <br/>
+                                       <span>{item.content}</span>
+                                     </li>
+                                     );
+                              })
+                            }
+                          </ul>
                         <br/> 
-                    </Panel>
-                </Collapse> */}
+                    </Panel> 
+
+                </Collapse>
                 
                   <button style={{width:'100%', marginTop:20}} onClick={this.handleClick.bind(this)} className="btn btn-primary" >
                     Save

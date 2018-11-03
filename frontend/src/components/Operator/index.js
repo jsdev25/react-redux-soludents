@@ -11,7 +11,7 @@ class Operator extends Component {
         const { isAuthenticated } = this.props.auth;
         return (
             <div>
-                {isAuthenticated ? <OpearatorManage/> : <Error/>}
+                {isAuthenticated  && localStorage.getItem('admin') == 1 ? <OpearatorManage/> : <Error/>}
             </div>
         );
     }

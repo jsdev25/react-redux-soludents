@@ -199,7 +199,7 @@ class DentistManage extends React.Component {
 
            <div>
                 <div style={{textAlign:'center',marginTop:20}}>
-                    <image src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" style={{width:80,height:40}} />
+                    <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" alt="Smiley face" height="50" width="120"></img>
                     <br/><br/>
                     <Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" style={{width:110,height:110}} />
                     <br /><br/><br/>
@@ -313,19 +313,19 @@ class DentistManage extends React.Component {
                       <Checkbox name="offer1"  onChange={this.handleChange1.bind(this)} value={this.state.offer1} style={{color:'#666',float:'right'}} checked={this.state.offer1}></Checkbox>
                     <br/>
                     <span style={{marginLeft:20}}>Offer 2</span>
-                      <Checkbox name="offer2" onChange={this.handleChange2.bind(this)} value={this.state.offer2} style={{color:'#666',float:'right'}} checked={this.state.offer2}></Checkbox>
+                      <Checkbox name="offer2" onChange={this.handleChange2.bind(this)} value={this.state.offer2} style={{clear:'both',color:'#666',float:'right'}} checked={this.state.offer2}></Checkbox>
                     <br/>
                     <span style={{marginLeft:20}}>Offer 3</span>
-                      <Checkbox name="offer3" onChange={this.handleChange3.bind(this)} value={this.state.offer3} style={{color:'#666',float:'right'}} checked={this.state.offer3}></Checkbox>
+                      <Checkbox name="offer3" onChange={this.handleChange3.bind(this)} value={this.state.offer3} style={{clear:'both',color:'#666',float:'right'}} checked={this.state.offer3}></Checkbox>
                     <br/>  
                     <span style={{marginLeft:20}}>Offer 4</span>
-                      <Checkbox name="offer4" onChange={this.handleChange4.bind(this)} value={this.state.offer4} style={{color:'#666',float:'right'}} checked={this.state.offer4}></Checkbox>
+                      <Checkbox name="offer4" onChange={this.handleChange4.bind(this)} value={this.state.offer4} style={{clear:'both',color:'#666',float:'right'}} checked={this.state.offer4}></Checkbox>
                     <br/>
                     <span style={{marginLeft:20}}>Offer 5</span>
-                      <Checkbox name="offer5" onChange={this.handleChange5.bind(this)} value={this.state.offer5} style={{color:'#666',float:'right'}} checked={this.state.offer5}></Checkbox>
+                      <Checkbox name="offer5" onChange={this.handleChange5.bind(this)} value={this.state.offer5} style={{clear:'both',color:'#666',float:'right'}} checked={this.state.offer5}></Checkbox>
                     <br/>
                     <span style={{marginLeft:20}}>Offer 6</span>
-                      <Checkbox name="offer6" onChange={this.handleChange6.bind(this)} value={this.state.offer6} style={{color:'#666',float:'right'}} checked={this.state.offer6}></Checkbox>
+                      <Checkbox name="offer6" onChange={this.handleChange6.bind(this)} value={this.state.offer6} style={{clear:'both',color:'#666',float:'right'}} checked={this.state.offer6}></Checkbox>
                     <br/><br/>
 
                     <button style={{width:'100%'}} onClick={this.handleSubmit} className="btn btn-primary" >

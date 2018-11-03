@@ -12,7 +12,7 @@ class Dentist extends Component {
 
         return (
             <div style={{backgroundColor:'red'}}>
-                {isAuthenticated ? <DentistManage/> : <Error/>}
+                {isAuthenticated  && localStorage.getItem('admin') == 0 ? <DentistManage/> : <Error/>}
             </div>
         );
     }

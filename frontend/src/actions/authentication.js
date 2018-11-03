@@ -126,8 +126,23 @@ export const UpdateDentist = (dentist, history) => dispatch => {
 
 //////////////////////////////Update Document//////////////////
 export const UpdateDocument = (data, id ,history) => dispatch => {
-    console.log('Am I wrong Id', id);
-    axios.put('/api/documents/'+ id, data)
+    axios.put('/api/documents/update/'+ id, data)
+        .then(res => {
+            alert('Success Update Document')})
+           // history.push('/dentist') })      
+            
+        .catch(err => {
+            alert('Fail Update Dentist')
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+        });
+}
+
+//////////////////////////////Pickup Document//////////////////
+export const AddRemarkDocument = (data, id ,history) => dispatch => {
+    axios.post('/api/documents/insertremark/'+ id, data)
         .then(res => {
             alert('Success Update Document')})
            // history.push('/dentist') })      

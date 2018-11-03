@@ -63,6 +63,7 @@ class ManageFile extends Component {
           dentist_id: useradmin,
           dentist_name :this.props.username,
           operator_id: "",
+          operator_name: ""
       }
       var today = new Date().toJSON().slice(0,24).replace(/-/g,'/');
 

@@ -111,7 +111,7 @@ class AdminStuff extends React.Component {
             'password': this.state.password,
             'admin': 0,
             'subscription': {
-                'offer1' : 0
+                'offer1' : 1
             }
         }
 

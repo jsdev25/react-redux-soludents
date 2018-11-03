@@ -27,10 +27,31 @@ router.get('/', function(req,res){
   })
 });
 
+router.get('/align/remarks/:name', function(req,res){
+    Document.findOne({_id:req.params.name},{'remarks': true, '_id' : false}, function(err, document){
+      if(err){
+        res.status(500).json({ code:'500',message:'fail',error: err });
+      }else if(!document){
+          res.status(404).json({code:'404',message:'fail',error:"Not Found document!-requested resource is not available now" });
+      }
+      else {
+          res.status(200).json(document);
+      }
+  })
+});
+
 router.get('/:dentist_id', function(req, res){
   Document.find({dentist_id: req.params.dentist_id}, function(err, dentist){
       if(err) return res.status(500).json({error: err});
       if(!dentist) return res.status(404).json({error: 'Dentist not found'});
+      res.json(dentist);
+  })
+});
+
+router.get('/operator/:name', function(req, res){
+  Document.find({operator_id: req.params.name }, function(err, dentist){
+      if(err) return res.status(500).json({error: err});
+      if(!dentist) return res.status(404).json({error: 'Dentist not found'}); 
       res.json(dentist);
   })
 });
@@ -51,7 +72,7 @@ router.post('/upload', (req, res, next) => {
         file: `public/${req.files.file.name}`,
       })
 
-      directory = __dirname + '/public/files/' + fileName;
+      directory = 'localhost:5000/public/files/' + fileName;
 
     },
   )
@@ -72,18 +93,41 @@ router.post('/document', function(req, res){
     });
 });
 
-module.exports = router;
 
-router.put('/:name', function(req, res){
-  Document.updateOne({ _id: req.params.name }, { $set: req.body }, function(err, member){
+router.post('/insertremark/:name', function(req, res){
 
-      if(err){
-          res.status(500).json({ code:'500',message:'fail',error: err });
-      }else if(!member){
-          res.status(400).json({code:'404',message:'fail',error:"Not Found Document" });
-      }
-      else {
-          res.status(200).json({ code:'200',message:'success',data:req.body });
-      }
+ // document.directory = directory;
+ // document.Filename = fileName;
+
+ Document.updateOne({ _id: req.params.name }, {
+    $push: {remarks : req.body}
+      }, function(err, member){
+
+    if(err){
+        res.status(500).json({ code:'500',message:'fail',error: err });
+    }else if(!member){
+        res.status(400).json({code:'404',message:'fail',error:"Not Found Member" });
+    }
+    else {
+        res.status(200).json({ code:'200',message:'success',data:req.body });
+    }
   })
-});
+  });
+
+  router.put('/update/:name', function(req, res){
+   
+    Document.updateOne({ _id: req.params.name }, {
+       $set: req.body }, function(err, member){
+   
+       if(err){
+           res.status(500).json({ code:'500',message:'fail',error: err });
+       }else if(!member){
+           res.status(400).json({code:'404',message:'fail',error:"Not Found Document" });
+       }
+       else {
+           res.status(200).json({ code:'200',message:'success',data:req.body });
+       }
+     })
+     });
+
+module.exports = router;
