@@ -252,7 +252,7 @@ class OperatorManage extends React.Component {
           onCancel={this.handleCancel}
           footer={[]}
         >
-          <a href={this.state.file_directory} download="proposed_file_name" type="file">FileName: {this.state.file_name}</a>
+          <a href={this.state.file_directory} download target="_blank" type="file">FileName: {this.state.file_name}</a>
           <Collapse bordered={false}>
 
             <Panel header="Status In Progress: " key="1">

@@ -332,7 +332,6 @@ class AdminStuff extends React.Component {
         this.setState({
             Update_dentist_visible: true
         })
-        let that = this;
         const index = wholedata.findIndex(item => item._id === e._id);
 
         this.setState({
@@ -350,10 +349,6 @@ class AdminStuff extends React.Component {
         })
 
         localStorage.setItem('update_dentist', e._id);
-        // this.setState({
-        //     Update_dentist_visible:true
-        // })
-        // let that = this;
         const index = wholedata.findIndex(item => item._id === e._id);
 
         this.setState({
@@ -364,17 +359,6 @@ class AdminStuff extends React.Component {
             offer5: wholedata[index].subscription.offer5,
             offer6: wholedata[index].subscription.offer6,
         })
-        const mydata = {
-            subscription: {
-                offer1: + this.state.offer1,
-                offer2: + this.state.offer2,
-                offer3: + this.state.offer3,
-                offer4: + this.state.offer4,
-                offer5: + this.state.offer5,
-                offer6: + this.state.offer6
-            }
-        }
-
     }
 
     handleUpdateDentist() {

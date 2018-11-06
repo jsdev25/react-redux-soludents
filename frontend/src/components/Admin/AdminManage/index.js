@@ -240,7 +240,7 @@ class AdminManage extends React.Component {
             onCancel={this.handleCancel}
             footer={[]}
             >
-                 <a href={this.state.file_directory} download="proposed_file_name" type="file">FileName: {this.state.file_name}</a>
+                 <a href={this.state.file_directory} target="_blank" type="file">FileName: {this.state.file_name}</a>
               
                 {/* <Collapse bordered={false}>
                   
@@ -290,7 +290,7 @@ class AdminManage extends React.Component {
 
                 <Collapse bordered={false}>
                     <Panel header="Remarks: " key="1">
-                          {/* <ul>
+                          <ul>
                            {
                               this.state.data_remarks.map(function(item, i){
                                 return (
@@ -302,7 +302,7 @@ class AdminManage extends React.Component {
                                      );
                               })
                             }
-                          </ul> */}
+                          </ul>
 
                         <br/> 
                     </Panel> 
