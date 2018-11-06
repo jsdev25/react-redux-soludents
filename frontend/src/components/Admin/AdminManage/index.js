@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse ,Select} from 'antd';
+import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse ,Select, Progress} from 'antd';
 import { logoutUser, UpdateDocument } from '../../../actions/authentication';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -52,9 +52,19 @@ class AdminManage extends React.Component {
       dataIndex: 'status',
       key: 'status',
     }, {
+      title: 'Active Statusbar',
+      key: 'status1',
+      dataIndex: 'status',
+      render: text => text === 'Successful'
+       ?<Progress percent={100}/>
+       : text === 'Un Successful' 
+         ? <Progress percent={50} status="exception" showInfo={false}/>
+         : <Progress percent={50} showInfo={false}/>
+    }, {
       title: 'Date',
       key: 'created_date',
       dataIndex: 'created_date',
+      render: text => <span>{text.replace('T',' ').substring(0,19)}</span>
     }, {
       title: 'Opeartor',
       key: 'operator_name',
@@ -68,7 +78,6 @@ class AdminManage extends React.Component {
         </span>
       ),
     }];
-
   }
 
   state = {
@@ -82,12 +91,10 @@ class AdminManage extends React.Component {
 
       operator_id: this.state.selected_operator,
       operator_name: this.state.operator_id,
-      status:this.state.status
+      // status:this.state.status
   }
-  console.log('rrrrrrrrrrrrrrrrrrr', update_data)
 
-
-  const getDate = {dentist_name: item.dentist_name, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_name:this.state.operator_id}
+  const getDate = {dentist_name: item.dentist_name, status: item.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_name:this.state.operator_id}
 
     newData.splice(index, 1, {
 
@@ -111,7 +118,6 @@ class AdminManage extends React.Component {
 
     axios.get('/api/members/' + useradmin)
     .then(res => {
-        // const admin_info = res.data.data;
         this.setState({ 
           name: res.data.data.name,
           email: res.data.data.email,
@@ -141,7 +147,6 @@ class AdminManage extends React.Component {
     .then(res => {
         const data_remarks = res.data.remarks;
         this.setState({ data_remarks });
-        console.log('____👠👠👠____', data_remarks);
     });
   }
 
@@ -188,11 +193,12 @@ class AdminManage extends React.Component {
      }
     
   render() {
+
     return(
       <div className="container-fluid" style={{backgroundColor:'#e7ebee'}}>
         <Row>
 
-          <Col xs={10} md={4} className="sidebar"  style={{position: 'fixed', height: '100vh'}}>
+          <Col xs={10} md={4} className="sidebar"  style  ={{position: 'fixed', height: '100vh'}}>
 
            <div>
                 <div style={{textAlign:'center',marginTop:20}}>
@@ -236,7 +242,7 @@ class AdminManage extends React.Component {
             >
                  <a href={this.state.file_directory} download="proposed_file_name" type="file">FileName: {this.state.file_name}</a>
               
-                <Collapse bordered={false}>
+                {/* <Collapse bordered={false}>
                   
                   <Panel header="Status In Progress: " key="1">
                        
@@ -257,7 +263,7 @@ class AdminManage extends React.Component {
                           <br/>
                       <br/> 
                   </Panel>
-                </Collapse>
+                </Collapse> */}
 
                 <Collapse bordered={false}>
                     <Panel header="Operator Name: " key="1">
@@ -284,7 +290,7 @@ class AdminManage extends React.Component {
 
                 <Collapse bordered={false}>
                     <Panel header="Remarks: " key="1">
-                          <ul>
+                          {/* <ul>
                            {
                               this.state.data_remarks.map(function(item, i){
                                 return (
@@ -296,7 +302,8 @@ class AdminManage extends React.Component {
                                      );
                               })
                             }
-                          </ul>
+                          </ul> */}
+
                         <br/> 
                     </Panel> 
 

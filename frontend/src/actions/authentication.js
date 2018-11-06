@@ -124,6 +124,78 @@ export const UpdateDentist = (dentist, history) => dispatch => {
         });
 }
 
+// UpdateOpertorByAdmin
+
+export const UpdateOpertorByAdmin = (data, history) => dispatch => {
+
+    console.log('🤓',data)
+    console.log('🤓🤓',localStorage.getItem('update_dentist'))
+
+    axios.put('/api/members/update/'+ localStorage.getItem('update_dentist'), data)
+        .then(res => {
+            alert('Success Update Operator')
+
+            history.push('/admin') })      
+            
+        .catch(err => {
+            alert('Fail Update Dentist')
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+        });
+}
+
+export const UpdateDentistSubscription = (dentist, history) => dispatch => {
+
+    axios.put('/api/members/update/subscription/'+ JSON.parse( localStorage.getItem('UserAdmin')), dentist)
+        .then(res => {
+            alert('Success Update Subscription')
+
+            history.push('/dentist') })      
+            
+        .catch(err => {
+            alert('Fail Update Dentist')
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+        });
+}
+
+export const UpdateDentistSubscriptionByadmin = (dentist, history) => dispatch => {
+
+    axios.put('/api/members/update/subscription/'+ localStorage.getItem('update_dentist'), dentist)
+        .then(res => {
+            alert('Success Update Subscription by admin')
+
+            history.push('/admin') })      
+            
+        .catch(err => {
+            alert('Fail Update Dentist')
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+        });
+}
+
+export const UpdateDentistByAdmin = (dentist, history) => dispatch => {
+    axios.put('/api/members/update/'+ localStorage.getItem('update_dentist'), dentist)
+        .then(res => {
+            alert('Success Update Dentist By Admin')
+
+           window.location.href = '/admin' })
+            
+        .catch(err => {
+            alert('Fail Update Dentist')
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+        });
+}
+
 //////////////////////////////Update Document//////////////////
 export const UpdateDocument = (data, id ,history) => dispatch => {
     axios.put('/api/documents/update/'+ id, data)
@@ -149,6 +221,21 @@ export const AddRemarkDocument = (data, id ,history) => dispatch => {
             
         .catch(err => {
             alert('Fail Update Dentist')
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+        });
+}
+
+export const AddHistory = (data ,history) => dispatch => {
+    axios.post('/api/histories/add/' , data)
+        .then(res => {
+            alert('Success Add History')})
+           // history.push('/dentist') })      
+            
+        .catch(err => {
+            alert('Fail Add History')
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data

@@ -10,6 +10,7 @@
     "jwt-decode": "^2.2.0",
     "react": "^16.4.1",
     "react-addons-update": "^15.6.2",
+    "react-csv": "^1.0.18",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",

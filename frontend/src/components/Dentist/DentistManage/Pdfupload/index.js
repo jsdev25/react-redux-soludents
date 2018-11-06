@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, List, Card} from 'antd';
+import { Row, Col, List, Card, Progress} from 'antd';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -68,7 +68,7 @@ class ManageFile extends Component {
       var today = new Date().toJSON().slice(0,24).replace(/-/g,'/');
 
         const NewData = {
-          Filename: "New File",
+          Filename: this.state.selectedFile.name,
           created_date: today,
           status: "In Progress",
       }
@@ -103,9 +103,18 @@ class ManageFile extends Component {
                     title={
                         <div style={{paddingLeft:12}}>
                           <Row>
-                            <Col xs={11}>{item.Filename}</Col>
-                            <Col xs={5}>{item.status}</Col>
-                            <Col xs={8}>{item.created_date}</Col>
+                            <Col xs={8}>{item.Filename}</Col>
+                            <Col xs={4}>{item.status}</Col>
+                            <Col xs={4}>
+                             {  
+                                item.status === 'Successful'
+                                ?<Progress percent={100}/>
+                                : item.status === 'Un Successful' 
+                                  ? <Progress percent={50} status="exception" showInfo={false}/>
+                                  : <Progress percent={50} showInfo={false}/>
+                             }  
+                            </Col>
+                            <Col xs={8}>{item.created_date.replace('T',' ').substring(0,19)}</Col>
                           </Row>
                         </div>
                     }

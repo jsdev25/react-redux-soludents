@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar , Row, Col, Card, Button, Modal, Input, Divider, Collapse, Checkbox} from 'antd';
-import { logoutUser, UpdateDentist } from '../../../actions/authentication';
+import { Avatar , Row, Col, Card, Button, Modal, Input, Divider, Collapse, Checkbox } from 'antd';
+import { logoutUser, UpdateDentist,UpdateDentistSubscription } from '../../../actions/authentication';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -40,6 +40,7 @@ class DentistManage extends React.Component {
 
     axios.get('/api/members/' + useradmin)
     .then(res => {
+
         this.setState({ 
           name: res.data.data.name,
           lastname: res.data.data.lastname,
@@ -149,7 +150,8 @@ class DentistManage extends React.Component {
       }
     }
 
-    this.props.UpdateDentist(dentist, this.props.history);
+
+    this.props.UpdateDentistSubscription(dentist, this.props.history);
     this.setState({
       offer1 : this.state.offer1,
       offer2 : this.state.offer2,
@@ -170,7 +172,7 @@ class DentistManage extends React.Component {
       phone: this.state.phone,
       adli_number: this.state.adli_number,
       email: this.state.email,
-      //password: this.state.password,
+      password: this.state.password,
   }
     this.props.UpdateDentist(dentist, this.props.history);
     this.setState({
@@ -266,7 +268,7 @@ class DentistManage extends React.Component {
 
                     <Col span={24}>
                         <label style={{fontWeight:'800'}}>Password</label>
-                        <Input type = "password" disabled style={{border: 'none'}} name="password" onChange={ this.handleInputChange } value={ this.state.password }/>
+                        <Input type = "text" style={{border: 'none'}} name="password" onChange={ this.handleInputChange } value={ this.state.password }/>
                     </Col>
                     <Divider style={{padding:0,marginTop:5,marginBottom:15}}/>
 
@@ -358,6 +360,7 @@ class DentistManage extends React.Component {
 DentistManage.propTypes = {
   logoutUser: PropTypes.func.isRequired,
   UpdateDentist: PropTypes.func.isRequired,
+  UpdateDentistSubscription: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -365,4 +368,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps,{ logoutUser,UpdateDentist })(withRouter(DentistManage))
+export default connect(mapStateToProps,{ logoutUser,UpdateDentist,UpdateDentistSubscription })(withRouter(DentistManage))

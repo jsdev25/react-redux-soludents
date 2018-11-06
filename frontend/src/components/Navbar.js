@@ -22,6 +22,21 @@ import { Menu, Dropdown, Icon } from 'antd';
 
 class Navbar extends Component {
 
+    constructor(){
+        super();
+        this.goPanel = this.goPanel.bind(this);
+    }
+
+    goPanel(){
+        if (localStorage.getItem('admin') == 2){
+            window.location.href = '/admin';
+        } else if (localStorage.getItem('admin') == 1){
+            window.location.href = '/operator';
+        } else {
+            window.location.href = '/dentist';  
+        }
+    }
+
     onLogout(e) {
         e.preventDefault();
         this.props.logoutUser(this.props.history);
@@ -32,10 +47,13 @@ class Navbar extends Component {
         const {isAuthenticated} = this.props.auth;
         const authLinks = (
             <ul className="navbar-nav ml-auto">
-                <a href="" className="nav-link" onClick={this.onLogout.bind(this)}>
-                   
-                            Logout
+                <a className="nav-link" onClick={this.goPanel.bind(this)}>  
+                            Panel
                 </a>
+
+                <a href="" className="nav-link" onClick={this.onLogout.bind(this)}>
+                            Logout
+                </a>          
             </ul>
         )
       const guestLinks = (

@@ -14,7 +14,7 @@ import { OurPartnerSlider } from './OurPartnerSlider';
 export default class Welcome extends React.Component {
   render() {
     return(
-        <div className="container-fluid">
+        <div className="container-fluid" id="home">
           <MainCarousel/>
           <Videoview />
         
@@ -73,7 +73,7 @@ export default class Welcome extends React.Component {
         
 
         <div style={{bottom: 10, right: 10, position:'fixed'}}>
-          <a href="#"><img src="https://www.qi-a.com/images/up-arrow-icon.png" alt="Smiley face" height="70" width="70"></img></a>
+          <a href="#home"><img src="https://www.qi-a.com/images/up-arrow-icon.png" alt="Smiley face" height="70" width="70"></img></a>
         </div>
         
       </div>

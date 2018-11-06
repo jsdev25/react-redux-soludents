@@ -7,6 +7,8 @@ const path=require("path");
 
 const documents = require('./routes/document'); 
 const members = require('./routes/member'); 
+const histories = require('./routes/history'); 
+
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     () => {console.log('Database is connected') },
@@ -22,6 +24,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,"public")));
 app.use('/api/documents', documents);
 app.use('/api/members', members);
+app.use('/api/histories', histories);
 app.get('/', function(req, res) {
     res.send('hello');
 });

@@ -72,8 +72,7 @@ router.post('/upload', (req, res, next) => {
         file: `public/${req.files.file.name}`,
       })
 
-      directory = 'localhost:5000/public/files/' + fileName;
-
+      directory = 'http://localhost:5000/files/' + fileName;
     },
   )
 

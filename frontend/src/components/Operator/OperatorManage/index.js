@@ -1,41 +1,44 @@
 import React from 'react';
-import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse , Input} from 'antd';
-import { logoutUser, AddRemarkDocument } from '../../../actions/authentication';
+import { Avatar, Row, Col, Card, Table, Button, Modal, Collapse, Input, Progress, Select } from 'antd';
+import { logoutUser, AddRemarkDocument, AddHistory, UpdateDocument } from '../../../actions/authentication';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 const Panel = Collapse.Panel;
 var newData;
-var item,index
-const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
+var item, index
+const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const { TextArea } = Input;
+const Option = Select.Option;
 
 class OperatorManage extends React.Component {
 
-  constructor(){
+  constructor() {
     super();
     this.state = {
-        data_document : [],
-        data_operators : [],
-        model_view: false,
-        visible_editMange:false,
-        status:'Un successful',
-        operator_id:'',
-        operator_name:'',
-        remarks:'',
-        store:'',
-        admin_info:[],
-        name:'',
-        email:'',
-        id:'',
-        file_name: localStorage.getItem('files'),
-        file_directory:localStorage.getItem('directory'),
+      data_document: [],
+      data_operators: [],
+      model_view: false,
+      visible_editMange: false,
+      status: 'Un successful',
+      operator_id: '',
+      operator_name: '',
+      remarks: '',
+      store: '',
+      admin_info: [],
+      name: '',
+      email: '',
+      operator_status: '',
+      id: '',
+      file_name: localStorage.getItem('files'),
+      file_directory: localStorage.getItem('directory'),
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleChangeOperator=this.handleChangeOperator.bind(this);
+    this.handleChangeOperator = this.handleChangeOperator.bind(this);
 
     this.columns = [{
       title: 'File',
@@ -50,9 +53,19 @@ class OperatorManage extends React.Component {
       dataIndex: 'status',
       key: 'status',
     }, {
+      title: 'Active Statusbar',
+      key: 'status1',
+      dataIndex: 'status',
+      render: text => text === 'Successful'
+        ? <Progress percent={100} />
+        : text === 'Un Successful'
+          ? <Progress percent={50} status="exception" showInfo={false} />
+          : <Progress percent={50} showInfo={false} />
+    }, {
       title: 'Date',
       key: 'created_date',
       dataIndex: 'created_date',
+      render: text => <span>{text.replace('T', ' ').substring(0, 19)}</span>
     }, {
       title: 'Opeartor',
       key: 'operator_name',
@@ -62,7 +75,7 @@ class OperatorManage extends React.Component {
       key: 'action',
       render: (text, record) => (
         <span>
-          <Button style={{backgroundColor:'#00a99d',color:'#fff'}} onClick={() => this.handleView(record)} >Click here</Button>
+          <Button style={{ backgroundColor: '#00a99d', color: '#fff' }} onClick={() => this.handleView(record)} >Click here</Button>
         </span>
       ),
     }];
@@ -70,21 +83,30 @@ class OperatorManage extends React.Component {
   }
 
   state = {
-    profile:false,
-    subscription:false,
-    manage:false,
+    profile: false,
+    subscription: false,
+    manage: false,
   }
 
-  handleClick(){
+  handleClick() {
     const update_data = {
-        operator_id:this.state.id,
-        operator_name:this.state.name,
-        content:this.state.remarks
-  }
+      operator_id: this.state.id,
+      operator_name: this.state.name,
+      content: this.state.remarks,
+      status: this.state.operator_status
+    }
 
+    const history_data = {
+      operator_id: this.state.id,
+      operator_name: this.state.name,
+      remark: this.state.remarks
+    }
 
+    const update_operator_data = {
+      status: this.state.operator_status
+    }
 
-  const getDate = {dentist_name: item.dentist_name, status: this.state.status, _id:item._id, Filename: item.Filename, created_date: item.created_date, operator_name:item.operator_name}
+    const getDate = { dentist_name: item.dentist_name, status: this.state.operator_status, _id: item._id, Filename: item.Filename, created_date: item.created_date, operator_name: item.operator_name }
 
     newData.splice(index, 1, {
 
@@ -93,43 +115,49 @@ class OperatorManage extends React.Component {
 
     });
 
-  this.setState({ data_document: newData,visible_editMange:false });
-  this.props.AddRemarkDocument(update_data, item._id,this.props.history);
+    console.log('🤗🤗🤗🤗🤗🤗🤗🤗', update_data);
+    console.log('😎😎😎😎😎😎😎😎', this.state.operator_status);
+
+    this.setState({ data_document: newData, visible_editMange: false });
+
+    this.props.UpdateDocument(update_operator_data, item._id, this.props.history);
+    this.props.AddRemarkDocument(update_data, item._id, this.props.history);
+    this.props.AddHistory(history_data, this.props.history);
 
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     axios.get('/api/documents/operator/' + useradmin)
-    .then(res => {
+      .then(res => {
         const data_document = res.data;
         this.setState({ data_document });
-    });
+      });
 
     axios.get('/api/members/' + useradmin)
-    .then(res => {
-        this.setState({ 
+      .then(res => {
+        this.setState({
           name: res.data.data.name,
           email: res.data.data.email,
           id: res.data.data._id,
-         });
-    });
+        });
+      });
 
     axios.get('/api/members/operator')
-    .then(res => {
-      const data_operators = res.data;
-      this.setState({ data_operators });
-    });
+      .then(res => {
+        const data_operators = res.data;
+        this.setState({ data_operators });
+      });
   }
 
   handleView = (row) => {
 
     this.setState({
-      visible_editMange:!this.state.visible_editMange
+      visible_editMange: !this.state.visible_editMange
     })
 
     newData = [...this.state.data_document];
-    index = newData.findIndex(item=>item._id === row._id);
+    index = newData.findIndex(item => item._id === row._id);
     localStorage.setItem("directory", row.directory);
     localStorage.setItem("files", row.Filename);
 
@@ -138,14 +166,14 @@ class OperatorManage extends React.Component {
 
   handleInputChange(e) {
     this.setState({
-        [e.target.name]: e.target.value
+      [e.target.name]: e.target.value
     })
-}
+  }
 
   onLogout(e) {
     e.preventDefault();
     this.props.logoutUser(this.props.history);
-    localStorage.setItem("admin",500)
+    localStorage.setItem("admin", 500)
   }
 
   handleOk = (e) => {
@@ -156,106 +184,109 @@ class OperatorManage extends React.Component {
 
   handleCancel = (e) => {
     this.setState({
-      visible_editMange:false,
+      visible_editMange: false,
 
     });
   }
 
   handleChange = (value) => {
     this.setState({
-      status : value
+      operator_status: value
     })
   }
 
-  handleChangeOperator = (e,array) => {
+  handleChangeOperator = (e, array) => {
 
-    for(let i=0;i<array.length;i++){
-      if(array[i]._id===e){
-          this.setState({
-            operator_id : array[i].name
-          })
-            }
-          }
-     }
-    
+    for (let i = 0; i < array.length; i++) {
+      if (array[i]._id === e) {
+        this.setState({
+          operator_id: array[i].name
+        })
+      }
+    }
+  }
+
   render() {
-    return(
-      <div className="container-fluid" style={{backgroundColor:'#e7ebee'}}>
+    return (
+      <div className="container-fluid" style={{ backgroundColor: '#e7ebee' }}>
         <Row>
 
-          <Col xs={10} md={4} className="sidebar"  style={{position: 'fixed', height: '100vh'}}>
+          <Col xs={10} md={4} className="sidebar" style={{ position: 'fixed', height: '100vh' }}>
 
-           <div>
-                <div style={{textAlign:'center',marginTop:20}}>
-                    <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" alt="Smiley face" height="50" width="120"></img>
-                    <br/><br/>
-                    <Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" style={{width:110,height:110}} />
-                    <br /><br/><br/>
-                    <span className="text-muted" style={{color:'#fff'}}>{this.state.name}</span>
-                    <br />
-                    <strong style={{color:'#fff'}}>{this.state.email}</strong>
-                </div>
-                <a style={{position:'absolute',bottom:20,color:'#fff',left:'40%',cursor:'point'}} onClick={this.onLogout.bind(this)}>sign out</a>
-           </div>
-          
+            <div>
+              <div style={{ textAlign: 'center', marginTop: 20 }}>
+                <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" alt="Smiley face" height="50" width="120"></img>
+                <br /><br />
+                <Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" style={{ width: 110, height: 110 }} />
+                <br /><br /><br />
+                <span className="text-muted" style={{ color: '#fff' }}>{this.state.name}</span>
+                <br />
+                <strong style={{ color: '#fff' }}>{this.state.email}</strong>
+              </div>
+              <a style={{ position: 'absolute', bottom: 20, color: '#fff', left: '40%', cursor: 'point' }} onClick={this.onLogout.bind(this)}>sign out</a>
+            </div>
+
           </Col>
 
-          <Col xs={10} md={4} className="sidebar" style={{position: 'relative'}}></Col>
-          
+          <Col xs={10} md={4} className="sidebar" style={{ position: 'relative' }}></Col>
+
           <Col xs={14} md={20}>
 
             <div className="card-view" >
-               <Card>
-                  <Table columns={this.columns} dataSource={this.state.data_document} />
-                </Card>
+              <Card>
+                <Table columns={this.columns} dataSource={this.state.data_document} />
+              </Card>
+              <Link to="/">
+                <Button style={{ marginLeft: 90, marginTop: 30, backgroundColor: '#00a99d', color: '#fff', width: 120, height: 50 }}>Back</Button>
+              </Link>
             </div>
 
           </Col>
         </Row>
 
         <Modal
-            centered={true}
-            title={"File Manage"}
-            visible={this.state.visible_editMange}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            footer={[]}
-            >
-                <a href={this.state.file_directory} download="proposed_file_name" type="file">FileName: {this.state.file_name}</a>              
-                {/* <Collapse bordered={false}>
-                  
-                  <Panel header="Status In Progress: " key="1">
-                       
-                          <span style={{marginLeft:20}}>Edit: </span>
-                          <Select
-                            showSearch
-                            style={{ width: 200 }}
-                            placeholder="Select status"
-                            optionFilterProp="children"
-                            onChange={this.handleChange.bind(this)}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                          >
-                            <Option value="In progress">In progress</Option>
-                            <Option value="Un Successful">Un Successful</Option>
-                            <Option value="Successful">Successful</Option>
+          centered={true}
+          title={"File Manage"}
+          visible={this.state.visible_editMange}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[]}
+        >
+          <a href={this.state.file_directory} download="proposed_file_name" type="file">FileName: {this.state.file_name}</a>
+          <Collapse bordered={false}>
 
-                          </Select>              
-                          <br/>
-                      <br/> 
-                  </Panel>
-                </Collapse> */}
+            <Panel header="Status In Progress: " key="1">
 
-                <Collapse bordered={false}>
-                    <Panel header="Remarks: " key="1">
-                    <span style={{marginLeft:20}}>Edit: </span>
-                    <br/>
-                    <TextArea value={this.state.remarks} name="remarks" onChange={this.handleInputChange.bind(this)} rows={4}/>
-                       
-                    </Panel>
-                </Collapse>
+              <span style={{ marginLeft: 20 }}>Edit: </span>
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="Select status"
+                optionFilterProp="children"
+                onChange={this.handleChange.bind(this)}
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              >
+                <Option value="In progress">In progress</Option>
+                <Option value="Un Successful">Un Successful</Option>
+                <Option value="Successful">Successful</Option>
 
-                  <button style={{width:'100%', marginTop:20}} onClick={this.handleClick.bind(this)} className="btn btn-primary" >
-                    Save
+              </Select>
+              <br />
+              <br />
+            </Panel>
+          </Collapse>
+
+          <Collapse bordered={false}>
+            <Panel header="Remarks: " key="1">
+              <span style={{ marginLeft: 20 }}>Edit: </span>
+              <br />
+              <TextArea value={this.state.remarks} name="remarks" onChange={this.handleInputChange.bind(this)} rows={4} />
+
+            </Panel>
+          </Collapse>
+
+          <button style={{ width: '100%', marginTop: 20 }} onClick={this.handleClick.bind(this)} className="btn btn-primary" >
+            Save
                   </button>
         </Modal>
 
@@ -274,4 +305,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps,{ logoutUser,AddRemarkDocument })(withRouter(OperatorManage))
+export default connect(mapStateToProps, { logoutUser, AddRemarkDocument, AddHistory, UpdateDocument })(withRouter(OperatorManage))

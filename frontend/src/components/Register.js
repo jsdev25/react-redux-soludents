@@ -51,7 +51,13 @@ class Register extends Component {
             email: this.state.email,
             password: this.state.password,
             subscription:{
-                offer1: 1
+                offer1: 0,
+                offer2: 0,
+                offer3: 0,
+                offer4: 0,
+                offer5: 0,
+                offer6: 0,
+
             },
             admin: 0,
 
