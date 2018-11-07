@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, List, Card, Progress} from 'antd';
+import { Row, Col, List, Card, Progress, message} from 'antd';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -41,7 +41,7 @@ class ManageFile extends Component {
     let that = this;
 
     if(this.state.selectedFile == null){
-      alert('please input file!');
+      message.error('Please input file!')
       return true;
     }
 

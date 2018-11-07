@@ -1,6 +1,5 @@
 import React from 'react';
-import { Avatar, Button, Row, Col, Card, List, Collapse, Icon, Input, Divider, Modal, Checkbox, Table } from 'antd';
-import { Link } from 'react-router-dom';
+import { Avatar, Button, Row, Col, Card, List, Collapse, Icon, Input, Divider, Modal, Checkbox, Table, message } from 'antd';
 import { customPanelStyle } from './const'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -175,6 +174,21 @@ class AdminStuff extends React.Component {
 
     handleSubmitO_Byadmin() {
 
+        if(!this.state.Oname_byadmin){
+            message.error('Operator name is empty');
+            return false;
+        }
+
+        if(!this.state.Oemail_byadmin){
+            message.error('Operator email is empty');
+            return false;
+        }
+
+        if(!this.state.Oemail_byadmin.includes('@')){
+            message.error('Operator email is invalid');
+            return false;
+        }
+
         const mydata = {
             name: this.state.Oname_byadmin,
             email: this.state.Oemail_byadmin,
@@ -258,6 +272,27 @@ class AdminStuff extends React.Component {
     }
 
     handleSubmit() {
+
+        if(!this.state.name){
+            message.error('Dentist name is empty');
+            return false;
+        }
+
+        if(!this.state.email){
+            message.error('Dentist email is empty');
+            return false;
+        }
+
+        if(!this.state.email.includes('@')){
+            message.error('Dentist email is invalid');
+            return false;
+        }
+
+        if(!this.state.password){
+            message.error('Dentist password is empty');
+            return false;
+        }
+
         let that = this;
         const InserData = {
 
@@ -328,6 +363,7 @@ class AdminStuff extends React.Component {
     }
 
     UpdateDentist(e, wholedata) {
+
         localStorage.setItem('update_dentist', e._id);
         this.setState({
             Update_dentist_visible: true
@@ -362,12 +398,26 @@ class AdminStuff extends React.Component {
     }
 
     handleUpdateDentist() {
+        if(!this.state.update_name_d){
+            message.error('Dentist name is empty');
+            return false;
+        }
+
+        if(!this.state.update_email_d){
+            message.error('Dentist email is empty');
+            return false;
+        }
+
+        if(!this.state.update_email_d.includes('@')){
+            message.error('Dentist email is invalid');
+            return false;
+        }
         const dentist = {
             name: this.state.update_name_d,
             lastname: this.state.update_lastname_d,
             address: this.state.update_address_d,
             phone: this.state.update_phone_d,
-            // adli_number: this.state.update_number_d,
+            adli_number: this.state.update_number_d,
             email: this.state.update_email_d,
             password: this.state.update_password_d,
         }
@@ -378,6 +428,7 @@ class AdminStuff extends React.Component {
     }
 
     handleUpdateOperator() {
+
         const dentist = {
             name: this.state.update_name_d,
             lastname: this.state.update_lastname_d,
@@ -415,6 +466,7 @@ class AdminStuff extends React.Component {
     }
 
     DeleteOperator(e, wholedata) {
+        
         let that = this;
         const index = wholedata.findIndex(item => item._id === e._id);
 
@@ -423,10 +475,6 @@ class AdminStuff extends React.Component {
             url: `/api/members/` + e._id
         })
             .then(function (response) {
-
-                if (response.status === 200) {
-                }
-
             })
 
             .catch(function (response) {
@@ -440,6 +488,26 @@ class AdminStuff extends React.Component {
     }
 
     handleSubmitO() {
+
+        if(!this.state.Oname){
+            message.error('Operator name is empty');
+            return false;
+        }
+
+        if(!this.state.Oemail){
+            message.error('Operator email is empty');
+            return false;
+        }
+
+        if(!this.state.Oemail.includes('@')){
+            message.error('Operator email is invalid');
+            return false;
+        }
+
+        if(!this.state.Opassword){
+            message.error('Operator password is empty');
+            return false;
+        }
 
         let that = this;
         const InserDataO = {
@@ -473,12 +541,15 @@ class AdminStuff extends React.Component {
                 return
             });
 
+            console.log('~~~~~~~~~~~~~~~~~~~', InserDataO);
+
     }
 
     render() {
 
         return (
             <div>
+                
                 <Row gutter={12} >
                     <Col xs={12}>
                         <Card>
@@ -501,14 +572,14 @@ class AdminStuff extends React.Component {
                                                         }
                                                         style={customPanelStyle}
                                                         key="1">
-                                                        <span style={{ marginLeft: 50 }}>Dental Work History</span>
-                                                        <Icon type="file-pdf" onClick={(e, data) => this.HandleHistories(item, this.state.data_histories)} theme="outlined" style={{ color: '#666', float: 'right' }} />
+                                                        <span style={{ marginLeft: 50, fontSize:25, fontWeight: '400' }}>Dental Work History</span>
+                                                        <Icon type="file-pdf" onClick={(e, data) => this.HandleHistories(item, this.state.data_histories)} theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
                                                         <br />
-                                                        <span style={{ marginLeft: 50 }}>Edit Account</span>
-                                                        <Icon type="form" onClick={(e, data) => this.UpdateOperator(item, this.state.data_operators)} theme="outlined" style={{ color: '#666', float: 'right' }} />
+                                                        <span style={{ marginLeft: 50, fontSize:25, fontWeight: '400' }}>Edit Account</span>
+                                                        <Icon type="form" onClick={(e, data) => this.UpdateOperator(item, this.state.data_operators)} theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
                                                         <br />
-                                                        <span style={{ marginLeft: 50 }}>Delete Account</span>
-                                                        <Icon onClick={(e, data) => this.DeleteOperator(item, this.state.data_operators)} type="delete" theme="outlined" style={{ color: '#666', float: 'right' }} />
+                                                        <span style={{ marginLeft: 50, fontSize:25, fontWeight: '400' }}>Delete Account</span>
+                                                        <Icon onClick={(e, data) => this.DeleteOperator(item, this.state.data_operators)} type="delete" theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
                                                     </Panel>
                                                 </Collapse>
                                             }
@@ -545,14 +616,14 @@ class AdminStuff extends React.Component {
                                                         }
                                                         style={customPanelStyle}
                                                         key={1}>
-                                                        <span style={{ marginLeft: 50 }}>Manage Subscriptions </span>
-                                                        <Icon type="file-pdf" onClick={(e, data) => this.UpdateSubscription(item, this.state.data_dentists)} theme="outlined" style={{ color: '#666', float: 'right' }} />
+                                                        <span style={{ marginLeft: 50, fontSize:25, fontWeight: '400' }}>Manage Subscriptions </span>
+                                                        <Icon type="file-pdf" onClick={(e, data) => this.UpdateSubscription(item, this.state.data_dentists)} theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
                                                         <br />
-                                                        <span style={{ marginLeft: 50 }}>Edit Account</span>
-                                                        <Icon type="form" onClick={(e, data) => this.UpdateDentist(item, this.state.data_dentists)} theme="outlined" style={{ color: '#666', float: 'right' }} />
+                                                        <span style={{ marginLeft: 50 , fontSize:25, fontWeight: '400'}}>Edit Account</span>
+                                                        <Icon type="form" onClick={(e, data) => this.UpdateDentist(item, this.state.data_dentists)} theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
                                                         <br />
-                                                        <span style={{ marginLeft: 50 }}>Delete Account</span>
-                                                        <Icon onClick={(e, data) => this.DeleteDentist(item, this.state.data_dentists)} type="delete" theme="outlined" style={{ color: '#666', float: 'right' }} />
+                                                        <span style={{ marginLeft: 50 , fontSize:25, fontWeight: '400'}}>Delete Account</span>
+                                                        <Icon onClick={(e, data) => this.DeleteDentist(item, this.state.data_dentists)} type="delete" theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
                                                     </Panel>
                                                 </Collapse>
                                             }
@@ -567,12 +638,7 @@ class AdminStuff extends React.Component {
                             </div>
                         </Card>
                     </Col>
-                    <Col xs={24}>
-                        <br /><br /><br />
-                        <Link to="/">
-                            <Button style={{ marginLeft: 10, backgroundColor: '#00a99d', color: '#fff', width: 120, height: 50 }}>Back</Button>
-                        </Link>
-                    </Col>
+                
                 </Row>
 
                 <Modal
@@ -675,16 +741,15 @@ class AdminStuff extends React.Component {
                             </Col>
                             <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
-                            <Col span={24}>
+                            <Col span={12}>
                                 <label style={{ fontWeight: '800' }}>Address</label>
                                 <Input placeholder="10 Woodford St, California CA 9820" style={{ border: 'none' }} name="update_address_d" value={this.state.update_address_d} onChange={this.handleInputChange} />
                             </Col>
-                            <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
-                            {/* <Col span={12}>
-                            <label style={{fontWeight:'800'}}>Adzli Number</label>
+                            <Col span={12}>
+                            <label style={{fontWeight:'800'}}>Adeli Number</label>
                                 <Input placeholder="123456789" style={{border: 'none'}} value={this.state.update_number_d} name="update_number_d" onChange={ this.handleInputChange }/>
-                            </Col> */}
+                            </Col>
 
                             <button onClick={this.handleUpdateDentist.bind(this)} style={{ width: '100%' }}>Update</button>
 

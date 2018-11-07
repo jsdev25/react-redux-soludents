@@ -1,6 +1,7 @@
 import React from 'react';
-import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse ,Select, Progress} from 'antd';
+import { Avatar , Row, Col, Card, Table , Button, Modal, Collapse ,Select, Progress, message} from 'antd';
 import { logoutUser, UpdateDocument } from '../../../actions/authentication';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -216,8 +217,13 @@ class AdminManage extends React.Component {
           </Col>
 
           <Col xs={10} md={4} className="sidebar" style={{position: 'relative'}}></Col>
+           
           
           <Col xs={14} md={20}>
+
+          <Link to="/">
+              <Button style={{ marginLeft:100, marginTop:40 ,backgroundColor: '#00a99d', color: '#fff', width: 120, height: 50 }}>Back</Button>
+          </Link>
 
             <div className="card-view" >
                <Card>

@@ -231,14 +231,13 @@ class OperatorManage extends React.Component {
           <Col xs={10} md={4} className="sidebar" style={{ position: 'relative' }}></Col>
 
           <Col xs={14} md={20}>
-
+            <Link to="/">
+              <Button style={{ marginLeft: 100, marginTop: 40, backgroundColor: '#00a99d', color: '#fff', width: 120, height: 50 }}>Back</Button>
+            </Link>
             <div className="card-view" >
               <Card>
                 <Table columns={this.columns} dataSource={this.state.data_document} />
               </Card>
-              <Link to="/">
-                <Button style={{ marginLeft: 90, marginTop: 30, backgroundColor: '#00a99d', color: '#fff', width: 120, height: 50 }}>Back</Button>
-              </Link>
             </div>
 
           </Col>
