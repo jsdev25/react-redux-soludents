@@ -48,10 +48,14 @@ class AdminManage extends React.Component {
       title: 'Dentist',
       dataIndex: 'dentist_name',
       key: 'dentist_name',
+      onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
+      sorter: (a, b) => a.dentist_name.length - b.dentist_name.length,
     }, {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
+      sorter: (a, b) => a.status.length - b.status.length,
     }, {
       title: 'Active Statusbar',
       key: 'status1',
@@ -65,11 +69,15 @@ class AdminManage extends React.Component {
       title: 'Date',
       key: 'created_date',
       dataIndex: 'created_date',
+      onFilter: (value, record) => record.created_date.indexOf(value) === 0,
+      sorter: (a, b) => { return a.created_date.localeCompare(b.created_date)},
       render: text => <span>{text.replace('T',' ').substring(0,19)}</span>
     }, {
       title: 'Opeartor',
       key: 'operator_name',
       dataIndex: 'operator_name',
+      onFilter: (value, record) => record.operator_name.indexOf(value) === 0,
+      sorter: (a, b) => a.operator_name.length + b.operator_name.length,
     }, {
       title: 'Action',
       key: 'action',

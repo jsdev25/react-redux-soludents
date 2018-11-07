@@ -48,10 +48,14 @@ class OperatorManage extends React.Component {
       title: 'Dentist',
       dataIndex: 'dentist_name',
       key: 'dentist_name',
+      onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
+      sorter: (a, b) => a.dentist_name.length + b.dentist_name.length,
     }, {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
+      sorter: (a, b) => a.status.length + b.status.length,
     }, {
       title: 'Active Statusbar',
       key: 'status1',
@@ -65,12 +69,10 @@ class OperatorManage extends React.Component {
       title: 'Date',
       key: 'created_date',
       dataIndex: 'created_date',
+      onFilter: (value, record) => record.created_date.indexOf(value) === 0,
+      sorter: (a, b) => { return a.created_date.localeCompare(b.created_date)},
       render: text => <span>{text.replace('T', ' ').substring(0, 19)}</span>
-    }, {
-      title: 'Opeartor',
-      key: 'operator_name',
-      dataIndex: 'operator_name',
-    }, {
+    },{
       title: 'Action',
       key: 'action',
       render: (text, record) => (
@@ -114,9 +116,6 @@ class OperatorManage extends React.Component {
       ...null,
 
     });
-
-    console.log('🤗🤗🤗🤗🤗🤗🤗🤗', update_data);
-    console.log('😎😎😎😎😎😎😎😎', this.state.operator_status);
 
     this.setState({ data_document: newData, visible_editMange: false });
 
@@ -259,13 +258,14 @@ class OperatorManage extends React.Component {
               <span style={{ marginLeft: 20 }}>Edit: </span>
               <Select
                 showSearch
+                defaultValue="In progress" 
                 style={{ width: 200 }}
                 placeholder="Select status"
                 optionFilterProp="children"
                 onChange={this.handleChange.bind(this)}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >
-                <Option value="In progress">In progress</Option>
+                <Option value="In progress" >In progress</Option>
                 <Option value="Un Successful">Un Successful</Option>
                 <Option value="Successful">Successful</Option>
 

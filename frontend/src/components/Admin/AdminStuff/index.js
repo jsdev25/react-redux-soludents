@@ -73,7 +73,7 @@ class AdminStuff extends React.Component {
             Opassword_byadmin: '',
             Oemail_byadmin: '',
 
-            data : [
+            data: [
                 { firstname: "1111", lastname: "Tomi", email: "ah@smthing.co.com" },
                 { firstname: "2222", lastname: "Labes", email: "rl@smthing.co.com" },
                 { firstname: "3333", lastname: "Min l3b", email: "ymin@cocococo.com" }
@@ -174,17 +174,17 @@ class AdminStuff extends React.Component {
 
     handleSubmitO_Byadmin() {
 
-        if(!this.state.Oname_byadmin){
+        if (!this.state.Oname_byadmin) {
             message.error('Operator name is empty');
             return false;
         }
 
-        if(!this.state.Oemail_byadmin){
+        if (!this.state.Oemail_byadmin) {
             message.error('Operator email is empty');
             return false;
         }
 
-        if(!this.state.Oemail_byadmin.includes('@')){
+        if (!this.state.Oemail_byadmin.includes('@')) {
             message.error('Operator email is invalid');
             return false;
         }
@@ -273,22 +273,22 @@ class AdminStuff extends React.Component {
 
     handleSubmit() {
 
-        if(!this.state.name){
+        if (!this.state.name) {
             message.error('Dentist name is empty');
             return false;
         }
 
-        if(!this.state.email){
+        if (!this.state.email) {
             message.error('Dentist email is empty');
             return false;
         }
 
-        if(!this.state.email.includes('@')){
+        if (!this.state.email.includes('@')) {
             message.error('Dentist email is invalid');
             return false;
         }
 
-        if(!this.state.password){
+        if (!this.state.password) {
             message.error('Dentist password is empty');
             return false;
         }
@@ -398,17 +398,17 @@ class AdminStuff extends React.Component {
     }
 
     handleUpdateDentist() {
-        if(!this.state.update_name_d){
+        if (!this.state.update_name_d) {
             message.error('Dentist name is empty');
             return false;
         }
 
-        if(!this.state.update_email_d){
+        if (!this.state.update_email_d) {
             message.error('Dentist email is empty');
             return false;
         }
 
-        if(!this.state.update_email_d.includes('@')){
+        if (!this.state.update_email_d.includes('@')) {
             message.error('Dentist email is invalid');
             return false;
         }
@@ -466,7 +466,7 @@ class AdminStuff extends React.Component {
     }
 
     DeleteOperator(e, wholedata) {
-        
+
         let that = this;
         const index = wholedata.findIndex(item => item._id === e._id);
 
@@ -474,37 +474,37 @@ class AdminStuff extends React.Component {
             method: 'delete',
             url: `/api/members/` + e._id
         })
-            .then(function (response) {
+            .then(function (response) {                
             })
 
             .catch(function (response) {
                 return
             });
-
         var array = [...that.state.data_operators];
         array.splice(index, 1);
         that.setState({ data_operators: array });
+        window.location.href = '/admin';
 
     }
 
     handleSubmitO() {
 
-        if(!this.state.Oname){
+        if (!this.state.Oname) {
             message.error('Operator name is empty');
             return false;
         }
 
-        if(!this.state.Oemail){
+        if (!this.state.Oemail) {
             message.error('Operator email is empty');
             return false;
         }
 
-        if(!this.state.Oemail.includes('@')){
+        if (!this.state.Oemail.includes('@')) {
             message.error('Operator email is invalid');
             return false;
         }
 
-        if(!this.state.Opassword){
+        if (!this.state.Opassword) {
             message.error('Operator password is empty');
             return false;
         }
@@ -529,19 +529,15 @@ class AdminStuff extends React.Component {
         })
             .then(function (response) {
 
-                if (response.status === 200) {
-                }
+                that.setState({ data_operators: [...that.state.data_operators, InserDataO], visible_opertor: false, }, () => { });
+                window.location.href = '/admin';
+                message.success('New operator inserted!')
 
-                that.setState({ data_operators: [...that.state.data_operators, InserDataO], visible_opertor: false, }, () => {
-                });
-                
             })
 
             .catch(function (response) {
                 return
             });
-
-            console.log('~~~~~~~~~~~~~~~~~~~', InserDataO);
 
     }
 
@@ -549,7 +545,7 @@ class AdminStuff extends React.Component {
 
         return (
             <div>
-                
+
                 <Row gutter={12} >
                     <Col xs={12}>
                         <Card>
@@ -572,14 +568,14 @@ class AdminStuff extends React.Component {
                                                         }
                                                         style={customPanelStyle}
                                                         key="1">
-                                                        <span style={{ marginLeft: 50, fontSize:25, fontWeight: '400' }}>Dental Work History</span>
-                                                        <Icon type="file-pdf" onClick={(e, data) => this.HandleHistories(item, this.state.data_histories)} theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
+                                                        <span style={{ marginLeft: 50, fontSize: 25, fontWeight: '400' }}>Dental Work History</span>
+                                                        <Icon type="file-pdf" onClick={(e, data) => this.HandleHistories(item, this.state.data_histories)} theme="outlined" style={{ color: '#666', float: 'right', fontSize: 25, cursor: 'pointer' }} />
                                                         <br />
-                                                        <span style={{ marginLeft: 50, fontSize:25, fontWeight: '400' }}>Edit Account</span>
-                                                        <Icon type="form" onClick={(e, data) => this.UpdateOperator(item, this.state.data_operators)} theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
+                                                        <span style={{ marginLeft: 50, fontSize: 25, fontWeight: '400' }}>Edit Account</span>
+                                                        <Icon type="form" onClick={(e, data) => this.UpdateOperator(item, this.state.data_operators)} theme="outlined" style={{ color: '#666', float: 'right', fontSize: 25, cursor: 'pointer' }} />
                                                         <br />
-                                                        <span style={{ marginLeft: 50, fontSize:25, fontWeight: '400' }}>Delete Account</span>
-                                                        <Icon onClick={(e, data) => this.DeleteOperator(item, this.state.data_operators)} type="delete" theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
+                                                        <span style={{ marginLeft: 50, fontSize: 25, fontWeight: '400' }}>Delete Account</span>
+                                                        <Icon onClick={(e, data) => this.DeleteOperator(item, this.state.data_operators)} type="delete" theme="outlined" style={{ color: '#666', float: 'right', fontSize: 25, cursor: 'pointer' }} />
                                                     </Panel>
                                                 </Collapse>
                                             }
@@ -616,14 +612,14 @@ class AdminStuff extends React.Component {
                                                         }
                                                         style={customPanelStyle}
                                                         key={1}>
-                                                        <span style={{ marginLeft: 50, fontSize:25, fontWeight: '400' }}>Manage Subscriptions </span>
-                                                        <Icon type="file-pdf" onClick={(e, data) => this.UpdateSubscription(item, this.state.data_dentists)} theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
+                                                        <span style={{ marginLeft: 50, fontSize: 25, fontWeight: '400' }}>Manage Subscriptions </span>
+                                                        <Icon type="file-pdf" onClick={(e, data) => this.UpdateSubscription(item, this.state.data_dentists)} theme="outlined" style={{ color: '#666', float: 'right', fontSize: 25, cursor: 'pointer' }} />
                                                         <br />
-                                                        <span style={{ marginLeft: 50 , fontSize:25, fontWeight: '400'}}>Edit Account</span>
-                                                        <Icon type="form" onClick={(e, data) => this.UpdateDentist(item, this.state.data_dentists)} theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
+                                                        <span style={{ marginLeft: 50, fontSize: 25, fontWeight: '400' }}>Edit Account</span>
+                                                        <Icon type="form" onClick={(e, data) => this.UpdateDentist(item, this.state.data_dentists)} theme="outlined" style={{ color: '#666', float: 'right', fontSize: 25, cursor: 'pointer' }} />
                                                         <br />
-                                                        <span style={{ marginLeft: 50 , fontSize:25, fontWeight: '400'}}>Delete Account</span>
-                                                        <Icon onClick={(e, data) => this.DeleteDentist(item, this.state.data_dentists)} type="delete" theme="outlined" style={{ color: '#666', float: 'right', fontSize:25, cursor: 'pointer' }} />
+                                                        <span style={{ marginLeft: 50, fontSize: 25, fontWeight: '400' }}>Delete Account</span>
+                                                        <Icon onClick={(e, data) => this.DeleteDentist(item, this.state.data_dentists)} type="delete" theme="outlined" style={{ color: '#666', float: 'right', fontSize: 25, cursor: 'pointer' }} />
                                                     </Panel>
                                                 </Collapse>
                                             }
@@ -638,7 +634,7 @@ class AdminStuff extends React.Component {
                             </div>
                         </Card>
                     </Col>
-                
+
                 </Row>
 
                 <Modal
@@ -747,8 +743,8 @@ class AdminStuff extends React.Component {
                             </Col>
 
                             <Col span={12}>
-                            <label style={{fontWeight:'800'}}>Adeli Number</label>
-                                <Input placeholder="123456789" style={{border: 'none'}} value={this.state.update_number_d} name="update_number_d" onChange={ this.handleInputChange }/>
+                                <label style={{ fontWeight: '800' }}>Adeli Number</label>
+                                <Input placeholder="123456789" style={{ border: 'none' }} value={this.state.update_number_d} name="update_number_d" onChange={this.handleInputChange} />
                             </Col>
 
                             <button onClick={this.handleUpdateDentist.bind(this)} style={{ width: '100%' }}>Update</button>
