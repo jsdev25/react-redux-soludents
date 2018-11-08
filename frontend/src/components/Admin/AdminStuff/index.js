@@ -8,7 +8,6 @@ import { addDentist, UpdateDentistByAdmin, UpdateDentistSubscriptionByadmin, Upd
 import axios from 'axios';
 import { CSVLink } from 'react-csv';
 import update from 'react-addons-update';
-import Workbook from 'react-excel-workbook'
 
 const Panel = Collapse.Panel;
 
