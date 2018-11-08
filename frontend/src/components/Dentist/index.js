@@ -11,7 +11,7 @@ class Dentist extends Component {
         const { isAuthenticated } = this.props.auth;
 
         return (
-            <div style={{backgroundColor:'red'}}>
+            <div>
                 {isAuthenticated  && localStorage.getItem('admin') == 0 ? <DentistManage/> : <Error/>}
             </div>
         );

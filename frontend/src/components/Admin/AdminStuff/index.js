@@ -101,6 +101,11 @@ class AdminStuff extends React.Component {
                 { firstname: "1111", lastname: "Tomi", email: "ah@smthing.co.com" },
                 { firstname: "2222", lastname: "Labes", email: "rl@smthing.co.com" },
                 { firstname: "3333", lastname: "Min l3b", email: "ymin@cocococo.com" }
+            ],
+            dummy : [
+                { firstname: "1111", lastname: "Tomi", email: "ah@smthing.co.com" },
+                { firstname: "2222", lastname: "Labes", email: "rl@smthing.co.com" },
+                { firstname: "3333", lastname: "Min l3b", email: "ymin@cocococo.com" }
             ]
         }
 
@@ -661,6 +666,14 @@ class AdminStuff extends React.Component {
                             </div>
                         </Card>
                     </Col>
+                    
+                    <CSVLink data={this.state.dummy}>
+                      <Button type="primary" style={{float:"right",marginLeft:20,marginTop:20}}>Main 2</Button>
+                    </CSVLink>
+
+                    <CSVLink data={this.state.dummy}>
+                      <Button type="primary" style={{float:"right",marginTop:20}}>Main 1</Button>
+                    </CSVLink>
 
                 </Row>
 

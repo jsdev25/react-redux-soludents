@@ -35,6 +35,8 @@ class AdminManage extends React.Component {
         email:'',
         file_name: localStorage.getItem('files'),
         file_directory:localStorage.getItem('directory'),
+
+        
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
