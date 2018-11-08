@@ -25,7 +25,7 @@ router.get('/', function(req,res){
 });
 
 router.get('/:operator_id', function(req, res){
-  History.find({operator_id: req.params.operator_id},{'operator_name': true,'created_date': true,'remark': true, '_id' : false}, function(err, history){
+  History.find({operator_id: req.params.operator_id}, function(err, history){
       if(err) return res.status(500).json({error: err});
       if(!history) return res.status(404).json({error: 'History not found'});
       res.json(history);

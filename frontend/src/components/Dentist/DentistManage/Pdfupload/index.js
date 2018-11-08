@@ -8,6 +8,7 @@ import { addDocument } from '../../../../actions/authentication';
 
 const endpoint = 'http://localhost:5000/api/documents/upload'
 const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
+let length = 0;
 
 class ManageFile extends Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class ManageFile extends Component {
       loaded: 0,
       hidden:true,
       data_lists:[],
-      username:''
+      username:'',
+      length
     }
   }
 
@@ -26,6 +28,7 @@ class ManageFile extends Component {
     .then(res => {
         const data_lists = res.data;
         this.setState({ data_lists });
+        length = res.data.length;
     });
   }
 
@@ -48,6 +51,21 @@ class ManageFile extends Component {
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
 
+    if (length > 9) {
+      message.error('Your document count is limited 10');
+      return false;
+    }
+
+    if (this.state.selectedFile.name.slice(-4) === '.pdf' ||
+        this.state.selectedFile.name.slice(-4) === '.png' ||
+        this.state.selectedFile.name.slice(-4) === '.doc' ||
+        this.state.selectedFile.name.slice(-5) === '.docx' ||
+        this.state.selectedFile.name.slice(-4) === '.jpg') {
+    } else {
+      message.error ('wrong file extension');
+      return false;
+    } 
+
     axios
       .post(endpoint, data, {
         onUploadProgress: ProgressEvent => {
@@ -57,6 +75,7 @@ class ManageFile extends Component {
         },
       })
       .then(res => {
+        length++;
         const document = {
           Filename: "",
           directory: "",
@@ -130,7 +149,7 @@ class ManageFile extends Component {
         </div> */}
 
         <div style={{textAlign:'center',marginTop:20}}>
-          <input type="file" name="" id="" onChange={this.handleselectedFile} />
+          <input type="file" name="" id="" onChange={this.handleselectedFile} accept=".jpg, .jpeg, .png, .doc, .docx, .pdf"/> 
           <button onClick={this.handleUpload.bind(this)}>File Upload</button>
           <div> {Math.round(this.state.loaded, 2)} %</div>
         </div>

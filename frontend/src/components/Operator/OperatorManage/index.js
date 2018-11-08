@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Row, Col, Card, Table, Button, Modal, Collapse, Input, Progress, Select } from 'antd';
+import { Avatar, Row, Col, Card, Table, Button, Modal, Collapse, Input, Progress, Select, message } from 'antd';
 import { logoutUser, AddRemarkDocument, AddHistory, UpdateDocument } from '../../../actions/authentication';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -26,12 +26,14 @@ class OperatorManage extends React.Component {
       status: 'Un successful',
       operator_id: '',
       operator_name: '',
+      dentist_id: '',
+      dentist_name: '',
       remarks: '',
       store: '',
       admin_info: [],
       name: '',
       email: '',
-      operator_status: '',
+      operator_status: 'In Progress',
       id: '',
       file_name: localStorage.getItem('files'),
       file_directory: localStorage.getItem('directory'),
@@ -70,9 +72,9 @@ class OperatorManage extends React.Component {
       key: 'created_date',
       dataIndex: 'created_date',
       onFilter: (value, record) => record.created_date.indexOf(value) === 0,
-      sorter: (a, b) => { return a.created_date.localeCompare(b.created_date)},
+      sorter: (a, b) => { return a.created_date.localeCompare(b.created_date) },
       render: text => <span>{text.replace('T', ' ').substring(0, 19)}</span>
-    },{
+    }, {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
@@ -91,6 +93,12 @@ class OperatorManage extends React.Component {
   }
 
   handleClick() {
+
+    if (!this.state.remarks) {
+      message.error('Your remark content is empty!');
+      return false;
+    }
+
     const update_data = {
       operator_id: this.state.id,
       operator_name: this.state.name,
@@ -101,8 +109,13 @@ class OperatorManage extends React.Component {
     const history_data = {
       operator_id: this.state.id,
       operator_name: this.state.name,
-      remark: this.state.remarks
+      remark: this.state.remarks,
+      status: this.state.operator_status,
+      dentist_name: this.state.dentist_name,
+      dentist_id: this.state.dentist_id,
     }
+
+    console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDD', history_data)
 
     const update_operator_data = {
       status: this.state.operator_status
@@ -152,7 +165,8 @@ class OperatorManage extends React.Component {
   handleView = (row) => {
 
     this.setState({
-      visible_editMange: !this.state.visible_editMange
+      visible_editMange: !this.state.visible_editMange,
+      remarks:''
     })
 
     newData = [...this.state.data_document];
@@ -160,6 +174,10 @@ class OperatorManage extends React.Component {
     localStorage.setItem("directory", row.directory);
     localStorage.setItem("files", row.Filename);
 
+    console.log('my server data', row)
+
+    this.state.dentist_id = row.dentist_id;
+    this.state.dentist_name = row.dentist_name;
     item = newData[index];
   }
 
@@ -258,7 +276,7 @@ class OperatorManage extends React.Component {
               <span style={{ marginLeft: 20 }}>Edit: </span>
               <Select
                 showSearch
-                defaultValue="In progress" 
+                defaultValue="In progress"
                 style={{ width: 200 }}
                 placeholder="Select status"
                 optionFilterProp="children"
@@ -286,7 +304,7 @@ class OperatorManage extends React.Component {
 
           <button style={{ width: '100%', marginTop: 20 }} onClick={this.handleClick.bind(this)} className="btn btn-primary" >
             Save
-                  </button>
+          </button>
         </Modal>
 
       </div>

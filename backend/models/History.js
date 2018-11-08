@@ -9,7 +9,15 @@ const HistorySchema = new Schema({
     },
     operator_id: {
         type: String,
-        //required: true
+    },
+    dentist_id: {
+        type: String,
+    },
+    dentist_name: {
+        type: String,
+    },
+    status: {
+        type: String,
     },
     remark: {
         type: String,

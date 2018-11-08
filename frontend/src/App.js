@@ -34,11 +34,11 @@ class App extends Component {
         <Router>
             <div>
                   <Route exact path="/" component={ Home } />
-                  <Route exact path="/register" component={ Register } />
-                  <Route exact path="/login" component={ Login } />
-                  <Route exact path="/admin" component={ Admin } />
-                  <Route exact path="/operator" component={ Operator } />
-                  <Route exact path="/dentist" component={ Dentist } />
+                  <Route  path="/register" component={ Register } />
+                  <Route  path="/login" component={ Login } />
+                  <Route  path="/admin" component={ Admin } />
+                  <Route  path="/operator" component={ Operator } />
+                  <Route  path="/dentist" component={ Dentist } />
             </div>
           </Router>
         </Provider>
@@ -46,4 +46,8 @@ class App extends Component {
   }
 }
 
+
+
 export default App;
+
+

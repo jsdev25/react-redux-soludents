@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Button, Row, Col, Card, List, Collapse, Icon, Input, Divider, Modal, Checkbox, Table, message } from 'antd';
+import { Avatar, Button, Row, Col, Card, List, Collapse, Icon, Input, Divider, Modal, Checkbox, Table, message, Progress } from 'antd';
 import { customPanelStyle } from './const'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -8,6 +8,7 @@ import { addDentist, UpdateDentistByAdmin, UpdateDentistSubscriptionByadmin, Upd
 import axios from 'axios';
 import { CSVLink } from 'react-csv';
 import update from 'react-addons-update';
+import Workbook from 'react-excel-workbook'
 
 const Panel = Collapse.Panel;
 
@@ -16,14 +17,37 @@ const columns_history = [{
     dataIndex: 'operator_name',
     key: 'operator_name',
 }, {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    onFilter: (value, record) => record.status.indexOf(value) === 0,
+    sorter: (a, b) => a.status.length - b.status.length,
+}, {
+    title: 'Active Statusbar',
+    key: 'status1',
+    dataIndex: 'status',
+    render: text => text === 'Successful'
+        ? <Progress percent={100} />
+        : text === 'Un Successful'
+            ? <Progress percent={50} status="exception" showInfo={false} />
+            : <Progress percent={50} showInfo={false} />
+}, {
     title: 'Remark',
     dataIndex: 'remark',
     key: 'remark',
 }, {
     title: 'Date',
-    dataIndex: 'created_date',
     key: 'created_date',
+    dataIndex: 'created_date',
+    onFilter: (value, record) => record.created_date.indexOf(value) === 0,
+    sorter: (a, b) => { return a.created_date.localeCompare(b.created_date)},
     render: text => <span>{text.replace('T', ' ').substring(0, 19)}</span>
+}, {
+    title: 'Dentist',
+    key: 'dentist_name',
+    dataIndex: 'dentist_name',
+    onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
+    sorter: (a, b) => a.dentist_name.length + b.dentist_name.length,
 }];
 function callback(key) {
 
@@ -73,7 +97,7 @@ class AdminStuff extends React.Component {
             Opassword_byadmin: '',
             Oemail_byadmin: '',
 
-            data: [
+            csv_data: [
                 { firstname: "1111", lastname: "Tomi", email: "ah@smthing.co.com" },
                 { firstname: "2222", lastname: "Labes", email: "rl@smthing.co.com" },
                 { firstname: "3333", lastname: "Min l3b", email: "ymin@cocococo.com" }
@@ -209,10 +233,12 @@ class AdminStuff extends React.Component {
         axios.get('/api/histories/' + e._id)
             .then(res => {
                 this.setState({ data_histories: res.data });
-
                 let newState = update(this.state, {
                     data: {
-                        $set: this.state.data_histories
+                        $set: {
+                                 data_histories:this.state.data_histories,
+                                 csv_data: [{}]
+                              }
                     }
                 });
                 this.setState(newState);
@@ -474,7 +500,7 @@ class AdminStuff extends React.Component {
             method: 'delete',
             url: `/api/members/` + e._id
         })
-            .then(function (response) {                
+            .then(function (response) {
             })
 
             .catch(function (response) {
@@ -542,6 +568,7 @@ class AdminStuff extends React.Component {
     }
 
     render() {
+
 
         return (
             <div>
@@ -856,6 +883,7 @@ class AdminStuff extends React.Component {
 
                 <Modal
                     centered={true}
+                    width={1200}
                     title={"Operator Information"}
                     visible={this.state.visible_history}
                     onOk={this.handleOk}
