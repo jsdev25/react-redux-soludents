@@ -95,6 +95,7 @@ class AdminStuff extends React.Component {
             Oname_byadmin: '',
             Opassword_byadmin: '',
             Oemail_byadmin: '',
+            download_csv : false,
 
             csv_data: [
                 { firstname: "1111", lastname: "Tomi", email: "ah@smthing.co.com" },
@@ -166,6 +167,14 @@ class AdminStuff extends React.Component {
         });
     }
 
+    DownloadCSV(){
+        this.setState({
+            visible_history: false,
+            download_csv: true,
+            csv_data: this.state.data_histories
+        })
+    }
+
     componentDidMount() {
         axios.get('/api/members/dentist')
             .then(res => {
@@ -226,22 +235,14 @@ class AdminStuff extends React.Component {
     }
 
     HandleHistories(e, wholedata) {
+        let that = this;
         this.setState({
-            visible_history: true
+            visible_history: true,
         })
         axios.get('/api/histories/' + e._id)
             .then(res => {
-                this.setState({ data_histories: res.data });
-                let newState = update(this.state, {
-                    data: {
-                        $set: {
-                                 data_histories:this.state.data_histories,
-                                 csv_data: [{}]
-                              }
-                    }
-                });
-                this.setState(newState);
-            });
+                that.setState({ data_histories: res.data, csv_data: res.data });
+            });     
     }
 
     handleInputChange(e) {
@@ -277,8 +278,8 @@ class AdminStuff extends React.Component {
             update_operator_byadmin_visible: false,
             update_subscription_byadmin_visible: false,
             visible_opertor_byadmin: false,
-            visible_history: false
-
+            visible_history: false,
+            download_csv: false
         });
     }
 
@@ -291,8 +292,8 @@ class AdminStuff extends React.Component {
             update_operator_byadmin_visible: false,
             update_subscription_byadmin_visible: false,
             visible_opertor_byadmin: false,
-            visible_history: false
-
+            visible_history: false,
+            download_csv: false
         });
     }
 
@@ -891,8 +892,21 @@ class AdminStuff extends React.Component {
                 >
                     <Table dataSource={this.state.data_histories} columns={columns_history} />
 
-                    <CSVLink data={this.state.data_histories} >
-                        Download me
+                    <Button onClick={this.DownloadCSV.bind(this)}> View History</Button>
+                </Modal>
+
+                <Modal
+                    centered={true}
+                    width={200}
+                    title={"Operator History"}
+                    visible={this.state.download_csv}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    footer={[]}
+                >
+
+                    <CSVLink data={this.state.csv_data} onClick={()=>{this.setState({download_csv:false})}}>
+                        Download
                     </CSVLink>
 
                 </Modal>

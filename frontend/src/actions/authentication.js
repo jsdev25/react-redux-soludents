@@ -111,12 +111,12 @@ export const logoutUser = (history) => dispatch => {
 export const UpdateDentist = (dentist, history) => dispatch => {
     axios.put('/api/members/update/'+  JSON.parse( localStorage.getItem('UserAdmin')), dentist)
         .then(res => {
-            alert('Success Update Dentist')
+         //   alert('Success Update Dentist')
 
             history.push('/dentist') })      
             
         .catch(err => {
-            alert('Fail Update Dentist')
+        //    alert('Fail Update Dentist')
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
@@ -128,12 +128,12 @@ export const UpdateDentist = (dentist, history) => dispatch => {
 
 export const UpdateOpertorByAdmin = (data, history) => dispatch => {
 
-    console.log('🤓',data)
-    console.log('🤓🤓',localStorage.getItem('update_dentist'))
+    // console.log('🤓',data)
+    // console.log('🤓🤓',localStorage.getItem('update_dentist'))
 
     axios.put('/api/members/update/'+ localStorage.getItem('update_dentist'), data)
         .then(res => {
-            alert('Success Update Operator')
+        //    alert('Success Update Operator')
 
             history.push('/admin') })      
             
@@ -150,12 +150,12 @@ export const UpdateDentistSubscription = (dentist, history) => dispatch => {
 
     axios.put('/api/members/update/subscription/'+ JSON.parse( localStorage.getItem('UserAdmin')), dentist)
         .then(res => {
-            alert('Success Update Subscription')
+         //   alert('Success Update Subscription')
 
             history.push('/dentist') })      
             
         .catch(err => {
-            alert('Fail Update Dentist')
+         //   alert('Fail Update Dentist')
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
@@ -167,12 +167,12 @@ export const UpdateDentistSubscriptionByadmin = (dentist, history) => dispatch =
 
     axios.put('/api/members/update/subscription/'+ localStorage.getItem('update_dentist'), dentist)
         .then(res => {
-            alert('Success Update Subscription by admin')
+           // alert('Success Update Subscription by admin')
 
             history.push('/admin') })      
             
         .catch(err => {
-            alert('Fail Update Dentist')
+           // alert('Fail Update Dentist')
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
@@ -183,12 +183,12 @@ export const UpdateDentistSubscriptionByadmin = (dentist, history) => dispatch =
 export const UpdateDentistByAdmin = (dentist, history) => dispatch => {
     axios.put('/api/members/update/'+ localStorage.getItem('update_dentist'), dentist)
         .then(res => {
-            alert('Success Update Dentist By Admin')
+          //  alert('Success Update Dentist By Admin')
 
            window.location.href = '/admin' })
             
         .catch(err => {
-            alert('Fail Update Dentist')
+         //   alert('Fail Update Dentist')
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
@@ -200,11 +200,12 @@ export const UpdateDentistByAdmin = (dentist, history) => dispatch => {
 export const UpdateDocument = (data, id ,history) => dispatch => {
     axios.put('/api/documents/update/'+ id, data)
         .then(res => {
-            alert('Success Update Document')})
+           // alert('Success Update Document')
+        })
            // history.push('/dentist') })      
             
         .catch(err => {
-            alert('Fail Update Dentist')
+           // alert('Fail Update Dentist')
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
@@ -216,8 +217,9 @@ export const UpdateDocument = (data, id ,history) => dispatch => {
 export const AddRemarkDocument = (data, id ,history) => dispatch => {
     axios.post('/api/documents/insertremark/'+ id, data)
         .then(res => {
-            alert('Success Update Document')})
-           // history.push('/dentist') })      
+          //  alert('Success Update Document')})
+           // history.push('/dentist') 
+        })      
             
         .catch(err => {
             alert('Fail Update Dentist')
@@ -231,11 +233,12 @@ export const AddRemarkDocument = (data, id ,history) => dispatch => {
 export const AddHistory = (data ,history) => dispatch => {
     axios.post('/api/histories/add/' , data)
         .then(res => {
-            alert('Success Add History')})
-           // history.push('/dentist') })      
+           // alert('Success Add History')})
+           // history.push('/dentist') 
+        })      
             
         .catch(err => {
-            alert('Fail Add History')
+          //  alert('Fail Add History')
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
