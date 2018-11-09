@@ -8,6 +8,7 @@ const path=require("path");
 const documents = require('./routes/document'); 
 const members = require('./routes/member'); 
 const histories = require('./routes/history'); 
+const emails = require('./routes/email'); 
 
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -25,6 +26,8 @@ app.use(express.static(path.join(__dirname,"public")));
 app.use('/api/documents', documents);
 app.use('/api/members', members);
 app.use('/api/histories', histories);
+app.use('/api/emails', emails);
+
 app.get('/', function(req, res) {
     res.send('hello');
 });
