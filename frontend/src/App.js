@@ -9,6 +9,7 @@ import { setCurrentUser, logoutUser } from './actions/authentication';
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
+import Stripe from './components/Stripe';
 import Admin from './components/Admin';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,6 +40,8 @@ class App extends Component {
                   <Route  path="/admin" component={ Admin } />
                   <Route  path="/operator" component={ Operator } />
                   <Route  path="/dentist" component={ Dentist } />
+                  <Route  path="/stripe" component={ Stripe } />
+
             </div>
           </Router>
         </Provider>
