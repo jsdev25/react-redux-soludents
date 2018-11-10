@@ -10,6 +10,8 @@ const members = require('./routes/member');
 const histories = require('./routes/history'); 
 const emails = require('./routes/email'); 
 
+//This is stripe mode.
+const stripe = require('./models/constants/stripe');
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     () => {console.log('Database is connected') },
@@ -31,6 +33,22 @@ app.use('/api/emails', emails);
 app.get('/', function(req, res) {
     res.send('hello');
 });
+
+//////////////This is stripe test mode////////////////
+
+app.post('/api/stripe', (req, res) => {
+    stripe.charges.create(req.body, postStripeCharge(res));
+});
+
+const postStripeCharge = res => (stripeErr, stripeRes) => {
+    if (stripeErr) {
+      res.status(500).send({ error: stripeErr });
+    } else {
+      res.status(200).send({ success: stripeRes });
+    }
+}
+//////////////////////////////////////////////////////
+
 
 const PORT = process.env.PORT || 5000;
 

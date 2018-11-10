@@ -122,8 +122,6 @@ class OperatorManage extends React.Component {
       dentist_id: this.state.dentist_id,
     }
 
-    console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDD', history_data)
-
     const update_operator_data = {
       status: this.state.operator_status
     }
