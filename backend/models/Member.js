@@ -13,7 +13,7 @@ const MemberSchema = new Schema({
         type: String
      },
     adli_number:{
-        type: String
+        type: String,
     },
     address:{
         type: String
@@ -25,6 +25,10 @@ const MemberSchema = new Schema({
     password:{
         type: String,
         required: true
+    },
+    card_number: {
+        type: String,
+        required : true
     },
     img: String,
     document_count: {

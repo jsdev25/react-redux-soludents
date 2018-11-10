@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Managefile from './Pdfupload';
 import axios from 'axios';
+import Checkout from '../../Stripe/Checkout';
 import './index.css';
 const Panel = Collapse.Panel;
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
@@ -348,7 +349,12 @@ class DentistManage extends React.Component {
 
               <button style={{ width: '100%' }} onClick={this.handleSubmit} className="btn btn-primary" >
                 Pay
-                    </button>
+              </button>
+              <Checkout
+                name={'The Road to learn React'}
+                description={'Open Source React Book'}
+                amount={2250}
+              />
               <br />
             </Panel>
           </Collapse>
