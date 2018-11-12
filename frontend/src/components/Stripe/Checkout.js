@@ -5,12 +5,13 @@ import StripeCheckout from 'react-stripe-checkout';
 import STRIPE_PUBLISHABLE from './constants/stripe';
 // import PAYMENT_SERVER_URL from './constants/server';
 
-const CURRENCY = 'GBP';
+const CURRENCY = 'EUR';
 
 const fromEuroToCent = amount => amount * 100;
 
 const successPayment = data => {
   alert('Payment Successful');
+  localStorage.setItem('payment', 1);
   console.log(data);
 };
 

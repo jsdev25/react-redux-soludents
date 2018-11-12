@@ -24,6 +24,7 @@ class DentistManage extends React.Component {
       offer4: false,
       offer5: false,
       offer6: false,
+      offer_pay: 390,
       name: '',
       lastname: '',
       email: '',
@@ -74,9 +75,9 @@ class DentistManage extends React.Component {
   }
 
   showSubscription = () => {
+    localStorage.setItem('payment', 0);
     this.setState({
       subscription: true,
-
     });
   }
 
@@ -103,44 +104,59 @@ class DentistManage extends React.Component {
   }
 
   handleChange1() {
+
+    if (this.state.offer6) {
+      return false
+    }
+
     this.setState({
-      offer1: !this.state.offer1,
-    });
+      offer1: !this.state.offer1,offer_pay:390
+    });    
   }
 
   handleChange2() {
     this.setState({
-      offer2: !this.state.offer2,
-      check1: 1,
+      offer2: !this.state.offer2, offer_pay: 3900
     });
   }
 
   handleChange3() {
     this.setState({
-      offer3: !this.state.offer3,
+      offer3: !this.state.offer3, offer_pay: 750
     });
+    (!this.state.offer3) ? this.setState({offer_pay:750}) : this.setState({offer_pay:390})
+
   }
 
   handleChange4() {
     this.setState({
-      offer4: !this.state.offer4,
+      offer4: !this.state.offer4, offer_pay: 7500
     });
+    (!this.state.offer4) ? this.setState({offer_pay:7500}) : this.setState({offer_pay:390})
   }
 
   handleChange5() {
     this.setState({
-      offer5: !this.state.offer5,
+      offer5: !this.state.offer5, offer_pay: 990
     });
+    (!this.state.offer5) ? this.setState({offer_pay:990}) : this.setState({offer_pay:390})
   }
 
   handleChange6() {
     this.setState({
-      offer6: !this.state.offer6,
+      offer6: !this.state.offer6
     });
+    (!this.state.offer6) ? this.setState({offer_pay:9900}) : this.setState({offer_pay:390})
+
   }
 
   handleSubmit() {
-    //e.preventDefault();
+
+    if (localStorage.getItem('payment') == 0) {
+      message.error('You must pay with card directly!');
+      return false;
+    }
+
     const dentist = {
       subscription: {
         offer1: + this.state.offer1,
@@ -151,7 +167,6 @@ class DentistManage extends React.Component {
         offer6: + this.state.offer6
       }
     }
-
 
     this.props.UpdateDentistSubscription(dentist, this.props.history);
     this.setState({
@@ -347,14 +362,20 @@ class DentistManage extends React.Component {
               <Checkbox name="offer6" onChange={this.handleChange6.bind(this)} value={this.state.offer6} style={{ clear: 'both', color: '#666', float: 'right' }} checked={this.state.offer6}></Checkbox>
               <br /><br />
 
-              <button style={{ width: '100%' }} onClick={this.handleSubmit} className="btn btn-primary" >
-                Pay
+              <center>
+                <Checkout
+                  name={'Payment Subscription'}
+                  description={'You can choose 6 subscriptions'}
+                  amount={this.state.offer_pay}
+                />
+              </center>
+
+              {this.state.offer_pay}
+
+              <button style={{ width: '100%', marginTop: 30 }} onClick={this.handleSubmit} className="btn btn-primary" >
+                Update
               </button>
-              <Checkout
-                name={'The Road to learn React'}
-                description={'Open Source React Book'}
-                amount={2250}
-              />
+
               <br />
             </Panel>
           </Collapse>
