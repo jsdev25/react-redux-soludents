@@ -1,6 +1,10 @@
-.sidebar{
-    background-color: #001529
+.sidebar {
+  background-color: #001529;
 }
-.card-view{
-    padding: 6%;
+.card-view {
+  padding: 6%;
+}
+
+.ant-modal {
+  width: 630px !important;
 }

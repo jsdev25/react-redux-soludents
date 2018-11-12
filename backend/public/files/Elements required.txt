@@ -1,0 +1,27 @@
+Budget: 20,000 Shekels - (18 heures x 200 shekels) = 16,400 shekels.
+
+Délai livraison : 30jours à partir de la date de développement, 30% accompte pour démarrer le projet, 70% restant à la livraison du site.
+
+Besoin des informations de la carte bleu qui sera utilisé pour les couts additionnels hors budget ci-dessous.
+
+Couts Additionnels hors budget:
+  -nom de domaine: www.nomdusite.com => entre 15 et 30 euros
+  -certificat ssl de securité => entre 10 et 15 euros
+  -hebergement du site (depend du traffic mais peut s'échelonner) : de 10 à 30 euros/mois à prévoir environ
+
+Partie advertising Internet (non obligatoire mais fortement recommandé):
+  -estimation peut aller de 300 à 500 euros par mois pendant les 6 premiers mois pour cibler tous les dentistes francais (inclut              referencement google, seo organique, publicités payantes et stratégie de backlinking).
+
+Technologies utilisées:
+  -React-Redux front-end
+  -Node-Express-MongoDB back-end
+  -ui/ux responsive
+
+A savoir pour les operateurs:
+ils telechargeront deux fichier excels.
+ -fichier excel numero 1 : les organismes de prets.
+ -fichier excel numero 2: les  differentes mutuelles.
+
+Travail pré-requis sur ces 2 fichiers:
+Ou trouver les données pour les ajouter au fichier excel ?
+Quels champs d'informations devront s'afficher sur ces fichiers ?
