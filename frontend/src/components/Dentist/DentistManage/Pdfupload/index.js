@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { addDocument } from '../../../../actions/authentication';
+import { Z_ASCII } from 'zlib';
 
 const endpoint = 'http://localhost:5000/api/documents/upload'
 const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
 let length = 0;
+let default_count = 9;
 
 class ManageFile extends Component {
   constructor(props) {
@@ -17,7 +19,8 @@ class ManageFile extends Component {
       selectedFile: null,
       loaded: 0,
       hidden:true,
-      data_lists:[],
+      data_lists:[],   
+      me_lists:[],
       username:'',
       length
     }
@@ -28,7 +31,19 @@ class ManageFile extends Component {
     .then(res => {
         const data_lists = res.data;
         this.setState({ data_lists });
+        console.log('data', this.state.data_lists)
         length = res.data.length;
+    });
+    axios.get('/api/members/'+ useradmin)
+    .then(res => {
+        const me_lists = res.data;
+        this.setState({ me_lists });
+        (this.state.me_lists.data.subscription.offer1 == 1) ? default_count =9 : null;
+        (this.state.me_lists.data.subscription.offer2 == 1) ? default_count =9 : null;
+        (this.state.me_lists.data.subscription.offer3 == 1) ? default_count =19 : null;
+        (this.state.me_lists.data.subscription.offer4 == 1) ? default_count =19 : null;
+        (this.state.me_lists.data.subscription.offer5 == 1) ? default_count =29 : null;
+        (this.state.me_lists.data.subscription.offer6 == 1) ? default_count =29 : null;
     });
   }
 
@@ -50,9 +65,11 @@ class ManageFile extends Component {
 
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
+    console.log('my real count', default_count)
 
-    if (length > 9) {
-      message.error('Your document count is limited 10');
+
+    if (length > default_count) {
+      message.error('Your document count is limited ' + default_count + 1);
       return false;
     }
 
