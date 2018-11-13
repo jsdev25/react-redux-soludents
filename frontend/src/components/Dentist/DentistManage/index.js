@@ -55,7 +55,7 @@ class DentistManage extends React.Component {
 
     this.columns = [
       {
-        title: "Offer",
+        title: "Offer Number",
         dataIndex: "Offernumber",
         key: "Offernumber"
       },
@@ -90,6 +90,28 @@ class DentistManage extends React.Component {
               onClick={() => this.handleView(record)}
             >
               Cancel
+            </Button>
+          </span>
+        )
+      }
+    ];
+
+    this.columnsbillings = [
+      {
+        title: "Billing",
+        dataIndex: "Offernumber",
+        key: "Offernumber"
+      },
+      {
+        title: "Action",
+        key: "action",
+        render: (text, record) => (
+          <span>
+            <Button
+              style={{ backgroundColor: "#00a99d", color: "#fff" }}
+              onClick={() => this.handleView(record)}
+            >
+              Print
             </Button>
           </span>
         )
@@ -400,6 +422,19 @@ class DentistManage extends React.Component {
                   Click Here
                 </Button>
               </Card>
+              <Card>
+                View Archive File Section
+                <Button
+                  style={{
+                    float: "right",
+                    backgroundColor: "#00a99d",
+                    color: "#fff"
+                  }}
+                  // onClick={this.showManage}
+                >
+                  Click Here
+                </Button>
+              </Card>
               <br />
               You can currently upload X documents based on your active
               subscriptions.
@@ -601,6 +636,19 @@ class DentistManage extends React.Component {
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
                   <Table columns={this.columns} />
+                  {/* dataSource={this.state.data_document}  */}
+                </Card>
+              </div>
+              <br />
+            </Panel>
+          </Collapse>
+
+          {/* Billing Area */}
+          <Collapse bordered={false}>
+            <Panel header="Billing Area" key="2">
+              <div className="card-view">
+                <Card style={{ width: "118%", marginLeft: "-42px" }}>
+                  <Table columns={this.columnsbillings} />
                   {/* dataSource={this.state.data_document}  */}
                 </Card>
               </div>
