@@ -4,7 +4,7 @@ import { Videoview } from "./videoview";
 import { Autionview } from "./autionview";
 import { Pricingitem } from "./pricingitem";
 import { TeamMemberSlider } from "./TeamMemberSlider";
-import { ContactView } from "./ContactView";
+import  Messageview from './contactView';
 import { Footer } from "./Footer";
 import { BackTop } from "antd";
 
@@ -110,7 +110,7 @@ export default class Welcome extends React.Component {
         </div>
         <OurPartnerSlider />
         <TeamMemberSlider />
-        <ContactView />
+        <Messageview />
 
         <div id="contact">
           <Footer />

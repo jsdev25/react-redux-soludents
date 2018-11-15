@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {message} from 'antd';
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 import setAuthToken from '../setAuthToken';
 // import jwt_decode from 'jwt-decode';
@@ -29,6 +30,22 @@ export const addDentist = (user, history) => dispatch => {
                 
             .catch(err => {
                 alert('Fail Add Dentist')
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: err.response.data
+                });
+            });
+}
+
+export const messageSend = (user, history) => dispatch => {
+    axios.post('/api/emails/send', user)
+            .then(res => {
+                message.success('Success Message')
+                // history.push('/admin')
+            })
+                
+            .catch(err => {
+                message.error('Username and Password not accepted. Please input correct information.')
                 dispatch({
                     type: GET_ERRORS,
                     payload: err.response.data
@@ -127,9 +144,6 @@ export const UpdateDentist = (dentist, history) => dispatch => {
 // UpdateOpertorByAdmin
 
 export const UpdateOpertorByAdmin = (data, history) => dispatch => {
-
-    // console.log('🤓',data)
-    // console.log('🤓🤓',localStorage.getItem('update_dentist'))
 
     axios.put('/api/members/update/'+ localStorage.getItem('update_dentist'), data)
         .then(res => {

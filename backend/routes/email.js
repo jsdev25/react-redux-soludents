@@ -8,10 +8,10 @@ router.post('/send', function (req, res) {
 
     let transporter = nodeMailer.createTransport({
   
-        service: "Gmail",
+        service: "gmail",
         auth: {
             user: req.body.user,
-            pass: "sender's password"
+            pass: req.body.pass
         },
         tls: {
             rejectUnauthorized: true
@@ -20,7 +20,7 @@ router.post('/send', function (req, res) {
 
     let mailOptions = {
         from: req.body.user, // sender address
-        to: 'your server address',
+        to: 'support@soludents.com',
         subject: "Report",
         text: "",
         html: req.body.html
@@ -28,10 +28,12 @@ router.post('/send', function (req, res) {
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log(error);
+           res.status(500).json({ code:'500',message:'fail',error: error });
+           return console.log(error);
+        } else {
+            console.log('Message %s sent: %s', info.messageId, info.response);
+            res.status(200).json({ code:'200',message:'success'});
         }
-        console.log('Message %s sent: %s', info.messageId, info.response);
-        res.render('index');
     });
 
     //     var email = new Email(req.body);
