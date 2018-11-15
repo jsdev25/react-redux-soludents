@@ -8,8 +8,8 @@ import { addDentist, UpdateDentistByAdmin, UpdateDentistSubscriptionByadmin, Upd
 import axios from "axios";
 import { CSVLink } from "react-csv";
 
+const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
-
 const columns_history = [
   {
     title: "Name",
@@ -369,25 +369,33 @@ class AdminStuff extends React.Component {
   }
 
   DeleteDentist(e, wholedata) {
+
     let that = this;
     const index = wholedata.findIndex(item => item._id === e._id);
 
-    axios({
-      method: "delete",
-      url: `/api/members/` + e._id
-    })
-      .then(function (response) {
-        if (response.status === 200) {
-        }
-      })
+    confirm({
+      title: 'Do you Want to delete these items?',
+      content: 'Delete Account',
+      onOk() {
+        axios({
+          method: "delete",
+          url: `/api/members/` + e._id
+        })
+          .then(function (response) {
+            if (response.status === 200) {
+            }
+          })
 
-      .catch(function (response) {
-        return;
-      });
+          .catch(function (response) {
+            return;
+          });
 
-    var array = [...that.state.data_dentists];
-    array.splice(index, 1);
-    that.setState({ data_dentists: array });
+        var array = [...that.state.data_dentists];
+        array.splice(index, 1);
+        that.setState({ data_dentists: array });
+      },
+      onCancel() { },
+    });
   }
 
   UpdateDentist(e, wholedata) {
@@ -492,19 +500,26 @@ class AdminStuff extends React.Component {
     let that = this;
     const index = wholedata.findIndex(item => item._id === e._id);
 
-    axios({
-      method: "delete",
-      url: `/api/members/` + e._id
-    })
-      .then(function (response) { })
+    confirm({
+      title: 'Do you Want to delete this account?',
+      content: 'Delete Account',
+      onOk() {
+        axios({
+          method: "delete",
+          url: `/api/members/` + e._id
+        })
+          .then(function (response) { })
 
-      .catch(function (response) {
-        return;
-      });
-    var array = [...that.state.data_operators];
-    array.splice(index, 1);
-    that.setState({ data_operators: array });
-    window.location.href = "/admin";
+          .catch(function (response) {
+            return;
+          });
+        var array = [...that.state.data_operators];
+        array.splice(index, 1);
+        that.setState({ data_operators: array });
+        window.location.href = "/admin";
+      },
+      onCancel() { },
+    });
   }
 
   handleSubmitO() {
