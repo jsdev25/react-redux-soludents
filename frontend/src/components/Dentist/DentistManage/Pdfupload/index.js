@@ -159,12 +159,6 @@ class ManageFile extends Component {
             )}
         />
 
-        {/* <div style={{ textAlign:'center'}}>
-          <Button shape={'circle'} style={{backgroundColor:'#00a99d',color:'#fff',fontSize:30,width:50,height:50 }} onClick={this.showModal}>
-            +
-          </Button>
-        </div> */}
-
         <div style={{textAlign:'center',marginTop:20}}>
           <input type="file" name="" id="" onChange={this.handleselectedFile} accept=".jpg, .jpeg, .png, .doc, .docx, .pdf"/> 
           <button onClick={this.handleUpload.bind(this)}>File Upload</button>

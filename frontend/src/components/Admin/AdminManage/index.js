@@ -1,6 +1,6 @@
 import React from 'react';
-import { Avatar, Row, Col, Card, Table, Button, Modal, Collapse, Select, Progress } from 'antd';
-import { logoutUser, UpdateDocument } from '../../../actions/authentication';
+import { Avatar, Row, Col, Card, Table, Button, Modal, Collapse, Select, Progress, message } from 'antd';
+import { logoutUser, UpdateDocument, UpdateAdminPassword } from '../../../actions/authentication';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -29,6 +29,9 @@ class AdminManage extends React.Component {
       remarks_name: '',
       remarks_content: '',
       selected_operator: '',
+      id:'',
+      hidden:true,
+      password:'',
       store: '',
       admin_info: [],
       name: '',
@@ -95,6 +98,27 @@ class AdminManage extends React.Component {
     manage: false,
   }
 
+  onUpdatePassword(){
+    if (!this.state.password) {
+      message.error('please input your update password');
+      return false;
+    }
+
+    if(this.state.password.length < 6) {
+      message.error('Password length must be over 6 characters.');
+      return false;
+    }
+
+    const admin_password = {
+      password: this.state.password
+    }
+
+    this.props.UpdateAdminPassword(admin_password, this.state.id, this.props.history);
+    this.setState({
+      password:'',hidden:true
+    })
+  }
+
   handleClick() {
 
     const update_data = {
@@ -128,7 +152,9 @@ class AdminManage extends React.Component {
         this.setState({
           name: res.data.data.name,
           email: res.data.data.email,
+          id:res.data.data._id
         });
+        console.log('password',res)
       });
 
     axios.get('/api/members/operator')
@@ -212,10 +238,26 @@ class AdminManage extends React.Component {
                 <img src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png" alt="Smiley face" height="50" width="120"></img>
                 <br /><br />
                 <Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" style={{ width: 110, height: 110 }} />
-                <br /><br /><br />
+                <br /><br />
                 <span className="text-muted" style={{ color: '#fff' }}>{this.state.name}</span>
                 <br />
                 <strong style={{ color: '#fff' }}>{this.state.email}</strong>
+                <br/><br/><br/><br/>
+                <span style={{ color: '#fff', cursor:'pointer'}} onClick={()=>{ this.setState({hidden:!this.state.hidden}) }}>Update Password</span>
+
+                <div className="form-group" style={{marginTop:20}} hidden={this.state.hidden}>
+                  <input
+                    style={{borderRadius:12, paddingLeft:5}}
+                    type="text"
+                    placeholder="password"
+                    name="password"
+                    onChange={this.handleInputChange}
+                    value={this.state.password}
+                  />
+                  <br/><br/>
+                  <Button onClick={this.onUpdatePassword.bind(this)}>Update Password</Button>
+                </div>
+
               </div>
               <a style={{ position: 'absolute', bottom: 20, color: '#fff', left: '40%', cursor: 'point' }} onClick={this.onLogout.bind(this)}>sign out</a>
             </div>
@@ -341,4 +383,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { logoutUser, UpdateDocument })(withRouter(AdminManage))
+export default connect(mapStateToProps, { logoutUser, UpdateDocument, UpdateAdminPassword })(withRouter(AdminManage))

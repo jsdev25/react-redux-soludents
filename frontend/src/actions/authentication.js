@@ -212,7 +212,22 @@ export const UpdateDocument = (data, id ,history) => dispatch => {
             });
         });
 }
-
+///////////////////////Update Admin Password///////////////////
+export const UpdateAdminPassword = (data, id ,history) => dispatch => {
+    axios.put('/api/members/update/admin_password/'+ id, data)
+        .then(res => {
+            alert('Success Update Password')
+        })
+           // history.push('/dentist') })      
+            
+        .catch(err => {
+            alert('Fail Update Password')
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+        });
+}
 //////////////////////////////Pickup Document//////////////////
 export const AddRemarkDocument = (data, id ,history) => dispatch => {
     axios.post('/api/documents/insertremark/'+ id, data)
