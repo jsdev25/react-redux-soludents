@@ -1,34 +1,12 @@
 import React from "react";
-import {
-  Avatar,
-  Button,
-  Row,
-  Col,
-  Card,
-  List,
-  Collapse,
-  Icon,
-  Input,
-  Divider,
-  Modal,
-  Checkbox,
-  Table,
-  message,
-  Progress
-} from "antd";
+import { Avatar, Button, Row, Col, Card, List, Collapse, Icon, Input, Divider, Modal, Checkbox, Table, message, Progress } from "antd";
 import { customPanelStyle } from "./const";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import {
-  addDentist,
-  UpdateDentistByAdmin,
-  UpdateDentistSubscriptionByadmin,
-  UpdateOpertorByAdmin
-} from "../../../actions/authentication";
+import { addDentist, UpdateDentistByAdmin, UpdateDentistSubscriptionByadmin, UpdateOpertorByAdmin } from "../../../actions/authentication";
 import axios from "axios";
 import { CSVLink } from "react-csv";
-import update from "react-addons-update";
 
 const Panel = Collapse.Panel;
 
@@ -55,8 +33,8 @@ const columns_history = [
       ) : text === "Un Successful" ? (
         <Progress percent={50} status="exception" showInfo={false} />
       ) : (
-        <Progress percent={50} showInfo={false} />
-      )
+            <Progress percent={50} showInfo={false} />
+          )
   },
   {
     title: "Remark",
@@ -81,7 +59,7 @@ const columns_history = [
     sorter: (a, b) => a.dentist_name.length + b.dentist_name.length
   }
 ];
-function callback(key) {}
+function callback(key) { }
 
 class AdminStuff extends React.Component {
   constructor() {
@@ -372,7 +350,7 @@ class AdminStuff extends React.Component {
       data: InserData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
-      .then(function(response) {
+      .then(function (response) {
         if (response.status === 200) {
         }
 
@@ -381,11 +359,11 @@ class AdminStuff extends React.Component {
             data_dentists: [...that.state.data_dentists, InserData],
             visible: false
           },
-          () => {}
+          () => { }
         );
       })
 
-      .catch(function(response) {
+      .catch(function (response) {
         return;
       });
   }
@@ -398,12 +376,12 @@ class AdminStuff extends React.Component {
       method: "delete",
       url: `/api/members/` + e._id
     })
-      .then(function(response) {
+      .then(function (response) {
         if (response.status === 200) {
         }
       })
 
-      .catch(function(response) {
+      .catch(function (response) {
         return;
       });
 
@@ -518,9 +496,9 @@ class AdminStuff extends React.Component {
       method: "delete",
       url: `/api/members/` + e._id
     })
-      .then(function(response) {})
+      .then(function (response) { })
 
-      .catch(function(response) {
+      .catch(function (response) {
         return;
       });
     var array = [...that.state.data_operators];
@@ -567,19 +545,19 @@ class AdminStuff extends React.Component {
       data: InserDataO,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
-      .then(function(response) {
+      .then(function (response) {
         that.setState(
           {
             data_operators: [...that.state.data_operators, InserDataO],
             visible_opertor: false
           },
-          () => {}
+          () => { }
         );
         window.location.href = "/admin";
         message.success("New operator inserted!");
       })
 
-      .catch(function(response) {
+      .catch(function (response) {
         return;
       });
   }

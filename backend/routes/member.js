@@ -51,7 +51,7 @@ router.get('/:name', function (req, res) {
     })
 });
 
-router.put('/update/:name', function (req, res) {
+router.put('/update/dentist/:name', function (req, res) {
     let newpass = '';
     bcrypt.genSalt(10, (err, salt) => {
         if (err) console.error('There was an error', err);
@@ -62,12 +62,75 @@ router.put('/update/:name', function (req, res) {
                     newpass = hash;
                     Member.updateMany({ _id: req.params.name }, {
                         $set: {
-                            address: req.body.adress,
                             name: req.body.name,
                             lastname: req.body.lastname,
-                            address: req.body.address,
                             email: req.body.email,
                             phone: req.body.phone,
+                            address: req.body.address,
+                            adli_number: req.body.adli_number,
+                            password: newpass.toString()
+                        }
+                    }, function (err, member) {
+
+                        if (err) {
+                            res.status(500).json({ code: '500', message: 'fail', error: err });
+                        } else if (!member) {
+                            res.status(400).json({ code: '404', message: 'fail', error: "Not Found Member" });
+                        }
+                        else {
+                            res.status(200).json({ code: '200', message: 'success', data: req.body });
+                        }
+                    })
+                }
+            });
+        }
+    });
+
+});
+
+router.put('/update/operator/:name', function (req, res) {
+    let newpass = '';
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) console.error('There was an error', err);
+        else {
+            bcrypt.hash(req.body.password, salt, (err, hash) => {
+                if (err) console.error('There was an error', err);
+                else {
+                    newpass = hash;
+                    Member.updateMany({ _id: req.params.name }, {
+                        $set: {
+                            name: req.body.name,
+                            email: req.body.email,
+                            password: newpass.toString()
+                        }
+                    }, function (err, member) {
+
+                        if (err) {
+                            res.status(500).json({ code: '500', message: 'fail', error: err });
+                        } else if (!member) {
+                            res.status(400).json({ code: '404', message: 'fail', error: "Not Found Member" });
+                        }
+                        else {
+                            res.status(200).json({ code: '200', message: 'success', data: req.body });
+                        }
+                    })
+                }
+            });
+        }
+    });
+});
+
+router.put('/update/admin_password/:name', function (req, res) {
+    let newpass = '';
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) console.error('There was an error', err);
+        else {
+            bcrypt.hash(req.body.password, salt, (err, hash) => {
+                if (err) console.error('There was an error', err);
+                else {
+                    newpass = hash;
+                    Member.updateMany({ _id: req.params.name }, {
+                        $set: {
                             password: newpass.toString()
                         }
                     }, function (err, member) {
@@ -135,27 +198,7 @@ router.post('/register', function (req, res) {
             });
         }
         else {
-
-            const newMember = new Member({
-                name: req.body.name,
-                lastname: req.body.lastname,
-                email: req.body.email,
-                phone: req.body.phone,
-                address: req.body.address,
-                adli_number: req.body.adli_number,
-                password: req.body.password,
-                img: req.body.img,
-                document_count: req.body.document_count,
-                subscription: {
-                    offer1: req.body.subscription.offer1,
-                    offer2: req.body.subscription.offer2,
-                    offer3: req.body.subscription.offer3,
-                    offer4: req.body.subscription.offer4,
-                    offer5: req.body.subscription.offer5,
-                    offer6: req.body.subscription.offer6
-                },
-                admin: req.body.admin
-            });
+            var newMember = new Member(req.body);
 
             bcrypt.genSalt(10, (err, salt) => {
                 if (err) console.error('There was an error', err);

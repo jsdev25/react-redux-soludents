@@ -5,8 +5,15 @@ import { withRouter } from 'react-router-dom';
 import { registerUser } from '../actions/authentication';
 import classnames from 'classnames';
 import Navbar from './Navbar';
-import { Row, Col, message } from 'antd';
+import { Row, Col, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
+
+function info() {
+    Modal.info({
+      title: 'Term and Conditions',
+      content: 'some messages...some messages...',
+    });
+  }
 
 class Register extends Component {
 
@@ -22,7 +29,6 @@ class Register extends Component {
             password: '',
             password_confirm: '',
             admin: '',
-            card_number:'',
             errors: {}
         }
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -42,11 +48,6 @@ class Register extends Component {
             return false;
         }
 
-        if (!this.state.card_number) {
-            message.error('You must confirm card number')
-            return false;
-        }
-
         e.preventDefault();
         const user = {
             name: this.state.name,
@@ -57,7 +58,6 @@ class Register extends Component {
             adli_number: this.state.adli_number,
             email: this.state.email,
             password: this.state.password,
-            card_number: this.state.card_number,
             subscription: {
                 offer1: 1,
                 offer2: 0,
@@ -203,18 +203,7 @@ class Register extends Component {
                         {errors.address && (<div className="invalid-feedback">{errors.address}</div>)}
                     </div>
 
-                    <div className="form-group">
-                        <input
-                            type="text"
-                            placeholder="Stripe Card"
-                            className={classnames('form-control form-control-lg', {
-                                'is-invalid': errors.card_number
-                            })}
-                            name="card_number"
-                            onChange={this.handleInputChange}
-                            value={this.state.card_number}
-                        />
-                    </div>
+                    <p onClick={info} style={{cursor:'pointer'}}>Terms and Conditions</p>
 
                     <div className="form-group">
 

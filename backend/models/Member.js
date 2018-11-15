@@ -26,40 +26,29 @@ const MemberSchema = new Schema({
     type: String,
     required: true
   },
-  card_number: {
-    type: String
-    // required : true
-  },
   img: String,
   document_count: {
     type: Number,
-    max: 10,
-    default: 0
+    max: 30,
   },
   subscription: {
     offer1: {
       type: Number,
-      default: 1
     },
     offer2: {
       type: Number,
-      default: 0
     },
     offer3: {
       type: Number,
-      default: 0
     },
     offer4: {
       type: Number,
-      default: 0
     },
     offer5: {
       type: Number,
-      default: 0
     },
     offer6: {
       type: Number,
-      default: 0
     }
   },
   admin: {
