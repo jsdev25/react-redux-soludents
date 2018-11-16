@@ -192,6 +192,7 @@ class AdminStuff extends React.Component {
     axios.get("/api/members/dentist").then(res => {
       const data_dentists = res.data;
       this.setState({ data_dentists });
+      console.log('this is my dentist data', data_dentists)
     });
 
     axios.get("/api/members/operator").then(res => {
@@ -272,6 +273,7 @@ class AdminStuff extends React.Component {
       lastname:'',
       phone:'',
       address:'',
+      adli_number:'',
       number:'',
       password:'',
       other_info:''
@@ -339,7 +341,7 @@ class AdminStuff extends React.Component {
       lastname: this.state.lastname,
       address: this.state.address,
       phone: this.state.phone,
-      number: this.state.number,
+      adli_number: this.state.adli_number,
       email: this.state.email,
       password: this.state.password,
       admin: 0,
@@ -419,7 +421,8 @@ class AdminStuff extends React.Component {
       update_lastname_d: wholedata[index].lastname,
       update_email_d: wholedata[index].email,
       update_address_d: wholedata[index].address,
-      update_phone_d: wholedata[index].phone
+      update_phone_d: wholedata[index].phone,
+      update_number_d:wholedata[index].adli_number
     });
   }
 
@@ -477,7 +480,7 @@ class AdminStuff extends React.Component {
       lastname: this.state.update_lastname_d,
       address: this.state.update_address_d,
       phone: this.state.update_phone_d,
-      // adli_number: this.state.update_number_d,
+      adli_number: this.state.update_number_d,
       email: this.state.update_email_d,
       password: this.state.update_password_d
     };
@@ -951,8 +954,8 @@ class AdminStuff extends React.Component {
                 <Input
                   placeholder="123456789"
                   style={{ border: "none" }}
-                  value={this.state.number}
-                  name="number"
+                  value={this.state.adli_number}
+                  name="adli_number"
                   onChange={this.handleInputChange}
                 />
               </Col>
@@ -1011,7 +1014,7 @@ class AdminStuff extends React.Component {
               </Col>
               <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
-              <Col span={24}>
+              {/* <Col span={24}>
                 <label style={{ fontWeight: "800" }}>Password</label>
                 <Input
                   placeholder="********"
@@ -1020,8 +1023,8 @@ class AdminStuff extends React.Component {
                   value={this.state.update_password_d}
                   onChange={this.handleInputChange}
                 />
-              </Col>
-              <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
+              </Col> */}
+              {/* <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} /> */}
 
               <Col span={12}>
                 <label style={{ fontWeight: "800" }}>Phone</label>
@@ -1232,7 +1235,7 @@ class AdminStuff extends React.Component {
                 />
               </Col>
 
-              <Col span={12}>
+              {/* <Col span={12}>
                 <label style={{ fontWeight: "800" }}>Password</label>
                 <Input
                   placeholder="********"
@@ -1241,7 +1244,7 @@ class AdminStuff extends React.Component {
                   value={this.state.Opassword_byadmin}
                   onChange={this.handleInputChange}
                 />
-              </Col>
+              </Col> */}
               <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
               <Col span={12}>

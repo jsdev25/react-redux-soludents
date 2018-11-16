@@ -154,7 +154,6 @@ class AdminManage extends React.Component {
           email: res.data.data.email,
           id: res.data.data._id
         });
-        console.log('password', res)
       });
 
     axios.get('/api/members/operator')

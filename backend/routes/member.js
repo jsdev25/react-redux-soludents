@@ -31,13 +31,15 @@ router.get('/operator', function (req, res) {
 });
 
 router.get('/dentist', function (req, res) {
+
     Member.find({ admin: 0 }, function (err, members) {
         if (err) return res.status(500).send({ error: 'database failure' });
-        res.json(members);
+        res.json(members)
     })
 });
 
 router.get('/:name', function (req, res) {
+
     Member.findOne({ _id: req.params.name }, function (err, members) {
 
         if (err) {
