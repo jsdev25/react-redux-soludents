@@ -101,11 +101,6 @@ class OperatorManage extends React.Component {
 
   handleClick() {
 
-    if (!this.state.remarks) {
-      message.error('Your remark content is empty!');
-      return false;
-    }
-
     const update_data = {
       operator_id: this.state.id,
       operator_name: this.state.name,
