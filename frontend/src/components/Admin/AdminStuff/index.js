@@ -81,6 +81,7 @@ class AdminStuff extends React.Component {
       update_address_d: "",
       update_lastname_d: "",
       update_phone_d: "",
+      other_info:'',
 
       update_name_0: "",
       update_email_0: "",
@@ -265,7 +266,15 @@ class AdminStuff extends React.Component {
 
   showModalDentist = () => {
     this.setState({
-      visible: true
+      visible: true,
+      name:'',
+      email:'',
+      lastname:'',
+      phone:'',
+      address:'',
+      number:'',
+      password:'',
+      other_info:''
     });
   };
 
@@ -859,7 +868,7 @@ class AdminStuff extends React.Component {
 
         <Modal
           centered={true}
-          title={"Dentist Information"}
+          title={"Add Information"}
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -951,8 +960,10 @@ class AdminStuff extends React.Component {
               <Col span={12}>
                 <label style={{ fontWeight: "800" }}>Input</label>
                 <Input
-                  placeholder="abc def ghki"
+                  placeholder="other information"
                   style={{ border: "none" }}
+                  name="other_info"
+                  value={this.state.other_info}
                   onChange={this.handleInputChange}
                 />
               </Col>
