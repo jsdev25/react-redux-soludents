@@ -4,7 +4,7 @@ import { Videoview } from "./videoview";
 import { Autionview } from "./autionview";
 import { Pricingitem } from "./pricingitem";
 import { TeamMemberSlider } from "./TeamMemberSlider";
-import  Messageview from './contactView';
+import Messageview from "./ContactView";
 import { Footer } from "./Footer";
 import { BackTop } from "antd";
 

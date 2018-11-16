@@ -1,7 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar, Row, Col, Card, Button, Modal, Input, Divider, Collapse, Checkbox, message, Table, Popover } from "antd";
-import { logoutUser, UpdateDentist, UpdateDentistSubscription } from "../../../actions/authentication";
+import {
+  Avatar,
+  Row,
+  Col,
+  Card,
+  Button,
+  Modal,
+  Input,
+  Divider,
+  Collapse,
+  Checkbox,
+  message,
+  Table,
+  Popover
+} from "antd";
+import {
+  logoutUser,
+  UpdateDentist,
+  UpdateDentistSubscription
+} from "../../../actions/authentication";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
@@ -15,54 +33,80 @@ const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
 
 const content1 = (
-  <div style={{lineHeight:-5}}>
-    <span>Dentist can upload up to 10 document during 30 days.</span><br/>
-    <span>Counter of document reset to 0 on the next 30 days period. </span><br/>
+  <div style={{ lineHeight: -5 }}>
+    <span>Dentist can upload up to 10 document during 30 days.</span>
+    <br />
+    <span>Counter of document reset to 0 on the next 30 days period. </span>
+    <br />
     <span>Price 390euros per month during 3 months </span>
   </div>
 );
 
 const content2 = (
-  <div style={{lineHeight:-5}}>
-    <span>dentist can upload up to 10 document during 30 days. </span><br/>
-    <span>counter of document reset to 0 on the next 30 days period.</span><br/>
-    <span>(make the counter displayed on the front end, </span><br/>
-    <span>price 3900euros per 365 days (credited 3900 euros in one time for 365 days) </span>
-  </div >
+  <div style={{ lineHeight: -5 }}>
+    <span>dentist can upload up to 10 document during 30 days. </span>
+    <br />
+    <span>counter of document reset to 0 on the next 30 days period.</span>
+    <br />
+    <span>(make the counter displayed on the front end, </span>
+    <br />
+    <span>
+      price 3900euros per 365 days (credited 3900 euros in one time for 365
+      days){" "}
+    </span>
+  </div>
 );
 
 const content4 = (
-  <div style={{lineHeight:-5}}>
-    <span>dentist can upload up to 20 document during 30 days.</span><br/>
-    <span>counter of document reset to 0 on the next 30 days period.</span><br/>
-    <span>price 7500euros per 365 days</span><br/>
+  <div style={{ lineHeight: -5 }}>
+    <span>dentist can upload up to 20 document during 30 days.</span>
+    <br />
+    <span>counter of document reset to 0 on the next 30 days period.</span>
+    <br />
+    <span>price 7500euros per 365 days</span>
+    <br />
     <span>(credited 7500 euros in one time for 365 days) </span>
   </div>
 );
 
 const content3 = (
-  <div style={{lineHeight:-5}}>
-    <span>dentist can upload up to 20 document during 30 days. </span><br/>
-    <span>counter of document reset to 0 on the next 30 days period. </span><br/>
-    <span>price 750euros per month during 3 months </span><br/>
-    <span>(credited 750 euros per month 3 times, so total amount credited 2250euros) </span>
+  <div style={{ lineHeight: -5 }}>
+    <span>dentist can upload up to 20 document during 30 days. </span>
+    <br />
+    <span>counter of document reset to 0 on the next 30 days period. </span>
+    <br />
+    <span>price 750euros per month during 3 months </span>
+    <br />
+    <span>
+      (credited 750 euros per month 3 times, so total amount credited 2250euros){" "}
+    </span>
   </div>
 );
 
 const content5 = (
-  <div style={{lineHeight:-5}}>
-    <span>dentist can upload up to 30 document during 30 days.</span><br/>
-    <span>counter of document reset to 0 on the next 30 days period.</span><br/>
-    <span>price 990euros per month during 3 months</span><br/>
-    <span>(credited 990 euros per month 3 times, so total amount credited 2970euros)</span>
+  <div style={{ lineHeight: -5 }}>
+    <span>dentist can upload up to 30 document during 30 days.</span>
+    <br />
+    <span>counter of document reset to 0 on the next 30 days period.</span>
+    <br />
+    <span>price 990euros per month during 3 months</span>
+    <br />
+    <span>
+      (credited 990 euros per month 3 times, so total amount credited 2970euros)
+    </span>
   </div>
 );
 
 const content6 = (
-  <div style={{lineHeight:-5}}>
-    <span>dentist can upload up to 30 document during 30 days.</span><br/>
-    <span>counter of document reset to 0 on the next 30 days period. </span><br/>
-    <span>price 9900euros per 365 days (credited 9900 euros in one time for 365 days) </span>
+  <div style={{ lineHeight: -5 }}>
+    <span>dentist can upload up to 30 document during 30 days.</span>
+    <br />
+    <span>counter of document reset to 0 on the next 30 days period. </span>
+    <br />
+    <span>
+      price 9900euros per 365 days (credited 9900 euros in one time for 365
+      days){" "}
+    </span>
   </div>
 );
 
@@ -88,7 +132,7 @@ class DentistManage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-   // this.props.onHeaderClick = this.props.onHeaderClick.bind(this);
+    // this.props.onHeaderClick = this.props.onHeaderClick.bind(this);
 
     this.columns = [
       {
@@ -176,8 +220,8 @@ class DentistManage extends React.Component {
   }
 
   getAlert() {
-    alert('clicked');
- }
+    alert("clicked");
+  }
 
   state = {
     profile: false,
@@ -364,7 +408,7 @@ class DentistManage extends React.Component {
             <div>
               <div style={{ textAlign: "center", marginTop: 20 }}>
                 <img
-                  src="https://seeklogo.com/images/F/free-delivery-logo-3F8F5B428D-seeklogo.com.png"
+                  src="https://i.imgur.com/HhAxynm.jpg"
                   alt="Smiley face"
                   height="50"
                   width="120"
@@ -471,7 +515,7 @@ class DentistManage extends React.Component {
                     backgroundColor: "#00a99d",
                     color: "#fff"
                   }}
-                // onClick={this.showManage}
+                  // onClick={this.showManage}
                 >
                   Click Here
                 </Button>
@@ -593,8 +637,14 @@ class DentistManage extends React.Component {
         >
           <Collapse bordered={false}>
             <Panel header="Choose an offer" key="1">
-              <Popover placement="leftTop" content={content1} title="Subscription 1">
-                <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 1</span>
+              <Popover
+                placement="leftTop"
+                content={content1}
+                title="Subscription 1"
+              >
+                <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                  Offer 1
+                </span>
               </Popover>
 
               <Checkbox
@@ -605,8 +655,14 @@ class DentistManage extends React.Component {
                 checked={this.state.offer1}
               />
               <br />
-              <Popover placement="leftTop" content={content2} title="Subscription 2">
-                <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 2</span>
+              <Popover
+                placement="leftTop"
+                content={content2}
+                title="Subscription 2"
+              >
+                <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                  Offer 2
+                </span>
               </Popover>
 
               <Checkbox
@@ -617,8 +673,14 @@ class DentistManage extends React.Component {
                 checked={this.state.offer2}
               />
               <br />
-              <Popover placement="leftTop" content={content3} title="Subscription 3">
-                <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 3</span>
+              <Popover
+                placement="leftTop"
+                content={content3}
+                title="Subscription 3"
+              >
+                <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                  Offer 3
+                </span>
               </Popover>
 
               <Checkbox
@@ -629,8 +691,14 @@ class DentistManage extends React.Component {
                 checked={this.state.offer3}
               />
               <br />
-              <Popover placement="leftTop" content={content4} title="Subscription 4">
-                <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 4</span>
+              <Popover
+                placement="leftTop"
+                content={content4}
+                title="Subscription 4"
+              >
+                <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                  Offer 4
+                </span>
               </Popover>
 
               <Checkbox
@@ -641,8 +709,14 @@ class DentistManage extends React.Component {
                 checked={this.state.offer4}
               />
               <br />
-              <Popover placement="leftTop" content={content5} title="Subscription 5">
-                <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 5</span>
+              <Popover
+                placement="leftTop"
+                content={content5}
+                title="Subscription 5"
+              >
+                <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                  Offer 5
+                </span>
               </Popover>
 
               <Checkbox
@@ -653,8 +727,14 @@ class DentistManage extends React.Component {
                 checked={this.state.offer5}
               />
               <br />
-              <Popover placement="leftTop" content={content6} title="Subscription 6">
-                <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 6</span>
+              <Popover
+                placement="leftTop"
+                content={content6}
+                title="Subscription 6"
+              >
+                <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                  Offer 6
+                </span>
               </Popover>
 
               <Checkbox
