@@ -228,7 +228,7 @@ export const UpdateDocument = (data, id, history) => dispatch => {
 }
 ///////////////////////Update Admin Password///////////////////
 export const UpdateAdminPassword = (data, id, history) => dispatch => {
-    axios.put('/api/members/update/admin_password/' + id, data)
+    axios.put('/api/members/update/user_password/' + id, data)
         .then(res => {
             message.success('Success Update Password')
         })

@@ -4,7 +4,7 @@ import { customPanelStyle } from "./const";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { addDentist, UpdateDentistByAdmin, UpdateDentistSubscriptionByadmin, UpdateOpertorByAdmin } from "../../../actions/authentication";
+import { addDentist, UpdateDentistByAdmin, UpdateDentistSubscriptionByadmin, UpdateOpertorByAdmin, UpdateAdminPassword } from "../../../actions/authentication";
 import axios from "axios";
 import { CSVLink } from "react-csv";
 
@@ -82,6 +82,8 @@ class AdminStuff extends React.Component {
       update_lastname_d: "",
       update_phone_d: "",
       other_info:'',
+      dentist_password:'',
+      operator_password:'',
 
       update_name_0: "",
       update_email_0: "",
@@ -104,7 +106,10 @@ class AdminStuff extends React.Component {
       Oname_byadmin: "",
       Opassword_byadmin: "",
       Oemail_byadmin: "",
+      Oid_byadmin:'',
       download_csv: false,
+      hidden_d:true,
+      hidden_o:true,
 
       csv_data: [
         { firstname: "1111", lastname: "Tomi", email: "ah@smthing.co.com" },
@@ -206,6 +211,7 @@ class AdminStuff extends React.Component {
     localStorage.setItem("update_dentist", e._id);
 
     this.setState({
+      Oid_byadmin: wholedata[index]._id,
       Oname_byadmin: wholedata[index].name,
       Oemail_byadmin: wholedata[index].email
     });
@@ -417,6 +423,7 @@ class AdminStuff extends React.Component {
     const index = wholedata.findIndex(item => item._id === e._id);
 
     this.setState({
+      update_id_d:wholedata[index]._id,
       update_name_d: wholedata[index].name,
       update_lastname_d: wholedata[index].lastname,
       update_email_d: wholedata[index].email,
@@ -990,6 +997,25 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <div>
+            <p style={{cursor:'pointer'}} onClick={()=>{this.setState({hidden_d:!this.state.hidden_d})}}>Update Password</p>
+            <div hidden={this.state.hidden_d}>
+              <Input style={{width:200}} name="dentist_password" value={this.state.dentist_password} onChange={this.handleInputChange}/>
+              <Button style={{marginLeft:10}} onClick={()=>{
+                if (this.state.dentist_password.length < 6){
+                  message.error('password length must be over 6 characters.');
+                  return false;
+                }
+                const update_password = {
+                  password: this.state.dentist_password
+                }
+            
+               this.props.UpdateAdminPassword(update_password, this.state.update_id_d, this.props.history);
+                this.setState({
+                  dentist_password: '', hidden_d: true
+                })
+              }}>Update Password</Button>
+              <br/><br/><br/>
+            </div>
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
                 <label style={{ fontWeight: "800" }}>First Name</label>
@@ -1090,6 +1116,7 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <div>
+
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
                 <label style={{ fontWeight: "800" }}>Name</label>
@@ -1223,6 +1250,26 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <div>
+          <p style={{cursor:'pointer'}} onClick={()=>{this.setState({hidden_o:!this.state.hidden_o})}}>Update Password</p>
+            <div hidden={this.state.hidden_o}>
+              <Input style={{width:200}} name="operator_password" value={this.state.operator_password} onChange={this.handleInputChange}/>
+              <Button style={{marginLeft:10}} onClick={()=>{
+                if (this.state.operator_password.length < 6){
+                  message.error('password length must be over 6 characters.');
+                  return false;
+                }
+                const update_password = {
+                  password: this.state.operator_password
+                }
+            
+               this.props.UpdateAdminPassword(update_password, this.state.Oid_byadmin, this.props.history);
+                this.setState({
+                  dentist_password: '', hidden_o: true
+                })
+              }}>Update Password</Button>
+              <br/><br/><br/>
+            </div>
+
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
                 <label style={{ fontWeight: "800" }}>Name</label>
@@ -1325,6 +1372,7 @@ export default connect(
     addDentist,
     UpdateDentistByAdmin,
     UpdateDentistSubscriptionByadmin,
-    UpdateOpertorByAdmin
+    UpdateOpertorByAdmin,
+    UpdateAdminPassword
   }
 )(withRouter(AdminStuff));

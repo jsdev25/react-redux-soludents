@@ -122,7 +122,7 @@ router.put('/update/operator/:name', function (req, res) {
     });
 });
 
-router.put('/update/admin_password/:name', function (req, res) {
+router.put('/update/user_password/:name', function (req, res) {
     let newpass = '';
     bcrypt.genSalt(10, (err, salt) => {
         if (err) console.error('There was an error', err);
