@@ -111,6 +111,7 @@ class DentistManage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+   // this.props.onHeaderClick = this.props.onHeaderClick.bind(this);
 
     this.columns = [
       {
@@ -196,6 +197,10 @@ class DentistManage extends React.Component {
       });
     });
   }
+
+  getAlert() {
+    alert('clicked');
+ }
 
   state = {
     profile: false,
