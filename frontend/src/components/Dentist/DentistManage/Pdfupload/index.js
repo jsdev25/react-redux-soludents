@@ -22,6 +22,7 @@ class ManageFile extends Component {
       data_lists:[],   
       me_lists:[],
       username:'',
+      real_count:10,
       length
     }
   }
@@ -44,6 +45,8 @@ class ManageFile extends Component {
         (this.state.me_lists.data.subscription.offer4 == 1) ? default_count =19 : null;
         (this.state.me_lists.data.subscription.offer5 == 1) ? default_count =29 : null;
         (this.state.me_lists.data.subscription.offer6 == 1) ? default_count =29 : null;
+        this.setState({real_count:default_count-length+1})
+
     });
   }
 
@@ -65,11 +68,10 @@ class ManageFile extends Component {
 
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
-    console.log('my real count', default_count)
-
+    console.log('my real count', default_count-length)
 
     if (length > default_count) {
-      message.error('Your document count is limited ' + default_count + 1);
+      message.error('Your document count is limited ');
       return false;
     }
 
@@ -109,6 +111,7 @@ class ManageFile extends Component {
           status: "In Progress",
       }
           this.props.addDocument(document, this.props.history);
+          that.setState({real_count: that.state.real_count - 1})
           that.setState({data_lists: [...that.state.data_lists, NewData]}, () => {
           });
       })
@@ -123,6 +126,7 @@ class ManageFile extends Component {
   render() {
     return (
       <div className="App">
+      <p>You can currently upload <span style={{color:'red',fontSize:20}}>{this.state.real_count}</span> documents based on your active subscriptions.</p>
         <Card style={{backgroundColor:'#f5f6f8', height:50}}>
           <Row>
             <Col xs={12}>File</Col>

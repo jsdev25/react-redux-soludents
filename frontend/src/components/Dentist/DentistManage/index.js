@@ -50,20 +50,19 @@ const content4 = (
     <p>(renewed automatically at the end of 365 days, can cancel the the automatic renewal until 30 days before the end of the 365 days).</p>
   </div>
 );
-      
+
 const content3 = (
   <div>
     <p>dentist can upload up to 20 document during 30 days. </p>
     <p>(when limit reached he can not upload document, give the following message error : </p>
     <p>"You have reached your limits, please take another subscription if you wish to upload more documents").</p>
     <p>counter of document reset to 0 on the next 30 days period. </p>
-    <p>(make the counter displayed on the front end, for example: 
-      3/20 so the dentist can see how much he can upload during the period of 30 days).</p>
+    <p>(make the counter displayed on the front end, for example: 3/20 so the dentist can see how much he can upload during the period of 30 days).</p>
     <p>price 750euros per month during 3 months (credited 750 euros per month 3 times, so total amount credited 2250euros) </p>
     <p>(renewed automatically at the end of 90 days, can cancel the the automatic renewal until 30 days before the end of the 90 days).</p>
   </div>
-      );
-      
+);
+
 const content5 = (
   <div>
     <p>dentist can upload up to 30 document during 30 days.</p>
@@ -75,8 +74,8 @@ const content5 = (
     <p>price 990euros per month during 3 months (credited 990 euros per month 3 times, so total amount credited 2970euros)</p>
     <p>(renewed automatically at the end of 90 days, can cancel the the automatic renewal until 30 days before the end of the 90 days).</p>
   </div>
-      );
-      
+);
+
 const content6 = (
   <div>
     <p>dentist can upload up to 30 document during 30 days.</p>
@@ -88,13 +87,13 @@ const content6 = (
     <p>price 9900euros per 365 days (credited 9900 euros in one time for 365 days) </p>
     <p>(renewed automatically at the end of 365 days, can cancel the the automatic renewal until 30 days before the end of the 365 days).</p>
   </div>
-      );
-      
+);
+
 class DentistManage extends React.Component {
-        constructor(props) {
-      super(props);
+  constructor(props) {
+    super(props);
     this.state = {
-        offer1: false,
+      offer1: false,
       offer2: false,
       offer3: false,
       offer4: false,
@@ -116,206 +115,206 @@ class DentistManage extends React.Component {
     this.columns = [
       {
         title: "Offer Number",
-      dataIndex: "Offernumber",
-      key: "Offernumber"
-    },
+        dataIndex: "Offernumber",
+        key: "Offernumber"
+      },
       {
         title: "Subscription Date",
-      key: "subscription_date",
-      dataIndex: "subscription_date",
-      onFilter: (value, record) =>
-        record.subscription_date.indexOf(value) === 0,
+        key: "subscription_date",
+        dataIndex: "subscription_date",
+        onFilter: (value, record) =>
+          record.subscription_date.indexOf(value) === 0,
         sorter: (a, b) => {
           return a.subscription_date.localeCompare(b.subscription_date);
-    },
+        },
         render: text => <span>{text.replace("T", " ").substring(0, 19)}</span>
       },
       {
         title: "Renew Date",
-      key: "renew_date",
-      dataIndex: "renew_date",
-      onFilter: (value, record) => record.renew_date.indexOf(value) === 0,
+        key: "renew_date",
+        dataIndex: "renew_date",
+        onFilter: (value, record) => record.renew_date.indexOf(value) === 0,
         sorter: (a, b) => {
           return a.renew_date.localeCompare(b.renew_date);
-    },
+        },
         render: text => <span>{text.replace("T", " ").substring(0, 19)}</span>
       },
       {
         title: "Action",
-      key: "action",
-      render: (text, record) => (
+        key: "action",
+        render: (text, record) => (
           <span>
-        <Button
-          style={{ backgroundColor: "#00a99d", color: "#fff" }}
-          onClick={() => this.handleView(record)}
-        >
-          Cancel
+            <Button
+              style={{ backgroundColor: "#00a99d", color: "#fff" }}
+              onClick={() => this.handleView(record)}
+            >
+              Cancel
             </Button>
-      </span>
-      )
-    }
-  ];
+          </span>
+        )
+      }
+    ];
 
-  this.columnsbillings = [
+    this.columnsbillings = [
       {
         title: "Billing",
-      dataIndex: "Offernumber",
-      key: "Offernumber"
-    },
+        dataIndex: "Offernumber",
+        key: "Offernumber"
+      },
       {
         title: "Action",
-      key: "action",
-      render: (text, record) => (
+        key: "action",
+        render: (text, record) => (
           <span>
-        <Button
-          style={{ backgroundColor: "#00a99d", color: "#fff" }}
-          onClick={() => this.handleView(record)}
-        >
-          Print
+            <Button
+              style={{ backgroundColor: "#00a99d", color: "#fff" }}
+              onClick={() => this.handleView(record)}
+            >
+              Print
             </Button>
-      </span>
-      )
-    }
-  ];
-}
+          </span>
+        )
+      }
+    ];
+  }
 
   componentDidMount() {
-        axios.get("/api/members/" + useradmin).then(res => {
-          this.setState({
-            name: res.data.data.name,
-            lastname: res.data.data.lastname,
-            email: res.data.data.email,
-            address: res.data.data.address,
-            adli_number: res.data.data.adli_number,
-            phone: res.data.data.phone,
-            offer1: !!res.data.data.subscription.offer1,
-            offer2: !!res.data.data.subscription.offer2,
-            offer3: !!res.data.data.subscription.offer3,
-            offer4: !!res.data.data.subscription.offer4,
-            offer5: !!res.data.data.subscription.offer5,
-            offer6: !!res.data.data.subscription.offer6
-          });
-        });
-      }
-    
-  state = {
-        profile: false,
-      subscription: false,
-      manage: false
-    };
-  
-  showProfile = () => {
-        this.setState({
-          profile: true
-        });
-      };
-    
-  showSubscription = () => {
-        localStorage.setItem("payment", 0);
+    axios.get("/api/members/" + useradmin).then(res => {
       this.setState({
-        subscription: true
+        name: res.data.data.name,
+        lastname: res.data.data.lastname,
+        email: res.data.data.email,
+        address: res.data.data.address,
+        adli_number: res.data.data.adli_number,
+        phone: res.data.data.phone,
+        offer1: !!res.data.data.subscription.offer1,
+        offer2: !!res.data.data.subscription.offer2,
+        offer3: !!res.data.data.subscription.offer3,
+        offer4: !!res.data.data.subscription.offer4,
+        offer5: !!res.data.data.subscription.offer5,
+        offer6: !!res.data.data.subscription.offer6
+      });
+    });
+  }
+
+  state = {
+    profile: false,
+    subscription: false,
+    manage: false
+  };
+
+  showProfile = () => {
+    this.setState({
+      profile: true
+    });
+  };
+
+  showSubscription = () => {
+    localStorage.setItem("payment", 0);
+    this.setState({
+      subscription: true
     });
   };
 
   showManage = () => {
-        this.setState({
-          manage: true
-        });
-      };
-    
+    this.setState({
+      manage: true
+    });
+  };
+
   handleOk = e => {
-        this.setState({
-          profile: false,
-          subscription: false,
-          manage: false
-        });
-      };
-    
+    this.setState({
+      profile: false,
+      subscription: false,
+      manage: false
+    });
+  };
+
   handleCancel = e => {
-        this.setState({
-          profile: false,
-          subscription: false,
-          manage: false
-        });
-      };
-    
+    this.setState({
+      profile: false,
+      subscription: false,
+      manage: false
+    });
+  };
+
   handleChange1() {
     if (this.state.offer6) {
       return false;
     }
 
     this.setState({
-        offer1: !this.state.offer1,
+      offer1: !this.state.offer1,
       offer_pay: 390
     });
   }
 
   handleChange2() {
-        this.setState({
-          offer2: !this.state.offer2,
-          offer_pay: 3900
-        });
-      }
-    
+    this.setState({
+      offer2: !this.state.offer2,
+      offer_pay: 3900
+    });
+  }
+
   handleChange3() {
-        this.setState({
-          offer3: !this.state.offer3,
-          offer_pay: 750
-        });
-      !this.state.offer3
-      ? this.setState({offer_pay: 750 })
-      : this.setState({offer_pay: 390 });
+    this.setState({
+      offer3: !this.state.offer3,
+      offer_pay: 750
+    });
+    !this.state.offer3
+      ? this.setState({ offer_pay: 750 })
+      : this.setState({ offer_pay: 390 });
   }
 
   handleChange4() {
-        this.setState({
-          offer4: !this.state.offer4,
-          offer_pay: 7500
-        });
-      !this.state.offer4
-      ? this.setState({offer_pay: 7500 })
-      : this.setState({offer_pay: 390 });
+    this.setState({
+      offer4: !this.state.offer4,
+      offer_pay: 7500
+    });
+    !this.state.offer4
+      ? this.setState({ offer_pay: 7500 })
+      : this.setState({ offer_pay: 390 });
   }
 
   handleChange5() {
-        this.setState({
-          offer5: !this.state.offer5,
-          offer_pay: 990
-        });
-      !this.state.offer5
-      ? this.setState({offer_pay: 990 })
-      : this.setState({offer_pay: 390 });
+    this.setState({
+      offer5: !this.state.offer5,
+      offer_pay: 990
+    });
+    !this.state.offer5
+      ? this.setState({ offer_pay: 990 })
+      : this.setState({ offer_pay: 390 });
   }
 
   handleChange6() {
-        this.setState({
-          offer6: !this.state.offer6
-        });
-      !this.state.offer6
-      ? this.setState({offer_pay: 9900 })
-      : this.setState({offer_pay: 390 });
+    this.setState({
+      offer6: !this.state.offer6
+    });
+    !this.state.offer6
+      ? this.setState({ offer_pay: 9900 })
+      : this.setState({ offer_pay: 390 });
   }
 
   handleSubmit() {
     if (localStorage.getItem("payment") == 0) {
-        message.error("You must pay with card directly!");
+      message.error("You must pay with card directly!");
       return false;
     }
 
     const dentist = {
-        subscription: {
+      subscription: {
         offer1: +this.state.offer1,
-      offer2: +this.state.offer2,
-      offer3: +this.state.offer3,
-      offer4: +this.state.offer4,
-      offer5: +this.state.offer5,
-      offer6: +this.state.offer6
-    }
-  };
+        offer2: +this.state.offer2,
+        offer3: +this.state.offer3,
+        offer4: +this.state.offer4,
+        offer5: +this.state.offer5,
+        offer6: +this.state.offer6
+      }
+    };
 
-  this.props.UpdateDentistSubscription(dentist, this.props.history);
+    this.props.UpdateDentistSubscription(dentist, this.props.history);
     this.setState({
-        offer1: this.state.offer1,
+      offer1: this.state.offer1,
       offer2: this.state.offer2,
       offer3: this.state.offer3,
       offer4: this.state.offer4,
@@ -327,21 +326,21 @@ class DentistManage extends React.Component {
 
   handleUpdate() {
     if (!this.state.name) {
-        message.error("Your name is empty!");
+      message.error("Your name is empty!");
       return false;
     }
 
     if (!this.state.password) {
-        message.error("Your password is empty!");
+      message.error("Your password is empty!");
       return false;
     }
 
     if (!this.state.email) {
-        message.error("Your email is empty!");
+      message.error("Your email is empty!");
       return false;
     }
     const dentist = {
-        name: this.state.name,
+      name: this.state.name,
       lastname: this.state.lastname,
       address: this.state.address,
       phone: this.state.phone,
@@ -351,22 +350,22 @@ class DentistManage extends React.Component {
     };
     this.props.UpdateDentist(dentist, this.props.history);
     this.setState({
-        profile: false
+      profile: false
     });
   }
 
   onLogout(e) {
-        e.preventDefault();
-      this.props.logoutUser(this.props.history);
-      localStorage.setItem("admin", 500);
-    }
-  
+    e.preventDefault();
+    this.props.logoutUser(this.props.history);
+    localStorage.setItem("admin", 500);
+  }
+
   handleInputChange(e) {
-        this.setState({
-          [e.target.name]: e.target.value
-        });
-      }
-    
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
   render() {
     return (
       <div
@@ -496,8 +495,8 @@ class DentistManage extends React.Component {
                 </Button>
               </Card>
               <br />
-              You can currently upload X documents based on your active
-              subscriptions.
+              {/* You can currently upload X documents based on your active
+              subscriptions. */}
             </div>
           </Col>
         </Row>
@@ -614,69 +613,75 @@ class DentistManage extends React.Component {
             <Panel header="Choose an offer" key="1">
               <Popover placement="right" content={content1} title="Subscription 1">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 1</span>
-                <Checkbox
-                  name="offer1"
-                  onChange={this.handleChange1.bind(this)}
-                  value={this.state.offer1}
-                  style={{ color: "#666", float: "right" }}
-                  checked={this.state.offer1}
-                />
               </Popover>
+
+              <Checkbox
+                name="offer1"
+                onChange={this.handleChange1.bind(this)}
+                value={this.state.offer1}
+                style={{ color: "#666", float: "right" }}
+                checked={this.state.offer1}
+              />
               <br />
               <Popover placement="right" content={content2} title="Subscription 2">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 2</span>
-                <Checkbox
-                  name="offer2"
-                  onChange={this.handleChange2.bind(this)}
-                  value={this.state.offer2}
-                  style={{ clear: "both", color: "#666", float: "right" }}
-                  checked={this.state.offer2}
-                />
               </Popover>
+
+              <Checkbox
+                name="offer2"
+                onChange={this.handleChange2.bind(this)}
+                value={this.state.offer2}
+                style={{ clear: "both", color: "#666", float: "right" }}
+                checked={this.state.offer2}
+              />
               <br />
               <Popover placement="right" content={content3} title="Subscription 3">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 3</span>
-                <Checkbox
-                  name="offer3"
-                  onChange={this.handleChange3.bind(this)}
-                  value={this.state.offer3}
-                  style={{ clear: "both", color: "#666", float: "right" }}
-                  checked={this.state.offer3}
-                />
               </Popover>
+
+              <Checkbox
+                name="offer3"
+                onChange={this.handleChange3.bind(this)}
+                value={this.state.offer3}
+                style={{ clear: "both", color: "#666", float: "right" }}
+                checked={this.state.offer3}
+              />
               <br />
               <Popover placement="right" content={content4} title="Subscription 4">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 4</span>
-                <Checkbox
-                  name="offer4"
-                  onChange={this.handleChange4.bind(this)}
-                  value={this.state.offer4}
-                  style={{ clear: "both", color: "#666", float: "right" }}
-                  checked={this.state.offer4}
-                />
               </Popover>
+
+              <Checkbox
+                name="offer4"
+                onChange={this.handleChange4.bind(this)}
+                value={this.state.offer4}
+                style={{ clear: "both", color: "#666", float: "right" }}
+                checked={this.state.offer4}
+              />
               <br />
               <Popover placement="right" content={content5} title="Subscription 5">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 5</span>
-                <Checkbox
-                  name="offer5"
-                  onChange={this.handleChange5.bind(this)}
-                  value={this.state.offer5}
-                  style={{ clear: "both", color: "#666", float: "right" }}
-                  checked={this.state.offer5}
-                />
               </Popover>
+
+              <Checkbox
+                name="offer5"
+                onChange={this.handleChange5.bind(this)}
+                value={this.state.offer5}
+                style={{ clear: "both", color: "#666", float: "right" }}
+                checked={this.state.offer5}
+              />
               <br />
               <Popover placement="right" content={content6} title="Subscription 6">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 6</span>
-                <Checkbox
-                  name="offer6"
-                  onChange={this.handleChange6.bind(this)}
-                  value={this.state.offer6}
-                  style={{ clear: "both", color: "#666", float: "right" }}
-                  checked={this.state.offer6}
-                />
               </Popover>
+
+              <Checkbox
+                name="offer6"
+                onChange={this.handleChange6.bind(this)}
+                value={this.state.offer6}
+                style={{ clear: "both", color: "#666", float: "right" }}
+                checked={this.state.offer6}
+              />
               <br />
               <br />
 
@@ -741,22 +746,22 @@ class DentistManage extends React.Component {
           <Managefile username={this.state.name} />
         </Modal>
       </div>
-      );
-    }
+    );
   }
-  
+}
+
 DentistManage.propTypes = {
-        logoutUser: PropTypes.func.isRequired,
-      UpdateDentist: PropTypes.func.isRequired,
-      UpdateDentistSubscription: PropTypes.func.isRequired
-    };
-    
+  logoutUser: PropTypes.func.isRequired,
+  UpdateDentist: PropTypes.func.isRequired,
+  UpdateDentistSubscription: PropTypes.func.isRequired
+};
+
 const mapStateToProps = state => ({
-        auth: state.auth,
-      errors: state.errors
-    });
-    
-    export default connect(
-      mapStateToProps,
-  {logoutUser, UpdateDentist, UpdateDentistSubscription }
-    )(withRouter(DentistManage));
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { logoutUser, UpdateDentist, UpdateDentistSubscription }
+)(withRouter(DentistManage));
