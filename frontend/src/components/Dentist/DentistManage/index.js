@@ -15,77 +15,54 @@ const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
 
 const content1 = (
-  <div>
-    <p>dentist can upload up to 10 document during 30 days.</p>
-    <p>(when limit reached he can not upload document, give the following message error :</p>
-    <p>"You have reached your limits, please take another subscription if you wish to upload more documents").</p>
-    <p>counter of document reset to 0 on the next 30 days period. </p>
-    <p>(make the counter displayed on the front end, for example: 3/10 so the dentist can see how much he can upload during the period of 30 days).</p>
-    <p>price 390euros per month during 3 months </p>
-    <p>(credited 390 euros per month 3 times, so total amount credited 1170euros)</p>
-    <p>(renewed automatically at the end of 90 days, can cancel the the automatic renewal until 30 days before the end of the 90 days).</p>
+  <div style={{lineHeight:-5}}>
+    <span>Dentist can upload up to 10 document during 30 days.</span><br/>
+    <span>Counter of document reset to 0 on the next 30 days period. </span><br/>
+    <span>Price 390euros per month during 3 months </span>
   </div>
 );
 
 const content2 = (
-  <div>
-    <p>dentist can upload up to 10 document during 30 days. </p>
-    <p>(when limit reached he can not upload document, give the following message error : </p>
-    <p>"You have reached your limits, please take another subscription if you wish to upload more documents").</p>
-    <p>counter of document reset to 0 on the next 30 days period. (make the counter displayed on the front end, </p>
-    <p>for example: 3/10 so the dentist can see how much he can upload during the period of 30 days).</p>
-    <p>price 3900euros per 365 days (credited 3900 euros in one time for 365 days) </p>
-    <p>(renewed automatically at the end of 365 days, can cancel the the automatic renewal until 30 days before the end of the 365 days).</p>
+  <div style={{lineHeight:-5}}>
+    <span>dentist can upload up to 10 document during 30 days. </span><br/>
+    <span>counter of document reset to 0 on the next 30 days period.</span><br/>
+    <span>(make the counter displayed on the front end, </span><br/>
+    <span>price 3900euros per 365 days (credited 3900 euros in one time for 365 days) </span>
   </div >
 );
 
 const content4 = (
-  <div>
-    <p>dentist can upload up to 20 document during 30 days.</p>
-    <p>(when limit reached he can not upload document, give the following message error : </p>
-    <p>"You have reached your limits, please take another subscription if you wish to upload more documents").</p>
-    <p>counter of document reset to 0 on the next 30 days period.</p>
-    <p>(make the counter displayed on the front end, for example: 3/20 so the dentist can see how much he can upload during the period of 30 days).</p>
-    <p>price 7500euros per 365 days (credited 7500 euros in one time for 365 days) </p>
-    <p>(renewed automatically at the end of 365 days, can cancel the the automatic renewal until 30 days before the end of the 365 days).</p>
+  <div style={{lineHeight:-5}}>
+    <span>dentist can upload up to 20 document during 30 days.</span><br/>
+    <span>counter of document reset to 0 on the next 30 days period.</span><br/>
+    <span>price 7500euros per 365 days</span><br/>
+    <span>(credited 7500 euros in one time for 365 days) </span>
   </div>
 );
 
 const content3 = (
-  <div>
-    <p>dentist can upload up to 20 document during 30 days. </p>
-    <p>(when limit reached he can not upload document, give the following message error : </p>
-    <p>"You have reached your limits, please take another subscription if you wish to upload more documents").</p>
-    <p>counter of document reset to 0 on the next 30 days period. </p>
-    <p>(make the counter displayed on the front end, for example: 3/20 so the dentist can see how much he can upload during the period of 30 days).</p>
-    <p>price 750euros per month during 3 months (credited 750 euros per month 3 times, so total amount credited 2250euros) </p>
-    <p>(renewed automatically at the end of 90 days, can cancel the the automatic renewal until 30 days before the end of the 90 days).</p>
+  <div style={{lineHeight:-5}}>
+    <span>dentist can upload up to 20 document during 30 days. </span><br/>
+    <span>counter of document reset to 0 on the next 30 days period. </span><br/>
+    <span>price 750euros per month during 3 months </span><br/>
+    <span>(credited 750 euros per month 3 times, so total amount credited 2250euros) </span>
   </div>
 );
 
 const content5 = (
-  <div>
-    <p>dentist can upload up to 30 document during 30 days.</p>
-    <p>(when limit reached he can not upload document, give the following message error : </p>
-    <p>"You have reached your limits, please take another subscription if you wish to upload more documents").</p>
-    <p>counter of document reset to 0 on the next 30 days period.</p>
-    <p>(make the counter displayed on the front end, for example: </p>
-    <p>3/30 so the dentist can see how much he can upload during the period of 30 days).</p>
-    <p>price 990euros per month during 3 months (credited 990 euros per month 3 times, so total amount credited 2970euros)</p>
-    <p>(renewed automatically at the end of 90 days, can cancel the the automatic renewal until 30 days before the end of the 90 days).</p>
+  <div style={{lineHeight:-5}}>
+    <span>dentist can upload up to 30 document during 30 days.</span><br/>
+    <span>counter of document reset to 0 on the next 30 days period.</span><br/>
+    <span>price 990euros per month during 3 months</span><br/>
+    <span>(credited 990 euros per month 3 times, so total amount credited 2970euros)</span>
   </div>
 );
 
 const content6 = (
-  <div>
-    <p>dentist can upload up to 30 document during 30 days.</p>
-    <p>(when limit reached he can not upload document, give the following message error : </p>
-    <p>"You have reached your limits, please take another subscription if you wish to upload more documents").</p>
-    <p>counter of document reset to 0 on the next 30 days period. </p>
-    <p>(make the counter displayed on the front end, for example: </p>
-    <p>3/30 so the dentist can see how much he can upload during the period of 30 days).</p>
-    <p>price 9900euros per 365 days (credited 9900 euros in one time for 365 days) </p>
-    <p>(renewed automatically at the end of 365 days, can cancel the the automatic renewal until 30 days before the end of the 365 days).</p>
+  <div style={{lineHeight:-5}}>
+    <span>dentist can upload up to 30 document during 30 days.</span><br/>
+    <span>counter of document reset to 0 on the next 30 days period. </span><br/>
+    <span>price 9900euros per 365 days (credited 9900 euros in one time for 365 days) </span>
   </div>
 );
 
@@ -616,7 +593,7 @@ class DentistManage extends React.Component {
         >
           <Collapse bordered={false}>
             <Panel header="Choose an offer" key="1">
-              <Popover placement="right" content={content1} title="Subscription 1">
+              <Popover placement="leftTop" content={content1} title="Subscription 1">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 1</span>
               </Popover>
 
@@ -628,7 +605,7 @@ class DentistManage extends React.Component {
                 checked={this.state.offer1}
               />
               <br />
-              <Popover placement="right" content={content2} title="Subscription 2">
+              <Popover placement="leftTop" content={content2} title="Subscription 2">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 2</span>
               </Popover>
 
@@ -640,7 +617,7 @@ class DentistManage extends React.Component {
                 checked={this.state.offer2}
               />
               <br />
-              <Popover placement="right" content={content3} title="Subscription 3">
+              <Popover placement="leftTop" content={content3} title="Subscription 3">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 3</span>
               </Popover>
 
@@ -652,7 +629,7 @@ class DentistManage extends React.Component {
                 checked={this.state.offer3}
               />
               <br />
-              <Popover placement="right" content={content4} title="Subscription 4">
+              <Popover placement="leftTop" content={content4} title="Subscription 4">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 4</span>
               </Popover>
 
@@ -664,7 +641,7 @@ class DentistManage extends React.Component {
                 checked={this.state.offer4}
               />
               <br />
-              <Popover placement="right" content={content5} title="Subscription 5">
+              <Popover placement="leftTop" content={content5} title="Subscription 5">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 5</span>
               </Popover>
 
@@ -676,7 +653,7 @@ class DentistManage extends React.Component {
                 checked={this.state.offer5}
               />
               <br />
-              <Popover placement="right" content={content6} title="Subscription 6">
+              <Popover placement="leftTop" content={content6} title="Subscription 6">
                 <span style={{ marginLeft: 20, cursor: 'pointer' }}>Offer 6</span>
               </Popover>
 
