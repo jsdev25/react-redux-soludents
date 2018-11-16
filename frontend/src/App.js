@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import jwt_decode from 'jwt-decode';
@@ -9,7 +9,7 @@ import { setCurrentUser, logoutUser } from './actions/authentication';
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
-import Stripe from './components/Stripe';
+import BadRequest from './components/BadRequest';
 import Admin from './components/Admin';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -32,17 +32,16 @@ class App extends Component {
   render() {
     return (
       <Provider store = { store }>
-        <Router>
-            <div>
-                  <Route exact path="/" component={ Home } />
-                  <Route  path="/register" component={ Register } />
-                  <Route  path="/login" component={ Login } />
-                  <Route  path="/admin" component={ Admin } />
-                  <Route  path="/operator" component={ Operator } />
-                  <Route  path="/dentist" component={ Dentist } />
-                  <Route  path="/stripe" component={ Stripe } />
-
-            </div>
+       <Router>
+        <Switch>
+            <Route exact path="/" component={ Home } />
+            <Route  path="/register" component={ Register } />
+            <Route  path="/login" component={ Login } />
+            <Route  path="/admin" component={ Admin } />
+            <Route  path="/operator" component={ Operator } />
+            <Route  path="/dentist" component={ Dentist } />
+            <Route exact component={BadRequest} />
+          </Switch>
           </Router>
         </Provider>
     );
