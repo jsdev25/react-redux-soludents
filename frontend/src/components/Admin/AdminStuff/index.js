@@ -56,7 +56,7 @@ const columns_history = [
     key: "dentist_name",
     dataIndex: "dentist_name",
     onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
-    sorter: (a, b) => a.dentist_name.length + b.dentist_name.length
+    sorter: (a, b) => a.dentist_name.length - b.dentist_name.length
   }
 ];
 function callback(key) { }

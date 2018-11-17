@@ -24,6 +24,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import Managefile from "./Pdfupload";
+import Dragdrop from './Dragdrop';
 import axios from "axios";
 import Checkout from "../../Stripe/Checkout";
 import "./index.css";
@@ -121,6 +122,7 @@ class DentistManage extends React.Component {
       offer5: false,
       offer6: false,
       offer_pay: 390,
+      drag : false,
       name: "",
       lastname: "",
       email: "",
@@ -129,6 +131,7 @@ class DentistManage extends React.Component {
       password: pwa,
       phone: ""
     };
+    this.showDragDrop = this.showDragDrop.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -248,11 +251,18 @@ class DentistManage extends React.Component {
     });
   };
 
+  showDragDrop = () => {
+    this.setState({
+      drag: true
+    });
+  }
+
   handleOk = e => {
     this.setState({
       profile: false,
       subscription: false,
-      manage: false
+      manage: false,
+      drag: false
     });
   };
 
@@ -260,7 +270,8 @@ class DentistManage extends React.Component {
     this.setState({
       profile: false,
       subscription: false,
-      manage: false
+      manage: false,
+      drag: false
     });
   };
 
@@ -515,7 +526,7 @@ class DentistManage extends React.Component {
                     backgroundColor: "#00a99d",
                     color: "#fff"
                   }}
-                  // onClick={this.showManage}
+                   onClick={this.showDragDrop}
                 >
                   Click Here
                 </Button>
@@ -806,6 +817,18 @@ class DentistManage extends React.Component {
           footer={[]}
         >
           <Managefile username={this.state.name} />
+        </Modal>
+
+        <Modal
+          centered={true}
+          title={"Upload Pdf"}
+          visible={this.state.drag}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          width={820}
+          footer={[]}
+        >
+          <Dragdrop username={this.state.name} />
         </Modal>
       </div>
     );

@@ -214,7 +214,7 @@ export const UpdateDentistByAdmin = (dentist, history) => dispatch => {
 export const UpdateDocument = (data, id, history) => dispatch => {
     axios.put('/api/documents/update/' + id, data)
         .then(res => {
-            message.success('Success Update Document')
+           // message.success('Success Update Document')
         })
         // history.push('/dentist') })      
 

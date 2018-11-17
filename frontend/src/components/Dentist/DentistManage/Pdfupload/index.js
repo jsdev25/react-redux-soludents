@@ -68,7 +68,7 @@ class ManageFile extends Component {
 
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
-    console.log('my real count', default_count-length)
+    console.log('my real information', this.state.selectedFile)
 
     if (length > default_count) {
       message.error('Your document count is limited ');
@@ -79,11 +79,16 @@ class ManageFile extends Component {
         this.state.selectedFile.name.slice(-4) === '.png' ||
         this.state.selectedFile.name.slice(-4) === '.doc' ||
         this.state.selectedFile.name.slice(-5) === '.docx' ||
-        this.state.selectedFile.name.slice(-4) === '.jpg') {
+        this.state.selectedFile.name.slice(-5) === '.jpeg') {
     } else {
       message.error ('wrong file extension');
       return false;
     } 
+
+    if (this.state.selectedFile.size > 10240000) {
+      message.error ('Maximun size 10MB!');
+      return false;
+    }
 
     axios
       .post(endpoint, data, {

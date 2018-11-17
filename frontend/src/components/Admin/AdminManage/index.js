@@ -106,7 +106,7 @@ class AdminManage extends React.Component {
         key: "operator_name",
         dataIndex: "operator_name",
         onFilter: (value, record) => record.operator_name.indexOf(value) === 0,
-        sorter: (a, b) => a.operator_name.length + b.operator_name.length
+        sorter: (a, b) => a.operator_name.length - b.operator_name.length
       },
       {
         title: "Action",
