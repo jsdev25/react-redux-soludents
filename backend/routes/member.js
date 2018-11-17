@@ -7,7 +7,6 @@ const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 const Member = require('../models/Member');
-var password_hash = '';
 
 router.get('/', function (req, res) {
     Member.find(function (err, members) {

@@ -7,3 +7,15 @@
     width: 160px;
     height: 40px;
 }
+
+@media (max-width:2466px) and (min-width:600px) {
+    .mobile-price-view {
+        width: 330px
+    }
+}
+
+@media (max-width:600px) and (min-width:4px) {
+    .mobile-price-view {
+        width: 200px
+    }
+}

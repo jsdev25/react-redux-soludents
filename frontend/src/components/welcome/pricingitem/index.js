@@ -27,7 +27,7 @@ export class Pricingitem extends React.Component {
             color: "white",
             textAlign: "center"
           }}
-          style={{ width: 330 }}
+          className="mobile-price-view"
         >
           <strong>{this.props.title}</strong>
           <p>

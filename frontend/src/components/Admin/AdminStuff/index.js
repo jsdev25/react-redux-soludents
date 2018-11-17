@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Button, Row, Col, Card, List, Collapse, Icon, Input, Divider, Modal, Checkbox, Table, message, Progress } from "antd";
+import { Avatar, Button, Row, Col, Card, List, Collapse, Icon, Input, Divider, Modal, Radio, Table, message, Progress } from "antd";
 import { customPanelStyle } from "./const";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -8,6 +8,7 @@ import { addDentist, UpdateDentistByAdmin, UpdateDentistSubscriptionByadmin, Upd
 import axios from "axios";
 import { CSVLink } from "react-csv";
 
+const RadioGroup = Radio.Group;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
 const columns_history = [
@@ -81,10 +82,10 @@ class AdminStuff extends React.Component {
       update_address_d: "",
       update_lastname_d: "",
       update_phone_d: "",
-      other_info:'',
-      dentist_password:'',
-      operator_password:'',
-
+      other_info: '',
+      dentist_password: '',
+      operator_password: '',
+      subscription: 1,
       update_name_0: "",
       update_email_0: "",
       update_password_0: "",
@@ -96,20 +97,13 @@ class AdminStuff extends React.Component {
       selectKey: -1,
       errors: {},
 
-      offer1: false,
-      offer2: false,
-      offer3: false,
-      offer4: false,
-      offer5: false,
-      offer6: false,
-
       Oname_byadmin: "",
       Opassword_byadmin: "",
       Oemail_byadmin: "",
-      Oid_byadmin:'',
+      Oid_byadmin: '',
       download_csv: false,
-      hidden_d:true,
-      hidden_o:true,
+      hidden_d: true,
+      hidden_o: true,
 
       csv_data: [
         { firstname: "1111", lastname: "Tomi", email: "ah@smthing.co.com" },
@@ -138,6 +132,13 @@ class AdminStuff extends React.Component {
     this.HandleHistories = this.HandleHistories.bind(this);
   }
 
+  onChange = (e) => {
+    console.log('radio checked', e.target.value);
+    this.setState({
+      subscription: e.target.value,
+    });
+  }
+
   state = {
     visible: false,
     visible_opertor: false,
@@ -147,43 +148,6 @@ class AdminStuff extends React.Component {
     visible_opertor_byadmin: false,
     visible_history: false
   };
-
-  handleChange1() {
-    this.setState({
-      offer1: !this.state.offer1
-    });
-  }
-
-  handleChange2() {
-    this.setState({
-      offer2: !this.state.offer2,
-      check1: 1
-    });
-  }
-
-  handleChange3() {
-    this.setState({
-      offer3: !this.state.offer3
-    });
-  }
-
-  handleChange4() {
-    this.setState({
-      offer4: !this.state.offer4
-    });
-  }
-
-  handleChange5() {
-    this.setState({
-      offer5: !this.state.offer5
-    });
-  }
-
-  handleChange6() {
-    this.setState({
-      offer6: !this.state.offer6
-    });
-  }
 
   DownloadCSV() {
     this.setState({
@@ -274,15 +238,15 @@ class AdminStuff extends React.Component {
   showModalDentist = () => {
     this.setState({
       visible: true,
-      name:'',
-      email:'',
-      lastname:'',
-      phone:'',
-      address:'',
-      adli_number:'',
-      number:'',
-      password:'',
-      other_info:''
+      name: '',
+      email: '',
+      lastname: '',
+      phone: '',
+      address: '',
+      adli_number: '',
+      number: '',
+      password: '',
+      other_info: ''
     });
   };
 
@@ -351,14 +315,7 @@ class AdminStuff extends React.Component {
       email: this.state.email,
       password: this.state.password,
       admin: 0,
-      subscription: {
-        offer1: 1,
-        offer2: 0,
-        offer3: 0,
-        offer4: 0,
-        offer5: 0,
-        offer6: 0
-      }
+      subscription: 1
     };
 
     axios({
@@ -423,13 +380,13 @@ class AdminStuff extends React.Component {
     const index = wholedata.findIndex(item => item._id === e._id);
 
     this.setState({
-      update_id_d:wholedata[index]._id,
+      update_id_d: wholedata[index]._id,
       update_name_d: wholedata[index].name,
       update_lastname_d: wholedata[index].lastname,
       update_email_d: wholedata[index].email,
       update_address_d: wholedata[index].address,
       update_phone_d: wholedata[index].phone,
-      update_number_d:wholedata[index].adli_number
+      update_number_d: wholedata[index].adli_number
     });
   }
 
@@ -442,12 +399,7 @@ class AdminStuff extends React.Component {
     const index = wholedata.findIndex(item => item._id === e._id);
 
     this.setState({
-      offer1: wholedata[index].subscription.offer1,
-      offer2: wholedata[index].subscription.offer2,
-      offer3: wholedata[index].subscription.offer3,
-      offer4: wholedata[index].subscription.offer4,
-      offer5: wholedata[index].subscription.offer5,
-      offer6: wholedata[index].subscription.offer6
+      subscription: wholedata[index].subscription
     });
   }
 
@@ -499,14 +451,7 @@ class AdminStuff extends React.Component {
 
   handleUpdateSubscription() {
     const mydata = {
-      subscription: {
-        offer1: +this.state.offer1,
-        offer2: +this.state.offer2,
-        offer3: +this.state.offer3,
-        offer4: +this.state.offer4,
-        offer5: +this.state.offer5,
-        offer6: +this.state.offer6
-      }
+      subscription: this.state.subscription
     };
 
     this.props.UpdateDentistSubscriptionByadmin(mydata, this.props.history);
@@ -567,10 +512,7 @@ class AdminStuff extends React.Component {
       name: this.state.Oname,
       email: this.state.Oemail,
       password: this.state.Opassword,
-      admin: 1,
-      subscription: {
-        offer1: 0
-      }
+      admin: 1
     };
 
     axios({
@@ -997,24 +939,24 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <div>
-            <p style={{cursor:'pointer'}} onClick={()=>{this.setState({hidden_d:!this.state.hidden_d})}}>Update Password</p>
+            <p style={{ cursor: 'pointer' }} onClick={() => { this.setState({ hidden_d: !this.state.hidden_d }) }}>Update Password</p>
             <div hidden={this.state.hidden_d}>
-              <Input style={{width:200}} name="dentist_password" value={this.state.dentist_password} onChange={this.handleInputChange}/>
-              <Button style={{marginLeft:10}} onClick={()=>{
-                if (this.state.dentist_password.length < 6){
+              <Input style={{ width: 200 }} name="dentist_password" value={this.state.dentist_password} onChange={this.handleInputChange} />
+              <Button style={{ marginLeft: 10 }} onClick={() => {
+                if (this.state.dentist_password.length < 6) {
                   message.error('password length must be over 6 characters.');
                   return false;
                 }
                 const update_password = {
                   password: this.state.dentist_password
                 }
-            
-               this.props.UpdateAdminPassword(update_password, this.state.update_id_d, this.props.history);
+
+                this.props.UpdateAdminPassword(update_password, this.state.update_id_d, this.props.history);
                 this.setState({
                   dentist_password: '', hidden_d: true
                 })
               }}>Update Password</Button>
-              <br/><br/><br/>
+              <br /><br /><br />
             </div>
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
@@ -1173,59 +1115,25 @@ class AdminStuff extends React.Component {
         >
           <Collapse bordered={false}>
             <Panel header="Choose an offer" key="1">
-              <span style={{ marginLeft: 20 }}>Offer 1</span>
-              <Checkbox
-                name="offer1"
-                onChange={this.handleChange1.bind(this)}
-                value={this.state.offer1}
-                style={{ color: "#666", float: "right" }}
-                checked={this.state.offer1}
-              />
-              <br />
-              <span style={{ marginLeft: 20 }}>Offer 2</span>
-              <Checkbox
-                name="offer2"
-                onChange={this.handleChange2.bind(this)}
-                value={this.state.offer2}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer2}
-              />
-              <br />
-              <span style={{ marginLeft: 20 }}>Offer 3</span>
-              <Checkbox
-                name="offer3"
-                onChange={this.handleChange3.bind(this)}
-                value={this.state.offer3}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer3}
-              />
-              <br />
-              <span style={{ marginLeft: 20 }}>Offer 4</span>
-              <Checkbox
-                name="offer4"
-                onChange={this.handleChange4.bind(this)}
-                value={this.state.offer4}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer4}
-              />
-              <br />
-              <span style={{ marginLeft: 20 }}>Offer 5</span>
-              <Checkbox
-                name="offer5"
-                onChange={this.handleChange5.bind(this)}
-                value={this.state.offer5}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer5}
-              />
-              <br />
-              <span style={{ marginLeft: 20 }}>Offer 6</span>
-              <Checkbox
-                name="offer6"
-                onChange={this.handleChange6.bind(this)}
-                value={this.state.offer6}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer6}
-              />
+              <RadioGroup onChange={this.onChange} value={this.state.subscription}>
+                <span style={{ marginLeft: 20 }}>Offer 1</span>
+                <Radio value={1} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <span style={{ marginLeft: 20 }}>Offer 2</span>
+                <Radio value={2} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <span style={{ marginLeft: 20 }}>Offer 3</span>
+                <Radio value={3} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <span style={{ marginLeft: 20 }}>Offer 4</span>
+                <Radio value={4} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <span style={{ marginLeft: 20 }}>Offer 5</span>
+                <Radio value={5} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <span style={{ marginLeft: 20 }}>Offer 6</span>
+                <Radio value={6} style={{ position: 'absolute', right: 40 }}></Radio>
+              </RadioGroup>
               <br />
               <br />
 
@@ -1250,24 +1158,24 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <div>
-          <p style={{cursor:'pointer'}} onClick={()=>{this.setState({hidden_o:!this.state.hidden_o})}}>Update Password</p>
+            <p style={{ cursor: 'pointer' }} onClick={() => { this.setState({ hidden_o: !this.state.hidden_o }) }}>Update Password</p>
             <div hidden={this.state.hidden_o}>
-              <Input style={{width:200}} name="operator_password" value={this.state.operator_password} onChange={this.handleInputChange}/>
-              <Button style={{marginLeft:10}} onClick={()=>{
-                if (this.state.operator_password.length < 6){
+              <Input style={{ width: 200 }} name="operator_password" value={this.state.operator_password} onChange={this.handleInputChange} />
+              <Button style={{ marginLeft: 10 }} onClick={() => {
+                if (this.state.operator_password.length < 6) {
                   message.error('password length must be over 6 characters.');
                   return false;
                 }
                 const update_password = {
                   password: this.state.operator_password
                 }
-            
-               this.props.UpdateAdminPassword(update_password, this.state.Oid_byadmin, this.props.history);
+
+                this.props.UpdateAdminPassword(update_password, this.state.Oid_byadmin, this.props.history);
                 this.setState({
                   dentist_password: '', hidden_o: true
                 })
               }}>Update Password</Button>
-              <br/><br/><br/>
+              <br /><br /><br />
             </div>
 
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
