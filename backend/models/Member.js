@@ -31,26 +31,7 @@ const MemberSchema = new Schema({
     type: Number,
     max: 30,
   },
-  subscription: {
-    offer1: {
-      type: Number,
-    },
-    offer2: {
-      type: Number,
-    },
-    offer3: {
-      type: Number,
-    },
-    offer4: {
-      type: Number,
-    },
-    offer5: {
-      type: Number,
-    },
-    offer6: {
-      type: Number,
-    }
-  },
+  subscription: Number,
   admin: {
     type: Number,
     min: 0,

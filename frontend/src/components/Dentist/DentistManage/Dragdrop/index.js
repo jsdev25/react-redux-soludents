@@ -25,7 +25,6 @@ const props = {
             return false;
         }
 
-        console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^', info.file.status)
         if (status !== 'uploading') {
             console.log(info.file, info.fileList);
         }

@@ -58,14 +58,7 @@ class Register extends Component {
             adli_number: this.state.adli_number,
             email: this.state.email,
             password: this.state.password,
-            subscription: {
-                offer1: 1,
-                offer2: 0,
-                offer3: 0,
-                offer4: 0,
-                offer5: 0,
-                offer6: 0,
-            },
+            subscription: 1,
             admin: 0,
         }
         this.props.registerUser(user, this.props.history);

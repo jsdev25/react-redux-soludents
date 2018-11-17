@@ -10,7 +10,7 @@ import {
   Input,
   Divider,
   Collapse,
-  Checkbox,
+  Radio,
   message,
   Table,
   Popover
@@ -32,6 +32,7 @@ import "./index.css";
 const Panel = Collapse.Panel;
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
+const RadioGroup = Radio.Group;
 
 const content1 = (
   <div style={{ lineHeight: -5 }}>
@@ -115,19 +116,16 @@ class DentistManage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      offer1: false,
-      offer2: false,
-      offer3: false,
-      offer4: false,
-      offer5: false,
-      offer6: false,
-      offer_pay: 390,
-      drag : false,
+      offer_pay: '',
+      drag: false,
+      subscription_modal: false,
       name: "",
       lastname: "",
       email: "",
       address: "",
       adli_number: "",
+      subscription: 1,
+      offer_content: '',
       password: pwa,
       phone: ""
     };
@@ -212,23 +210,27 @@ class DentistManage extends React.Component {
         address: res.data.data.address,
         adli_number: res.data.data.adli_number,
         phone: res.data.data.phone,
-        offer1: !!res.data.data.subscription.offer1,
-        offer2: !!res.data.data.subscription.offer2,
-        offer3: !!res.data.data.subscription.offer3,
-        offer4: !!res.data.data.subscription.offer4,
-        offer5: !!res.data.data.subscription.offer5,
-        offer6: !!res.data.data.subscription.offer6
+        subscription: res.data.data.subscription,
       });
     });
   }
 
-  getAlert() {
-    alert("clicked");
+  onChange = (e) => {
+    console.log('radio checked', e.target.value);
+    this.setState({
+      subscription: e.target.value,
+    });
+    if (e.target.value == 1) { this.setState({ offer_pay: 390, offer_content: 'Offer 1' }) }
+    if (e.target.value == 2) { this.setState({ offer_pay: 3900, offer_content: 'Offer 2' }) }
+    if (e.target.value == 3) { this.setState({ offer_pay: 750, offer_content: 'Offer 3' }) }
+    if (e.target.value == 4) { this.setState({ offer_pay: 7500, offer_content: 'Offer 4' }) }
+    if (e.target.value == 5) { this.setState({ offer_pay: 990, offer_content: 'Offer 5' }) }
+    if (e.target.value == 6) { this.setState({ offer_pay: 9900, offer_content: 'Offer 6' }) }
   }
 
   state = {
     profile: false,
-    subscription: false,
+    subscription_modal: false,
     manage: false
   };
 
@@ -241,7 +243,7 @@ class DentistManage extends React.Component {
   showSubscription = () => {
     localStorage.setItem("payment", 0);
     this.setState({
-      subscription: true
+      subscription_modal: true
     });
   };
 
@@ -262,102 +264,35 @@ class DentistManage extends React.Component {
       profile: false,
       subscription: false,
       manage: false,
-      drag: false
+      drag: false,
+      subscription_modal: false
     });
   };
 
   handleCancel = e => {
     this.setState({
       profile: false,
-      subscription: false,
-      manage: false,
+      manage: false,      
+      subscription_modal: false,
       drag: false
     });
   };
 
-  handleChange1() {
-    if (this.state.offer6) {
-      return false;
-    }
-
-    this.setState({
-      offer1: !this.state.offer1,
-      offer_pay: 390
-    });
-  }
-
-  handleChange2() {
-    this.setState({
-      offer2: !this.state.offer2,
-      offer_pay: 3900
-    });
-  }
-
-  handleChange3() {
-    this.setState({
-      offer3: !this.state.offer3,
-      offer_pay: 750
-    });
-    !this.state.offer3
-      ? this.setState({ offer_pay: 750 })
-      : this.setState({ offer_pay: 390 });
-  }
-
-  handleChange4() {
-    this.setState({
-      offer4: !this.state.offer4,
-      offer_pay: 7500
-    });
-    !this.state.offer4
-      ? this.setState({ offer_pay: 7500 })
-      : this.setState({ offer_pay: 390 });
-  }
-
-  handleChange5() {
-    this.setState({
-      offer5: !this.state.offer5,
-      offer_pay: 990
-    });
-    !this.state.offer5
-      ? this.setState({ offer_pay: 990 })
-      : this.setState({ offer_pay: 390 });
-  }
-
-  handleChange6() {
-    this.setState({
-      offer6: !this.state.offer6
-    });
-    !this.state.offer6
-      ? this.setState({ offer_pay: 9900 })
-      : this.setState({ offer_pay: 390 });
-  }
-
   handleSubmit() {
-    if (localStorage.getItem("payment") == 0) {
-      message.error("You must pay with card directly!");
-      return false;
-    }
+
+    // if (localStorage.getItem("payment") == 0) {
+    //   message.error("You must pay with card directly!");
+    //   return false;
+    // }
 
     const dentist = {
-      subscription: {
-        offer1: +this.state.offer1,
-        offer2: +this.state.offer2,
-        offer3: +this.state.offer3,
-        offer4: +this.state.offer4,
-        offer5: +this.state.offer5,
-        offer6: +this.state.offer6
-      }
-    };
+      subscription: this.state.subscription
+    }
 
     this.props.UpdateDentistSubscription(dentist, this.props.history);
     this.setState({
-      offer1: this.state.offer1,
-      offer2: this.state.offer2,
-      offer3: this.state.offer3,
-      offer4: this.state.offer4,
-      offer5: this.state.offer5,
-      offer6: this.state.offer6,
-      subscription: !this.state.subscription
+      subscription: this.state.subscription,
+      subscription_modal: !this.state.subscription_modal
     });
   }
 
@@ -376,6 +311,7 @@ class DentistManage extends React.Component {
       message.error("Your email is empty!");
       return false;
     }
+
     const dentist = {
       name: this.state.name,
       lastname: this.state.lastname,
@@ -385,7 +321,9 @@ class DentistManage extends React.Component {
       email: this.state.email,
       password: this.state.password
     };
+
     this.props.UpdateDentist(dentist, this.props.history);
+
     this.setState({
       profile: false
     });
@@ -526,7 +464,7 @@ class DentistManage extends React.Component {
                     backgroundColor: "#00a99d",
                     color: "#fff"
                   }}
-                   onClick={this.showDragDrop}
+                  onClick={this.showDragDrop}
                 >
                   Click Here
                 </Button>
@@ -641,127 +579,94 @@ class DentistManage extends React.Component {
         <Modal
           centered={true}
           title={"Personal Information"}
-          visible={this.state.subscription}
+          visible={this.state.subscription_modal}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[]}
         >
           <Collapse bordered={false}>
             <Panel header="Choose an offer" key="1">
-              <Popover
-                placement="leftTop"
-                content={content1}
-                title="Subscription 1"
-              >
-                <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                  Offer 1
-                </span>
-              </Popover>
+              <RadioGroup onChange={this.onChange} value={this.state.subscription}>
 
-              <Checkbox
-                name="offer1"
-                onChange={this.handleChange1.bind(this)}
-                value={this.state.offer1}
-                style={{ color: "#666", float: "right" }}
-                checked={this.state.offer1}
-              />
-              <br />
-              <Popover
-                placement="leftTop"
-                content={content2}
-                title="Subscription 2"
-              >
-                <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                  Offer 2
+                <Popover
+                  placement="leftTop"
+                  content={content1}
+                  title="Subscription 1"
+                >
+                  <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                    Offer 1
                 </span>
-              </Popover>
+                </Popover>
 
-              <Checkbox
-                name="offer2"
-                onChange={this.handleChange2.bind(this)}
-                value={this.state.offer2}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer2}
-              />
-              <br />
-              <Popover
-                placement="leftTop"
-                content={content3}
-                title="Subscription 3"
-              >
-                <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                  Offer 3
+                <Radio value={1} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <Popover
+                  placement="leftTop"
+                  content={content2}
+                  title="Subscription 2"
+                >
+                  <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                    Offer 2
                 </span>
-              </Popover>
+                </Popover>
 
-              <Checkbox
-                name="offer3"
-                onChange={this.handleChange3.bind(this)}
-                value={this.state.offer3}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer3}
-              />
-              <br />
-              <Popover
-                placement="leftTop"
-                content={content4}
-                title="Subscription 4"
-              >
-                <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                  Offer 4
+                <Radio value={2} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <Popover
+                  placement="leftTop"
+                  content={content3}
+                  title="Subscription 3"
+                >
+                  <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                    Offer 3
                 </span>
-              </Popover>
+                </Popover>
 
-              <Checkbox
-                name="offer4"
-                onChange={this.handleChange4.bind(this)}
-                value={this.state.offer4}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer4}
-              />
-              <br />
-              <Popover
-                placement="leftTop"
-                content={content5}
-                title="Subscription 5"
-              >
-                <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                  Offer 5
+                <Radio value={3} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <Popover
+                  placement="leftTop"
+                  content={content4}
+                  title="Subscription 4"
+                >
+                  <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                    Offer 4
                 </span>
-              </Popover>
+                </Popover>
 
-              <Checkbox
-                name="offer5"
-                onChange={this.handleChange5.bind(this)}
-                value={this.state.offer5}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer5}
-              />
-              <br />
-              <Popover
-                placement="leftTop"
-                content={content6}
-                title="Subscription 6"
-              >
-                <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                  Offer 6
+                <Radio value={4} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <Popover
+                  placement="leftTop"
+                  content={content5}
+                  title="Subscription 5"
+                >
+                  <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                    Offer 5
                 </span>
-              </Popover>
+                </Popover>
 
-              <Checkbox
-                name="offer6"
-                onChange={this.handleChange6.bind(this)}
-                value={this.state.offer6}
-                style={{ clear: "both", color: "#666", float: "right" }}
-                checked={this.state.offer6}
-              />
+                <Radio value={5} style={{ position: 'absolute', right: 40 }}></Radio>
+                <br />
+                <Popover
+                  placement="leftTop"
+                  content={content6}
+                  title="Subscription 6"
+                >
+                  <span style={{ marginLeft: 20, cursor: "pointer" }}>
+                    Offer 6
+                </span>
+                </Popover>
+
+                <Radio value={6} style={{ position: 'absolute', right: 40 }}></Radio>
+              </RadioGroup>
               <br />
               <br />
 
               <center>
                 <Checkout
                   name={"Payment Subscription"}
-                  description={"You are about to pay for your subscription"}
+                  description={this.state.offer_content}
                   amount={this.state.offer_pay}
                 />
               </center>
