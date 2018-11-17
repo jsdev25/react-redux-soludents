@@ -3,18 +3,17 @@ import { Card, Button } from "antd";
 import "./index.css";
 
 export class Pricingitem extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(){
-    this.setState()
-    if (localStorage.getItem('admin') == 500 ) {
-      window.location.href='/login';
+  handleClick() {
+    this.setState();
+    if (localStorage.getItem("admin") == 500) {
+      window.location.href = "/login";
     } else {
-      window.location.href='/dentist';
+      window.location.href = "/dentist";
     }
   }
 
@@ -23,7 +22,7 @@ export class Pricingitem extends React.Component {
       <div className="">
         <Card
           bodyStyle={{
-            backgroundColor: "#00d563",
+            backgroundColor: "#006500",
             color: "white",
             textAlign: "center"
           }}
@@ -35,10 +34,10 @@ export class Pricingitem extends React.Component {
           </p>
           <p>{this.props.products}</p>
           <p>{this.props.downloads}</p>
-          <p>{this.props.capacity}</p>
+          <p className="capacity">{this.props.capacity}</p>
 
           <Button className="button" onClick={this.handleClick.bind(this)}>
-            <strong>Subscribe</strong>
+            <strong>S'abonner</strong>
           </Button>
         </Card>
       </div>

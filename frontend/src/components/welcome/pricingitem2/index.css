@@ -1,0 +1,38 @@
+.price {
+  font-size: 70px;
+}
+.button {
+  border-radius: 20px;
+  color: #00d563;
+  width: 160px;
+  height: 40px;
+}
+
+@media (max-width: 2466px) and (min-width: 600px) {
+  .mobile-price-view {
+    width: 330px;
+  }
+}
+
+@media (max-width: 600px) and (min-width: 4px) {
+  .mobile-price-view {
+    width: 200px;
+  }
+}
+
+.capacity2 {
+  background: yellowgreen;
+  border-radius: 50%;
+  animation: capacity2 2s infinite;
+  -moz-animation: capacity2 2s infinite; /* Firefox */
+  -webkit-animation: capacity2 2s infinite; /* Safari and Chrome */
+}
+
+@keyframes capacity2 {
+  0% {
+    background: #139313;
+  }
+  100% {
+    background: yellowgreen;
+  }
+}

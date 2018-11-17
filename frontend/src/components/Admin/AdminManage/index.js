@@ -333,7 +333,7 @@ class AdminManage extends React.Component {
                 }}
                 onClick={this.onLogout.bind(this)}
               >
-                sign out
+                Se déconnecter
               </a>
             </div>
           </Col>
@@ -353,11 +353,11 @@ class AdminManage extends React.Component {
                   marginTop: 40,
                   backgroundColor: "#00a99d",
                   color: "#fff",
-                  width: 120,
+                  width: 170,
                   height: 50
                 }}
               >
-                Back
+                Retour Page d'Accueuil
               </Button>
             </Link>
 

@@ -3,10 +3,12 @@ import { MainCarousel } from "./maincarousel";
 import { Videoview } from "./videoview";
 import { Autionview } from "./autionview";
 import { Pricingitem } from "./pricingitem";
+import { Pricingitem2 } from "./pricingitem2";
+import { Pricingitem3 } from "./pricingitem3";
 import { TeamMemberSlider } from "./TeamMemberSlider";
-import Messageview from "./contactview";
+import Messageview from "./ContactView";
 import { Footer } from "./Footer";
-import { BackTop } from "antd";
+import { BackTop, Card } from "antd";
 
 import { Row, Col } from "antd";
 import "./index.css";
@@ -17,48 +19,96 @@ export default class Welcome extends React.Component {
     return (
       <div className="container-fluid" id="home">
         <BackTop>
-          <div className="ant-back-top-inner">Top</div>
+          <div className="ant-back-top-inner">Haut</div>
         </BackTop>
         <MainCarousel />
         <Videoview />
 
         <div id="choose">
           <Autionview
-            title="Choose your package"
+            title="Choisissez Votre Abonnement"
             description="But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth"
           />
           <div className="price-view container">
             <Row>
+              <Row>
+                <Col xs={24} md={8}>
+                  <center>
+                    <Card
+                      bodyStyle={{
+                        backgroundColor: "#006500",
+                        color: "white",
+                        textAlign: "center"
+                      }}
+                      style={{ width: 330 }}
+                    >
+                      <div className="bandeau-red">10 Devis / Mois</div>
+                    </Card>
+                  </center>
+                </Col>
+                <Col xs={24} md={8}>
+                  <center>
+                    {" "}
+                    <Card
+                      bodyStyle={{
+                        backgroundColor: "#139313",
+                        color: "white",
+                        textAlign: "center"
+                      }}
+                      style={{ width: 330 }}
+                    >
+                      <div className="bandeau-red">20 Devis / Mois</div>
+                    </Card>
+                  </center>
+                </Col>
+                <Col xs={24} md={8}>
+                  <center>
+                    {" "}
+                    <Card
+                      bodyStyle={{
+                        backgroundColor: "#00d563",
+                        color: "white",
+                        textAlign: "center"
+                      }}
+                      style={{ width: 330 }}
+                    >
+                      <div className="bandeau-red">30 Devis / Mois</div>
+                    </Card>
+                  </center>
+                </Col>
+              </Row>
               <Col xs={24} md={8}>
                 <center>
-                  <Pricingitem
-                    title="Offer 1"
-                    price="24"
-                    products="Unlimited products"
-                    downloads="Unlimited downloads"
-                    capacity="1000 GB"
+                  <div className={{ backgroundColor: "red" }}>
+                    <Pricingitem
+                      title="Offre 1 : Abonnement Trimestriel"
+                      price="390"
+                      products="390 euros/mois durant 3 mois"
+                      downloads="Renouvellement automatique à 60 jours"
+                      capacity=""
+                    />
+                  </div>
+                </center>
+              </Col>
+              <Col xs={24} md={8}>
+                <center>
+                  <Pricingitem2
+                    title="Offre 2 : Abonnement Trimestriel"
+                    price="750"
+                    products="750 euros/mois durant 3 mois"
+                    downloads="Renouvellement automatique à 60 jours"
+                    capacity=""
                   />
                 </center>
               </Col>
               <Col xs={24} md={8}>
                 <center>
-                  <Pricingitem
-                    title="Offer 2"
-                    price="39"
-                    products="Unlimited products"
-                    downloads="Unlimited downloads"
-                    capacity="1000 GB"
-                  />
-                </center>
-              </Col>
-              <Col xs={24} md={8}>
-                <center>
-                  <Pricingitem
-                    title="Offer 3"
-                    price="45"
-                    products="Unlimited products"
-                    downloads="Unlimited downloads"
-                    capacity="1000 GB"
+                  <Pricingitem3
+                    title="Offre 3 : Abonnement Trimestriel"
+                    price="990"
+                    products="990 euros/mois durant 3 mois"
+                    downloads="Renouvellement automatique à 60 jours"
+                    capacity=""
                   />
                 </center>
               </Col>
@@ -68,33 +118,33 @@ export default class Welcome extends React.Component {
               <Col xs={24} md={8}>
                 <center>
                   <Pricingitem
-                    title="Offer 4"
-                    price="24"
-                    products="Unlimited products"
-                    downloads="Unlimited downloads"
-                    capacity="1000 GB"
+                    title="Offre 4 : Abonnement Annuel"
+                    price="3900"
+                    products="3900euros (crédit en une fois)"
+                    downloads="Renouvellement automatique à 335 jours"
+                    capacity="Economisez 2 mois !"
                   />
                 </center>
               </Col>
               <Col xs={24} md={8}>
                 <center>
-                  <Pricingitem
-                    title="Offer 5"
-                    price="39"
-                    products="Unlimited products"
-                    downloads="Unlimited downloads"
-                    capacity="1000 GB"
+                  <Pricingitem2
+                    title="Offre 5 : Abonnement Annuel"
+                    price="7500"
+                    products="7500euros (crédit en une fois)"
+                    downloads="Renouvellement automatique à 335 jours"
+                    capacity="Economisez 2 mois !"
                   />
                 </center>
               </Col>
               <Col xs={24} md={8}>
                 <center>
-                  <Pricingitem
-                    title="Offer 6"
-                    price="45"
-                    products="Unlimited products"
-                    downloads="Unlimited downloads"
-                    capacity="1000 GB"
+                  <Pricingitem3
+                    title="Offre 6 : Abonnement Annuel"
+                    price="9900"
+                    products="9900euros (crédit en une fois)"
+                    downloads="Renouvellement automatique à 335 jours"
+                    capacity="Economisez 2 mois !"
                   />
                 </center>
               </Col>
@@ -104,7 +154,7 @@ export default class Welcome extends React.Component {
 
         <div id="team">
           <Autionview
-            title="Our Team"
+            title="Notre Equipe"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
           />
         </div>

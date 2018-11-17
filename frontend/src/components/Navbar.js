@@ -9,13 +9,13 @@ import { Menu, Dropdown, Icon } from "antd";
 const menu_list = (
   <Menu>
     <Menu.Item>
-      <a href="#choose">Our Offers</a>
+      <a href="#choose">Nos Offres</a>
     </Menu.Item>
     <Menu.Item>
-      <a href="#team">Our Team</a>
+      <a href="#team">Notre Equipe</a>
     </Menu.Item>
     <Menu.Item>
-      <a href="#contact">Contact Us</a>
+      <a href="#contact">Contactez Nous</a>
     </Menu.Item>
   </Menu>
 );
@@ -47,11 +47,11 @@ class Navbar extends Component {
     const authLinks = (
       <ul className="navbar-nav ml-auto">
         <a className="nav-link" onClick={this.goPanel.bind(this)}>
-          Panel
+          Mon Compte
         </a>
 
         <a href="" className="nav-link" onClick={this.onLogout.bind(this)}>
-          Logout
+          Se déconnecter
         </a>
       </ul>
     );
@@ -59,12 +59,12 @@ class Navbar extends Component {
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
           <Link className="nav-link" to="/register">
-            Sign Up
+            S'inscrire
           </Link>
         </li>
         <li className="nav-item">
           <Link className="nav-link" to="/login">
-            Log In
+            Se connecter
           </Link>
         </li>
       </ul>

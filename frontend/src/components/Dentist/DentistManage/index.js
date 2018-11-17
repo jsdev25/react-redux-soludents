@@ -24,7 +24,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import Managefile from "./Pdfupload";
-import Dragdrop from './Dragdrop';
+import Dragdrop from "./Dragdrop";
 import axios from "axios";
 import Checkout from "../../Stripe/Checkout";
 import "./index.css";
@@ -116,7 +116,7 @@ class DentistManage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      offer_pay: '',
+      offer_pay: "",
       drag: false,
       subscription_modal: false,
       name: "",
@@ -125,7 +125,7 @@ class DentistManage extends React.Component {
       address: "",
       adli_number: "",
       subscription: 1,
-      offer_content: '',
+      offer_content: "",
       password: pwa,
       phone: ""
     };
@@ -210,23 +210,35 @@ class DentistManage extends React.Component {
         address: res.data.data.address,
         adli_number: res.data.data.adli_number,
         phone: res.data.data.phone,
-        subscription: res.data.data.subscription,
+        subscription: res.data.data.subscription
       });
     });
   }
 
-  onChange = (e) => {
-    console.log('radio checked', e.target.value);
+  onChange = e => {
+    console.log("radio checked", e.target.value);
     this.setState({
-      subscription: e.target.value,
+      subscription: e.target.value
     });
-    if (e.target.value == 1) { this.setState({ offer_pay: 390, offer_content: 'Offer 1' }) }
-    if (e.target.value == 2) { this.setState({ offer_pay: 3900, offer_content: 'Offer 2' }) }
-    if (e.target.value == 3) { this.setState({ offer_pay: 750, offer_content: 'Offer 3' }) }
-    if (e.target.value == 4) { this.setState({ offer_pay: 7500, offer_content: 'Offer 4' }) }
-    if (e.target.value == 5) { this.setState({ offer_pay: 990, offer_content: 'Offer 5' }) }
-    if (e.target.value == 6) { this.setState({ offer_pay: 9900, offer_content: 'Offer 6' }) }
-  }
+    if (e.target.value == 1) {
+      this.setState({ offer_pay: 390, offer_content: "Offer 1" });
+    }
+    if (e.target.value == 2) {
+      this.setState({ offer_pay: 3900, offer_content: "Offer 2" });
+    }
+    if (e.target.value == 3) {
+      this.setState({ offer_pay: 750, offer_content: "Offer 3" });
+    }
+    if (e.target.value == 4) {
+      this.setState({ offer_pay: 7500, offer_content: "Offer 4" });
+    }
+    if (e.target.value == 5) {
+      this.setState({ offer_pay: 990, offer_content: "Offer 5" });
+    }
+    if (e.target.value == 6) {
+      this.setState({ offer_pay: 9900, offer_content: "Offer 6" });
+    }
+  };
 
   state = {
     profile: false,
@@ -257,7 +269,7 @@ class DentistManage extends React.Component {
     this.setState({
       drag: true
     });
-  }
+  };
 
   handleOk = e => {
     this.setState({
@@ -272,14 +284,13 @@ class DentistManage extends React.Component {
   handleCancel = e => {
     this.setState({
       profile: false,
-      manage: false,      
+      manage: false,
       subscription_modal: false,
       drag: false
     });
   };
 
   handleSubmit() {
-
     // if (localStorage.getItem("payment") == 0) {
     //   message.error("You must pay with card directly!");
     //   return false;
@@ -287,7 +298,7 @@ class DentistManage extends React.Component {
 
     const dentist = {
       subscription: this.state.subscription
-    }
+    };
 
     this.props.UpdateDentistSubscription(dentist, this.props.history);
     this.setState({
@@ -387,7 +398,7 @@ class DentistManage extends React.Component {
                 }}
                 onClick={this.onLogout.bind(this)}
               >
-                sign out
+                Se déconnecter
               </a>
             </div>
           </Col>
@@ -407,11 +418,11 @@ class DentistManage extends React.Component {
                   marginTop: 40,
                   backgroundColor: "#00a99d",
                   color: "#fff",
-                  width: 120,
+                  width: 170,
                   height: 50
                 }}
               >
-                Back
+                Retour Page d'Accueuil
               </Button>
             </Link>
             <div className="card-view">
@@ -586,8 +597,10 @@ class DentistManage extends React.Component {
         >
           <Collapse bordered={false}>
             <Panel header="Choose an offer" key="1">
-              <RadioGroup onChange={this.onChange} value={this.state.subscription}>
-
+              <RadioGroup
+                onChange={this.onChange}
+                value={this.state.subscription}
+              >
                 <Popover
                   placement="leftTop"
                   content={content1}
@@ -595,10 +608,10 @@ class DentistManage extends React.Component {
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
                     Offer 1
-                </span>
+                  </span>
                 </Popover>
 
-                <Radio value={1} style={{ position: 'absolute', right: 40 }}></Radio>
+                <Radio value={1} style={{ position: "absolute", right: 40 }} />
                 <br />
                 <Popover
                   placement="leftTop"
@@ -607,10 +620,10 @@ class DentistManage extends React.Component {
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
                     Offer 2
-                </span>
+                  </span>
                 </Popover>
 
-                <Radio value={2} style={{ position: 'absolute', right: 40 }}></Radio>
+                <Radio value={2} style={{ position: "absolute", right: 40 }} />
                 <br />
                 <Popover
                   placement="leftTop"
@@ -619,10 +632,10 @@ class DentistManage extends React.Component {
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
                     Offer 3
-                </span>
+                  </span>
                 </Popover>
 
-                <Radio value={3} style={{ position: 'absolute', right: 40 }}></Radio>
+                <Radio value={3} style={{ position: "absolute", right: 40 }} />
                 <br />
                 <Popover
                   placement="leftTop"
@@ -631,10 +644,10 @@ class DentistManage extends React.Component {
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
                     Offer 4
-                </span>
+                  </span>
                 </Popover>
 
-                <Radio value={4} style={{ position: 'absolute', right: 40 }}></Radio>
+                <Radio value={4} style={{ position: "absolute", right: 40 }} />
                 <br />
                 <Popover
                   placement="leftTop"
@@ -643,10 +656,10 @@ class DentistManage extends React.Component {
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
                     Offer 5
-                </span>
+                  </span>
                 </Popover>
 
-                <Radio value={5} style={{ position: 'absolute', right: 40 }}></Radio>
+                <Radio value={5} style={{ position: "absolute", right: 40 }} />
                 <br />
                 <Popover
                   placement="leftTop"
@@ -655,10 +668,10 @@ class DentistManage extends React.Component {
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
                     Offer 6
-                </span>
+                  </span>
                 </Popover>
 
-                <Radio value={6} style={{ position: 'absolute', right: 40 }}></Radio>
+                <Radio value={6} style={{ position: "absolute", right: 40 }} />
               </RadioGroup>
               <br />
               <br />
