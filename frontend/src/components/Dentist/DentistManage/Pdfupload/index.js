@@ -32,7 +32,6 @@ class ManageFile extends Component {
     .then(res => {
         const data_lists = res.data;
         this.setState({ data_lists });
-        //console.log('data', this.state.data_lists)
         length = res.data.length;
     });
     axios.get('/api/members/'+ useradmin)
@@ -68,7 +67,6 @@ class ManageFile extends Component {
 
     const data = new FormData()
     data.append('file', this.state.selectedFile, this.state.selectedFile.name)
-    //console.log('my real information', this.state.selectedFile)
 
     if (length > default_count) {
       message.error('Your document count is limited ');

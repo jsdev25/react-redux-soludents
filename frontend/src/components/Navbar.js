@@ -4,22 +4,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../actions/authentication";
 import { withRouter } from "react-router-dom";
-import { Menu, Dropdown, Icon } from "antd";
-import './Navbar.css';
-
-const menu_list = (
-  <Menu>
-    <Menu.Item>
-      <a href="#choose">Nos Offres</a>
-    </Menu.Item>
-    <Menu.Item>
-      <a href="#team">Notre Equipe</a>
-    </Menu.Item>
-    <Menu.Item>
-      <a href="#contact">Contactez Nous</a>
-    </Menu.Item>
-  </Menu>
-);
+import  HorizontalNavbar  from "./Navbar/horizontalNavbar";
+import  VerticalNavbar  from "./Navbar/verticalNavbar";
 
 class Navbar extends Component {
   constructor() {
@@ -70,30 +56,23 @@ class Navbar extends Component {
         </li>
       </ul>
     );
+
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Dropdown overlay={menu_list} className="Dropdown-menu">
-          <Link className="nav-link" to="#">
-            <Icon
-              style={{ fontSize: "32px" }}
-              type="align-left"
-              theme="outlined"
-            />
-          </Link>
-        </Dropdown>
+
+        <VerticalNavbar />
         <Link className="navbar-brand" to="/">
           <img
+            style={{marginLeft:25}}
             src="https://i.imgur.com/HhAxynm.jpg"
             alt="Smiley face"
             width="120"
             height="50"
           />
         </Link>
-        <div className="Navbar-view">
-          <a href="#choose" className="menu-item-head">Nos Offres</a>
-          <a href="#team" className="menu-item-head">Notre Equipe</a>
-          <a href="#contact" className="menu-item-head">Contactez Nous</a>
-        </div>
+
+        <HorizontalNavbar />
+
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           {isAuthenticated ? authLinks : guestLinks}
         </div>
