@@ -133,7 +133,7 @@ class AdminStuff extends React.Component {
   }
 
   onChange = (e) => {
-    console.log('radio checked', e.target.value);
+    //console.log('radio checked', e.target.value);
     this.setState({
       subscription: e.target.value,
     });
@@ -161,7 +161,7 @@ class AdminStuff extends React.Component {
     axios.get("/api/members/dentist").then(res => {
       const data_dentists = res.data;
       this.setState({ data_dentists });
-      console.log('this is my dentist data', data_dentists)
+      //console.log('this is my dentist data', data_dentists)
     });
 
     axios.get("/api/members/operator").then(res => {

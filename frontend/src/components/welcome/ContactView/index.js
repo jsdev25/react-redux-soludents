@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import "./index.css";
 
 const { TextArea } = Input;
-class ContactView extends Component {
+class Contactview extends Component {
   constructor() {
     super();
     this.state = {
@@ -90,7 +90,7 @@ class ContactView extends Component {
   }
 }
 
-ContactView.propTypes = {
+Contactview.propTypes = {
   messageSend: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
@@ -103,4 +103,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { messageSend }
-)(withRouter(ContactView));
+)(withRouter(Contactview));

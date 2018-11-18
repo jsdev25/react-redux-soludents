@@ -59,7 +59,9 @@ class Login extends Component {
         const {errors} = this.state;
         return(
             <div>
-                <Navbar/>
+                <Link to ='/'>
+                  <img src="https://cdn.icon-icons.com/icons2/209/PNG/128/go-back256_24856.png" width="50" height="50" style={{margin:30}}/>
+                </Link>
                 <div className="container" style={{ marginTop: 150, width: '700px'}}>
                 <h2 style={{marginBottom: '40px'}}>Login</h2>
                 <form onSubmit={ this.handleSubmit }>

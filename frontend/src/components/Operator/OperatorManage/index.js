@@ -209,7 +209,7 @@ class OperatorManage extends React.Component {
     localStorage.setItem("directory", row.directory);
     localStorage.setItem("files", row.Filename);
 
-    console.log("my server data", row);
+    //console.log("my server data", row);
 
     this.state.dentist_id = row.dentist_id;
     this.state.dentist_name = row.dentist_name;

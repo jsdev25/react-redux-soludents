@@ -216,7 +216,7 @@ class DentistManage extends React.Component {
   }
 
   onChange = e => {
-    console.log("radio checked", e.target.value);
+    //console.log("radio checked", e.target.value);
     this.setState({
       subscription: e.target.value
     });

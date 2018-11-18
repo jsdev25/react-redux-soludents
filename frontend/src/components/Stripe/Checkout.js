@@ -12,12 +12,12 @@ const fromEuroToCent = amount => amount * 100;
 const successPayment = data => {
   alert('Payment Successful');
   localStorage.setItem('payment', 1);
-  console.log(data);
+  //console.log(data);
 };
 
 const errorPayment = data => {
   alert('Payment Error');
-  console.log(data);
+  //console.log(data);
 };
 
 const onToken = (amount, description) => token =>

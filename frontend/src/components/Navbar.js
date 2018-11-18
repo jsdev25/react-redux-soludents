@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { logoutUser } from "../actions/authentication";
 import { withRouter } from "react-router-dom";
 import { Menu, Dropdown, Icon } from "antd";
+import './Navbar.css';
 
 const menu_list = (
   <Menu>
@@ -71,7 +72,7 @@ class Navbar extends Component {
     );
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Dropdown overlay={menu_list}>
+        <Dropdown overlay={menu_list} className="Dropdown-menu">
           <Link className="nav-link" to="#">
             <Icon
               style={{ fontSize: "32px" }}
@@ -88,6 +89,11 @@ class Navbar extends Component {
             height="50"
           />
         </Link>
+        <div className="Navbar-view">
+          <a href="#choose" className="menu-item-head">Nos Offres</a>
+          <a href="#team" className="menu-item-head">Notre Equipe</a>
+          <a href="#contact" className="menu-item-head">Contactez Nous</a>
+        </div>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           {isAuthenticated ? authLinks : guestLinks}
         </div>
