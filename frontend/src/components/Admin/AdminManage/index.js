@@ -158,6 +158,17 @@ class AdminManage extends React.Component {
   }
 
   handleClick() {
+
+    console.log('my data1', this.state.selected_operator)
+    console.log('my data2', this.state.operator_id)
+
+    if (this.state.selected_operator){
+      return true
+    } else {
+      this.state.selected_operator = '';
+      this.state.operator_id = ''
+    }
+
     const update_data = {
       operator_id: this.state.selected_operator,
       operator_name: this.state.operator_id

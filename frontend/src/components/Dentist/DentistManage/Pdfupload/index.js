@@ -39,12 +39,12 @@ class ManageFile extends Component {
     .then(res => {
         const me_lists = res.data;
         this.setState({ me_lists });
-        (this.state.me_lists.data.subscription.offer1 == 1) ? default_count =9 : null;
-        (this.state.me_lists.data.subscription.offer2 == 1) ? default_count =9 : null;
-        (this.state.me_lists.data.subscription.offer3 == 1) ? default_count =19 : null;
-        (this.state.me_lists.data.subscription.offer4 == 1) ? default_count =19 : null;
-        (this.state.me_lists.data.subscription.offer5 == 1) ? default_count =29 : null;
-        (this.state.me_lists.data.subscription.offer6 == 1) ? default_count =29 : null;
+        (this.state.me_lists.data.subscription == 1) ? default_count =9 : null;
+        (this.state.me_lists.data.subscription == 2) ? default_count =9 : null;
+        (this.state.me_lists.data.subscription == 3) ? default_count =19 : null;
+        (this.state.me_lists.data.subscription == 4) ? default_count =19 : null;
+        (this.state.me_lists.data.subscription == 5) ? default_count =29 : null;
+        (this.state.me_lists.data.subscription == 6) ? default_count =29 : null;
         this.setState({real_count:default_count-length+1})
 
     });

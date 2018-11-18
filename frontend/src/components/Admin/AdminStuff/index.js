@@ -11,6 +11,7 @@ import { CSVLink } from "react-csv";
 const RadioGroup = Radio.Group;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
+const data_history_regular=[];
 const columns_history = [
   {
     title: "Name",
@@ -219,7 +220,15 @@ class AdminStuff extends React.Component {
       visible_history: true
     });
     axios.get("/api/histories/" + e._id).then(res => {
+      console.log('$$$$$$$$$$')
       that.setState({ data_histories: res.data, csv_data: res.data });
+      data_history_regular.unshift (res.data);
+      for (let i = 0; i < res.data.length ; i++) {
+          console.log('my_data', res.data[i].created_date.replace('T', ' ').slice(0, 19))
+          data_history_regular[0][i].created_date = res.data[i].created_date.replace('T', ' ').slice(0, 19);
+         // data_history_regular[i].created_date = this.state.data_histories[0].created_date.replace('T', ' ').slice(0, 19);
+      } 
+       console.log('data histories',  data_history_regular[0])
     });
   }
 
@@ -1251,7 +1260,7 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <CSVLink
-            data={this.state.csv_data}
+            data={data_history_regular[0]}
             onClick={() => {
               this.setState({ download_csv: false });
             }}
