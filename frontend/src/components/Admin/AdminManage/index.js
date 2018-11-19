@@ -69,13 +69,12 @@ class AdminManage extends React.Component {
         dataIndex: "dentist_name",
         key: "dentist_name",
         onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
-        sorter: (a, b) => a.dentist_name.length - b.dentist_name.length
+        sorter: (a, b) => a.dentist_name ? a.dentist_name.length : 0 - b.dentist_name? b.dentist_name.length : 0
       },
       {
         title: "Status",
         dataIndex: "status",
         key: "status",
-        onFilter: (value, record) => record.status.indexOf(value) === 0,
         sorter: (a, b) => a.status.length - b.status.length
       },
       {
@@ -95,7 +94,6 @@ class AdminManage extends React.Component {
         title: "Date",
         key: "created_date",
         dataIndex: "created_date",
-        onFilter: (value, record) => record.created_date.indexOf(value) === 0,
         sorter: (a, b) => {
           return a.created_date.localeCompare(b.created_date);
         },
@@ -106,7 +104,7 @@ class AdminManage extends React.Component {
         key: "operator_name",
         dataIndex: "operator_name",
         onFilter: (value, record) => record.operator_name.indexOf(value) === 0,
-        sorter: (a, b) => a.operator_name.length - b.operator_name.length
+        sorter: (a, b) => a.operator_name ? a.operator_name.length : 0 - b.operator_name? b.operator_name.length : 0
       },
       {
         title: "Action",
@@ -159,11 +157,8 @@ class AdminManage extends React.Component {
 
   handleClick() {
 
-    console.log('my data1', this.state.selected_operator)
-    console.log('my data2', this.state.operator_id)
-
     if (this.state.selected_operator){
-      return true
+      
     } else {
       this.state.selected_operator = '';
       this.state.operator_id = ''

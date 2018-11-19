@@ -77,7 +77,7 @@ class OperatorManage extends React.Component {
         dataIndex: "dentist_name",
         key: "dentist_name",
         onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
-        sorter: (a, b) => a.dentist_name.length + b.dentist_name.length
+        sorter: (a, b) => a.dentist_name ? a.dentist_name.length : 0 - b.dentist_name? b.dentist_name.length : 0
       },
       {
         title: "Status",

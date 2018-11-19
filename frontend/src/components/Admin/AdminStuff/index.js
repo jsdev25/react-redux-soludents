@@ -58,7 +58,7 @@ const columns_history = [
     key: "dentist_name",
     dataIndex: "dentist_name",
     onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
-    sorter: (a, b) => a.dentist_name.length - b.dentist_name.length
+    sorter: (a, b) => a.dentist_name ? a.dentist_name.length : 0 - b.dentist_name? b.dentist_name.length : 0
   }
 ];
 function callback(key) { }
@@ -220,15 +220,11 @@ class AdminStuff extends React.Component {
       visible_history: true
     });
     axios.get("/api/histories/" + e._id).then(res => {
-      console.log('$$$$$$$$$$')
       that.setState({ data_histories: res.data, csv_data: res.data });
       data_history_regular.unshift (res.data);
       for (let i = 0; i < res.data.length ; i++) {
-          console.log('my_data', res.data[i].created_date.replace('T', ' ').slice(0, 19))
           data_history_regular[0][i].created_date = res.data[i].created_date.replace('T', ' ').slice(0, 19);
-         // data_history_regular[i].created_date = this.state.data_histories[0].created_date.replace('T', ' ').slice(0, 19);
       } 
-       console.log('data histories',  data_history_regular[0])
     });
   }
 
@@ -240,7 +236,10 @@ class AdminStuff extends React.Component {
 
   showModalOperator = () => {
     this.setState({
-      visible_opertor: true
+      visible_opertor: true,
+      Oname:'',
+      Oemail:'',
+      Opassword:''
     });
   };
 
