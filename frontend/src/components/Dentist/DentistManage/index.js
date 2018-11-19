@@ -20,6 +20,7 @@ import {
   UpdateDentist,
   UpdateDentistSubscription
 } from "../../../actions/authentication";
+import ReactToPrint from "react-to-print";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
@@ -33,6 +34,44 @@ const Panel = Collapse.Panel;
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
 const RadioGroup = Radio.Group;
+
+const data_billing = [{
+  key: '1',
+  Offernumber: 'Subscription 1',
+  day: '30',
+  count: '10',
+  price: '390'
+}, {
+  key: '2',
+  Offernumber: 'Subscription 2',
+  day: '365',
+  count: '10',
+  price: '3900'
+}, {
+  key: '3',
+  Offernumber: 'Subscription 3',
+  day: '30',
+  count: '20',
+  price: '750'
+}, {
+  key: '4',
+  Offernumber: 'Subscription 4',
+  day: '365',
+  count: '20',
+  price: '7500'
+}, {
+  key: '5',
+  Offernumber: 'Subscription 5',
+  day: '30',
+  count: '30',
+  price: '990'
+}, {
+  key: '6',
+  Offernumber: 'Subscription 6',
+  day: '365',
+  count: '30',
+  price: '9900'
+}];
 
 const content1 = (
   <div style={{ lineHeight: -5 }}>
@@ -112,6 +151,21 @@ const content6 = (
   </div>
 );
 
+class ComponentToPrint extends React.Component {
+  render() {
+    return (
+      <div style={{textAlign:'center', marginTop: 50}}>
+        <h1>Payment Invoice</h1>
+        <h3 style={{marginTop:120}}>Dentist can upload up to 10 document during 30 days.</h3>
+        <br />
+        <h3>Counter of document reset to 0 on the next 30 days period. </h3>
+        <br />
+        <h3>Price 390euros per month during 3 months </h3>
+      </div>
+    );
+  }
+}
+
 class DentistManage extends React.Component {
   constructor(props) {
     super(props);
@@ -133,6 +187,7 @@ class DentistManage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleBilling = this.handleBilling.bind(this);
     // this.props.onHeaderClick = this.props.onHeaderClick.bind(this);
 
     this.columns = [
@@ -189,16 +244,27 @@ class DentistManage extends React.Component {
         key: "action",
         render: (text, record) => (
           <span>
-            <Button
+            {/* <Button
               style={{ backgroundColor: "#00a99d", color: "#fff" }}
-              onClick={() => this.handleView(record)}
+              onClick={() => this.handleBilling(record)}
             >
               Print
-            </Button>
+            </Button> */}
+            <ReactToPrint
+              trigger={() => <Button style={{ backgroundColor: "#00a99d", color: "#fff" }} >Print</Button>}
+              content={() => this.componentRef}
+            />
+            <div style={{ display: 'none' }}>
+              <ComponentToPrint ref={el => (this.componentRef = el)} />
+            </div>
           </span>
         )
       }
     ];
+  }
+
+  handleBilling(e) {
+    console.log('my record', e)
   }
 
   componentDidMount() {
@@ -716,7 +782,7 @@ class DentistManage extends React.Component {
             <Panel header="Billing Area" key="2">
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
-                  <Table columns={this.columnsbillings} />
+                  <Table columns={this.columnsbillings} dataSource={data_billing} />
                   {/* dataSource={this.state.data_document}  */}
                 </Card>
               </div>

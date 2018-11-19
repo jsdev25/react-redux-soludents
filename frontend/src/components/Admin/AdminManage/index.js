@@ -51,8 +51,8 @@ class AdminManage extends React.Component {
       admin_info: [],
       name: "",
       email: "",
-      file_name: localStorage.getItem("files"),
-      file_directory: localStorage.getItem("directory")
+      file_name: '',
+      file_directory: ''
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -208,20 +208,25 @@ class AdminManage extends React.Component {
   }
 
   handleView = row => {
+
+    this.setState({
+      file_name: row.Filename,
+      file_directory: row.directory
+    })
+
     this.setState({
       visible_editMange: !this.state.visible_editMange
     });
 
     newData = [...this.state.data_document];
     index = newData.findIndex(item => item._id === row._id);
-    localStorage.setItem("directory", row.directory);
-    localStorage.setItem("files", row.Filename);
 
     item = newData[index];
     axios.get("/api/documents/align/remarks/" + row._id).then(res => {
       const data_remarks = res.data.remarks;
       this.setState({ data_remarks });
     });
+
   };
 
   handleInputChange(e) {
