@@ -4,16 +4,15 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { registerUser } from '../actions/authentication';
 import classnames from 'classnames';
-import Navbar from './Navbar';
-import { Row, Col, message, Modal } from 'antd';
+import { Row, Col, message, Modal, Checkbox } from 'antd';
 import { Link } from 'react-router-dom';
 
 function info() {
     Modal.info({
-      title: 'Term and Conditions',
-      content: 'some messages...some messages...',
+        title: 'Term and Conditions',
+        content: 'some messages...some messages...',
     });
-  }
+}
 
 class Register extends Component {
 
@@ -29,11 +28,20 @@ class Register extends Component {
             password: '',
             password_confirm: '',
             admin: '',
+            checkbox: false,
             errors: {}
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCheck = this.handleCheck.bind(this);
+
     }
+
+    handleCheck(e){
+        this.setState({
+            checkbox: e.target.checked
+        })
+      }
 
     handleInputChange(e) {
         this.setState({
@@ -45,6 +53,11 @@ class Register extends Component {
 
         if (this.state.password !== this.state.password_confirm) {
             message.error('Not matched password !')
+            return false;
+        }
+
+        if (!this.state.checkbox) {
+            message.info('please agree with terms and conditions');
             return false;
         }
 
@@ -61,7 +74,7 @@ class Register extends Component {
             subscription: 1,
             admin: 0,
         }
-        this.props.registerUser(user, this.props.history);
+         this.props.registerUser(user, this.props.history);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -85,8 +98,8 @@ class Register extends Component {
         const { errors } = this.state;
         return (
             <div>
-                <Link to ='/'>
-                  <img src="https://cdn.icon-icons.com/icons2/209/PNG/128/go-back256_24856.png" width="50" height="50" style={{margin:30}}/>
+                <Link to='/'>
+                    <img src="https://cdn.icon-icons.com/icons2/209/PNG/128/go-back256_24856.png" width="50" height="50" style={{ margin: 30 }} />
                 </Link>
                 <div className="container" style={{ marginTop: '50px', width: '700px' }}>
                     <h2 style={{ marginBottom: '40px' }}>Registration</h2>
@@ -198,9 +211,10 @@ class Register extends Component {
                         {errors.address && (<div className="invalid-feedback">{errors.address}</div>)}
                     </div>
 
-                    <p onClick={info} style={{cursor:'pointer'}}>Terms and Conditions</p>
+                    <span><Checkbox checked={this.state.checkbox}
+                        onChange={this.handleCheck} /><span onClick={info} style={{ cursor: 'pointer' }}>Terms and Conditions</span></span>
 
-                    <div className="form-group">
+                    <div className="form-group" style={{ marginTop: 15 }}>
 
                         <Row gutter={12}>
                             <Col span={12}>
