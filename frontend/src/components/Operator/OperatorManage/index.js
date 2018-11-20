@@ -137,16 +137,18 @@ class OperatorManage extends React.Component {
       operator_id: this.state.id,
       operator_name: this.state.name,
       content: this.state.remarks,
-      status: this.state.operator_status
+      status: this.state.operator_status,
     };
 
     const history_data = {
       operator_id: this.state.id,
       operator_name: this.state.name,
+      Filename:item.Filename,
       remark: this.state.remarks,
       status: this.state.operator_status,
       dentist_name: this.state.dentist_name,
-      dentist_id: this.state.dentist_id
+      dentist_id: this.state.dentist_id,
+
     };
 
     const update_operator_data = {

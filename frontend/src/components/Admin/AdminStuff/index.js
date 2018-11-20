@@ -19,6 +19,11 @@ const columns_history = [
     key: "operator_name"
   },
   {
+    title: "Filename",
+    dataIndex: "Filename",
+    key: "Filename"
+  },
+  {
     title: "Status",
     dataIndex: "status",
     key: "status",
@@ -1234,8 +1239,8 @@ class AdminStuff extends React.Component {
 
         <Modal
           centered={true}
-          width={1200}
-          title={"Operator Information"}
+          width={1800}
+          title={"Operator History"}
           visible={this.state.visible_history}
           onOk={this.handleOk}
           onCancel={this.handleCancel}

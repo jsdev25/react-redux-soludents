@@ -7,6 +7,9 @@ const HistorySchema = new Schema({
     operator_name: {
         type: String,
     },
+    Filename: {
+        type: String,
+    },
     operator_id: {
         type: String,
     },

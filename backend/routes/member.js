@@ -247,7 +247,7 @@ router.post('/login', (req, res) => {
                             name: member.name,
                         }
                         jwt.sign(payload, 'secret', {
-                            expiresIn: 86400
+                            expiresIn: 60 * 60 * 24
                         }, (err, token) => {
                             if (err) console.error('There is some error in token', err);
                             else {
