@@ -27,7 +27,7 @@ export default class Welcome extends React.Component {
         <div id="choose">
           <Autionview
             title="Choisissez Votre Abonnement"
-            description="But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth"
+            description="Choisissez l'abonnement qui vous correspond en fonction du nombre de devis que vous souhaitez que nous traitions et de la période ! Nous nous occupons du reste ! "
           />
           <div className="price-view container">
             <Row>
@@ -155,7 +155,7 @@ export default class Welcome extends React.Component {
         <div id="team">
           <Autionview
             title="Notre Equipe"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
+            description="Voici notre équipe d'expert en service dentaire et la liste de partenaires travaillant avec nous."
           />
         </div>
         <OurPartnerSlider />
