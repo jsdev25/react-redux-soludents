@@ -39,8 +39,8 @@ class AdminManage extends React.Component {
       data_remarks: [],
       model_view: false,
       visible_editMange: false,
-      status: "In progress",
-      remarks: "Nothing",
+      status: "En progrès",
+      remarks: "...",
       remarks_name: "",
       remarks_content: "",
       selected_operator: "",
@@ -51,8 +51,8 @@ class AdminManage extends React.Component {
       admin_info: [],
       name: "",
       email: "",
-      file_name: '',
-      file_directory: ''
+      file_name: "",
+      file_directory: ""
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -60,25 +60,30 @@ class AdminManage extends React.Component {
 
     this.columns = [
       {
-        title: "File",
+        title: "Fichier",
         dataIndex: "Filename",
         key: "Filename"
       },
       {
-        title: "Dentist",
+        title: "Dentiste",
         dataIndex: "dentist_name",
         key: "dentist_name",
         onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
-        sorter: (a, b) => a.dentist_name ? a.dentist_name.length : 0 - b.dentist_name? b.dentist_name.length : 0
+        sorter: (a, b) =>
+          a.dentist_name
+            ? a.dentist_name.length
+            : 0 - b.dentist_name
+            ? b.dentist_name.length
+            : 0
       },
       {
-        title: "Status",
+        title: "Statut",
         dataIndex: "status",
         key: "status",
         sorter: (a, b) => a.status.length - b.status.length
       },
       {
-        title: "Active Statusbar",
+        title: "Barre de Progression",
         key: "status1",
         dataIndex: "status",
         render: text =>
@@ -100,11 +105,16 @@ class AdminManage extends React.Component {
         render: text => <span>{text.replace("T", " ").substring(0, 19)}</span>
       },
       {
-        title: "Opeartor",
+        title: "Operator",
         key: "operator_name",
         dataIndex: "operator_name",
         onFilter: (value, record) => record.operator_name.indexOf(value) === 0,
-        sorter: (a, b) => a.operator_name ? a.operator_name.length : 0 - b.operator_name? b.operator_name.length : 0
+        sorter: (a, b) =>
+          a.operator_name
+            ? a.operator_name.length
+            : 0 - b.operator_name
+            ? b.operator_name.length
+            : 0
       },
       {
         title: "Action",
@@ -156,12 +166,10 @@ class AdminManage extends React.Component {
   }
 
   handleClick() {
-
-    if (this.state.selected_operator){
-      
+    if (this.state.selected_operator) {
     } else {
-      this.state.selected_operator = '';
-      this.state.operator_id = ''
+      this.state.selected_operator = "";
+      this.state.operator_id = "";
     }
 
     const update_data = {
@@ -208,11 +216,10 @@ class AdminManage extends React.Component {
   }
 
   handleView = row => {
-
     this.setState({
       file_name: row.Filename,
       file_directory: row.directory
-    })
+    });
 
     this.setState({
       visible_editMange: !this.state.visible_editMange
@@ -226,7 +233,6 @@ class AdminManage extends React.Component {
       const data_remarks = res.data.remarks;
       this.setState({ data_remarks });
     });
-
   };
 
   handleInputChange(e) {
@@ -281,12 +287,18 @@ class AdminManage extends React.Component {
             style={{ position: "fixed", height: "100vh" }}
           >
             <div>
-              <div style={{ textAlign: "center", marginTop: 20 }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  marginTop: 20
+                }}
+              >
                 <img
                   src="https://i.imgur.com/HhAxynm.jpg"
                   alt="Smiley face"
                   height="50"
                   width="120"
+                  style={{ border: "2px solid #00d563" }}
                 />
                 <br />
                 <br />
@@ -389,14 +401,14 @@ class AdminManage extends React.Component {
 
         <Modal
           centered={true}
-          title={"File Manage"}
+          title={"Assignement Devis"}
           visible={this.state.visible_editMange}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[]}
         >
           <a href={this.state.file_directory} target="_blank" type="file">
-            FileName: {this.state.file_name}
+            Devis: {this.state.file_name}
           </a>
 
           {/* <Collapse bordered={false}>
@@ -423,12 +435,12 @@ class AdminManage extends React.Component {
                 </Collapse> */}
 
           <Collapse bordered={false}>
-            <Panel header="Operator Name: " key="1">
-              <span style={{ marginLeft: 20 }}>Edit: </span>
+            <Panel header="Choisissez l'Opérateur: " key="1">
+              <span style={{ marginLeft: 20 }}>Séléctionnez: </span>
               <Select
                 showSearch
                 style={{ width: 200 }}
-                placeholder="Select Opearator"
+                placeholder="Nom de l'Opérateur"
                 optionFilterProp="children"
                 onChange={e =>
                   this.handleChangeOperator(e, this.state.data_operators)
@@ -453,7 +465,7 @@ class AdminManage extends React.Component {
           </Collapse>
 
           <Collapse bordered={false}>
-            <Panel header="Remarks: " key="1">
+            <Panel header="Remarques: " key="1">
               <ul>
                 {this.state.data_remarks.map(function(item, i) {
                   return (
@@ -477,7 +489,7 @@ class AdminManage extends React.Component {
             onClick={this.handleClick.bind(this)}
             className="btn btn-primary"
           >
-            Save
+            Confirmer
           </button>
         </Modal>
       </div>

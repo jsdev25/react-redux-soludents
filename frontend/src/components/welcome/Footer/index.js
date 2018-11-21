@@ -16,6 +16,7 @@ export class Footer extends React.Component {
                     alt="Smiley face"
                     width="120"
                     height="50"
+                    style={{ border: "2px solid #00d563" }}
                   />
                 </strong>
               </h1>

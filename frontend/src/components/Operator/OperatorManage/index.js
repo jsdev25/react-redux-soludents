@@ -68,26 +68,31 @@ class OperatorManage extends React.Component {
 
     this.columns = [
       {
-        title: "File",
+        title: "Fichier",
         dataIndex: "Filename",
         key: "Filename"
       },
       {
-        title: "Dentist",
+        title: "Dentiste",
         dataIndex: "dentist_name",
         key: "dentist_name",
         onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
-        sorter: (a, b) => a.dentist_name ? a.dentist_name.length : 0 - b.dentist_name? b.dentist_name.length : 0
+        sorter: (a, b) =>
+          a.dentist_name
+            ? a.dentist_name.length
+            : 0 - b.dentist_name
+            ? b.dentist_name.length
+            : 0
       },
       {
-        title: "Status",
+        title: "Statut",
         dataIndex: "status",
         key: "status",
         onFilter: (value, record) => record.status.indexOf(value) === 0,
         sorter: (a, b) => a.status.length + b.status.length
       },
       {
-        title: "Active Statusbar",
+        title: "Barre de progression",
         key: "status1",
         dataIndex: "status",
         render: text =>
@@ -118,7 +123,7 @@ class OperatorManage extends React.Component {
               style={{ backgroundColor: "#00a99d", color: "#fff" }}
               onClick={() => this.handleView(record)}
             >
-              Click here
+              Gestion Devis
             </Button>
           </span>
         )
@@ -137,18 +142,17 @@ class OperatorManage extends React.Component {
       operator_id: this.state.id,
       operator_name: this.state.name,
       content: this.state.remarks,
-      status: this.state.operator_status,
+      status: this.state.operator_status
     };
 
     const history_data = {
       operator_id: this.state.id,
       operator_name: this.state.name,
-      Filename:item.Filename,
+      Filename: item.Filename,
       remark: this.state.remarks,
       status: this.state.operator_status,
       dentist_name: this.state.dentist_name,
-      dentist_id: this.state.dentist_id,
-
+      dentist_id: this.state.dentist_id
     };
 
     const update_operator_data = {
@@ -275,6 +279,7 @@ class OperatorManage extends React.Component {
                   alt="Smiley face"
                   height="50"
                   width="120"
+                  style={{ border: "2px solid #00d563" }}
                 />
                 <br />
                 <br />
@@ -341,7 +346,7 @@ class OperatorManage extends React.Component {
                   type="primary"
                   style={{ float: "right", marginLeft: 20, marginTop: 20 }}
                 >
-                  Main 2
+                  Base de données Organismes de Prêts
                 </Button>
               </CSVLink>
 
@@ -350,7 +355,7 @@ class OperatorManage extends React.Component {
                   type="primary"
                   style={{ float: "right", marginTop: 20 }}
                 >
-                  Main 1
+                  Base de donnée Mutuelles
                 </Button>
               </CSVLink>
             </div>
@@ -359,7 +364,7 @@ class OperatorManage extends React.Component {
 
         <Modal
           centered={true}
-          title={"File Manage"}
+          title={"Gestion du Devis"}
           visible={this.state.visible_editMange}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -371,14 +376,14 @@ class OperatorManage extends React.Component {
             target="_blank"
             type="file"
           >
-            FileName: {this.state.file_name}
+            Devis: {this.state.file_name}
           </a>
           <Collapse bordered={false}>
-            <Panel header="Status In Progress: " key="1">
-              <span style={{ marginLeft: 20 }}>Edit: </span>
+            <Panel header="Mettre à jour le Statut: " key="1">
+              <span style={{ marginLeft: 20 }}>Editer: </span>
               <Select
                 showSearch
-                defaultValue="In progress"
+                defaultValue="En Progrès"
                 style={{ width: 200 }}
                 placeholder="Select status"
                 optionFilterProp="children"
@@ -389,9 +394,9 @@ class OperatorManage extends React.Component {
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                <Option value="In progress">In progress</Option>
-                <Option value="Un Successful">Un Successful</Option>
-                <Option value="Successful">Successful</Option>
+                <Option value="In progress">En Progrès</Option>
+                <Option value="Un Successful">Succès</Option>
+                <Option value="Successful">Sans Succès</Option>
               </Select>
               <br />
               <br />
@@ -399,8 +404,8 @@ class OperatorManage extends React.Component {
           </Collapse>
 
           <Collapse bordered={false}>
-            <Panel header="Remarks: " key="1">
-              <span style={{ marginLeft: 20 }}>Edit: </span>
+            <Panel header="Ajout de Remarques: " key="1">
+              <span style={{ marginLeft: 20 }}>Editer: </span>
               <br />
               <TextArea
                 value={this.state.remarks}
@@ -416,7 +421,7 @@ class OperatorManage extends React.Component {
             onClick={this.handleClick.bind(this)}
             className="btn btn-primary"
           >
-            Save
+            Enregistrer
           </button>
         </Modal>
       </div>

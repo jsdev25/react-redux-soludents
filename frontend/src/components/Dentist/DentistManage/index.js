@@ -35,43 +35,50 @@ const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
 const RadioGroup = Radio.Group;
 
-const data_billing = [{
-  key: '1',
-  Offernumber: 'Subscription 1',
-  day: '30',
-  count: '10',
-  price: '390'
-}, {
-  key: '2',
-  Offernumber: 'Subscription 2',
-  day: '365',
-  count: '10',
-  price: '3900'
-}, {
-  key: '3',
-  Offernumber: 'Subscription 3',
-  day: '30',
-  count: '20',
-  price: '750'
-}, {
-  key: '4',
-  Offernumber: 'Subscription 4',
-  day: '365',
-  count: '20',
-  price: '7500'
-}, {
-  key: '5',
-  Offernumber: 'Subscription 5',
-  day: '30',
-  count: '30',
-  price: '990'
-}, {
-  key: '6',
-  Offernumber: 'Subscription 6',
-  day: '365',
-  count: '30',
-  price: '9900'
-}];
+const data_billing = [
+  {
+    key: "1",
+    Offernumber: "Subscription 1",
+    day: "30",
+    count: "10",
+    price: "390"
+  },
+  {
+    key: "2",
+    Offernumber: "Subscription 2",
+    day: "365",
+    count: "10",
+    price: "3900"
+  },
+  {
+    key: "3",
+    Offernumber: "Subscription 3",
+    day: "30",
+    count: "20",
+    price: "750"
+  },
+  {
+    key: "4",
+    Offernumber: "Subscription 4",
+    day: "365",
+    count: "20",
+    price: "7500"
+  },
+  {
+    key: "5",
+    Offernumber: "Subscription 5",
+    day: "30",
+    count: "30",
+    price: "990"
+  },
+  {
+    key: "6",
+    Offernumber: "Subscription 6",
+    day: "365",
+    count: "30",
+    price: "9900"
+  }
+];
 
 const content1 = (
   <div style={{ lineHeight: -5 }}>
@@ -154,9 +161,11 @@ const content6 = (
 class ComponentToPrint extends React.Component {
   render() {
     return (
-      <div style={{textAlign:'center', marginTop: 50}}>
+      <div style={{ textAlign: "center", marginTop: 50 }}>
         <h1>Payment Invoice</h1>
-        <h3 style={{marginTop:120}}>Dentist can upload up to 10 document during 30 days.</h3>
+        <h3 style={{ marginTop: 120 }}>
+          Dentist can upload up to 10 document during 30 days.
+        </h3>
         <br />
         <h3>Counter of document reset to 0 on the next 30 days period. </h3>
         <br />
@@ -251,10 +260,14 @@ class DentistManage extends React.Component {
               Print
             </Button> */}
             <ReactToPrint
-              trigger={() => <Button style={{ backgroundColor: "#00a99d", color: "#fff" }} >Print</Button>}
+              trigger={() => (
+                <Button style={{ backgroundColor: "#00a99d", color: "#fff" }}>
+                  Print
+                </Button>
+              )}
               content={() => this.componentRef}
             />
-            <div style={{ display: 'none' }}>
+            <div style={{ display: "none" }}>
               <ComponentToPrint ref={el => (this.componentRef = el)} />
             </div>
           </span>
@@ -264,7 +277,7 @@ class DentistManage extends React.Component {
   }
 
   handleBilling(e) {
-    console.log('my record', e)
+    console.log("my record", e);
   }
 
   componentDidMount() {
@@ -438,6 +451,7 @@ class DentistManage extends React.Component {
                   alt="Smiley face"
                   height="50"
                   width="120"
+                  style={{ border: "2px solid #00d563" }}
                 />
                 <br />
                 <br />
@@ -782,7 +796,10 @@ class DentistManage extends React.Component {
             <Panel header="Billing Area" key="2">
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
-                  <Table columns={this.columnsbillings} dataSource={data_billing} />
+                  <Table
+                    columns={this.columnsbillings}
+                    dataSource={data_billing}
+                  />
                   {/* dataSource={this.state.data_document}  */}
                 </Card>
               </div>

@@ -6,11 +6,11 @@ import { Pricingitem } from "./pricingitem";
 import { Pricingitem2 } from "./pricingitem2";
 import { Pricingitem3 } from "./pricingitem3";
 import { TeamMemberSlider } from "./TeamMemberSlider";
-import Messageview from "./contactview";
+import Messageview from "./ContactView";
 import { Footer } from "./Footer";
 import { BackTop, Card } from "antd";
 
-import { Row, Col } from "antd";  
+import { Row, Col } from "antd";
 import "./index.css";
 import { OurPartnerSlider } from "./OurPartnerSlider";
 

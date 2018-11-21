@@ -1,37 +1,59 @@
 import React from "react";
-import { Avatar, Button, Row, Col, Card, List, Collapse, Icon, Input, Divider, Modal, Radio, Table, message, Progress } from "antd";
+import {
+  Avatar,
+  Button,
+  Row,
+  Col,
+  Card,
+  List,
+  Collapse,
+  Icon,
+  Input,
+  Divider,
+  Modal,
+  Radio,
+  Table,
+  message,
+  Progress
+} from "antd";
 import { customPanelStyle } from "./const";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { addDentist, UpdateDentistByAdmin, UpdateDentistSubscriptionByadmin, UpdateOpertorByAdmin, UpdateAdminPassword } from "../../../actions/authentication";
+import {
+  addDentist,
+  UpdateDentistByAdmin,
+  UpdateDentistSubscriptionByadmin,
+  UpdateOpertorByAdmin,
+  UpdateAdminPassword
+} from "../../../actions/authentication";
 import axios from "axios";
 import { CSVLink } from "react-csv";
 
 const RadioGroup = Radio.Group;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
-const data_history_regular=[];
+const data_history_regular = [];
 const columns_history = [
   {
-    title: "Name",
+    title: "Nom",
     dataIndex: "operator_name",
     key: "operator_name"
   },
   {
-    title: "Filename",
+    title: "Fichier",
     dataIndex: "Filename",
     key: "Filename"
   },
   {
-    title: "Status",
+    title: "Statut",
     dataIndex: "status",
     key: "status",
     onFilter: (value, record) => record.status.indexOf(value) === 0,
     sorter: (a, b) => a.status.length - b.status.length
   },
   {
-    title: "Active Statusbar",
+    title: "Barre de progression",
     key: "status1",
     dataIndex: "status",
     render: text =>
@@ -40,11 +62,11 @@ const columns_history = [
       ) : text === "Un Successful" ? (
         <Progress percent={50} status="exception" showInfo={false} />
       ) : (
-            <Progress percent={50} showInfo={false} />
-          )
+        <Progress percent={50} showInfo={false} />
+      )
   },
   {
-    title: "Remark",
+    title: "Remarque",
     dataIndex: "remark",
     key: "remark"
   },
@@ -59,14 +81,19 @@ const columns_history = [
     render: text => <span>{text.replace("T", " ").substring(0, 19)}</span>
   },
   {
-    title: "Dentist",
+    title: "Dentiste",
     key: "dentist_name",
     dataIndex: "dentist_name",
     onFilter: (value, record) => record.dentist_name.indexOf(value) === 0,
-    sorter: (a, b) => a.dentist_name ? a.dentist_name.length : 0 - b.dentist_name? b.dentist_name.length : 0
+    sorter: (a, b) =>
+      a.dentist_name
+        ? a.dentist_name.length
+        : 0 - b.dentist_name
+        ? b.dentist_name.length
+        : 0
   }
 ];
-function callback(key) { }
+function callback(key) {}
 
 class AdminStuff extends React.Component {
   constructor() {
@@ -88,9 +115,9 @@ class AdminStuff extends React.Component {
       update_address_d: "",
       update_lastname_d: "",
       update_phone_d: "",
-      other_info: '',
-      dentist_password: '',
-      operator_password: '',
+      other_info: "",
+      dentist_password: "",
+      operator_password: "",
       subscription: 1,
       update_name_0: "",
       update_email_0: "",
@@ -106,7 +133,7 @@ class AdminStuff extends React.Component {
       Oname_byadmin: "",
       Opassword_byadmin: "",
       Oemail_byadmin: "",
-      Oid_byadmin: '',
+      Oid_byadmin: "",
       download_csv: false,
       hidden_d: true,
       hidden_o: true,
@@ -138,12 +165,12 @@ class AdminStuff extends React.Component {
     this.HandleHistories = this.HandleHistories.bind(this);
   }
 
-  onChange = (e) => {
+  onChange = e => {
     //console.log('radio checked', e.target.value);
     this.setState({
-      subscription: e.target.value,
+      subscription: e.target.value
     });
-  }
+  };
 
   state = {
     visible: false,
@@ -193,30 +220,30 @@ class AdminStuff extends React.Component {
 
   handleSubmitO_Byadmin() {
     if (!this.state.Oname_byadmin) {
-      message.error("Operator name is empty");
+      message.error("Le nom de l'opérateur ne peut être vide !");
       return false;
     }
 
     if (!this.state.Oemail_byadmin) {
-      message.error("Operator email is empty");
+      message.error("L'email de l'opérateur ne peut être vide !");
       return false;
     }
 
     if (!this.state.Oemail_byadmin.includes("@")) {
-      message.error("Operator email is invalid");
+      message.error("L'email de l'opérateur est invalide !");
       return false;
     }
 
     const mydata = {
       name: this.state.Oname_byadmin,
       email: this.state.Oemail_byadmin,
-      password:'12345'
+      password: "12345"
     };
 
     this.setState({
       visible_opertor_byadmin: false
     });
-  //  console.log('^^^^^^^^^^^^^^^^^^^^^^^^', mydata)
+    //  console.log('^^^^^^^^^^^^^^^^^^^^^^^^', mydata)
     this.props.UpdateOpertorByAdmin(mydata, this.props.history);
   }
 
@@ -227,10 +254,12 @@ class AdminStuff extends React.Component {
     });
     axios.get("/api/histories/" + e._id).then(res => {
       that.setState({ data_histories: res.data, csv_data: res.data });
-      data_history_regular.unshift (res.data);
-      for (let i = 0; i < res.data.length ; i++) {
-          data_history_regular[0][i].created_date = res.data[i].created_date.replace('T', ' ').slice(0, 19);
-      } 
+      data_history_regular.unshift(res.data);
+      for (let i = 0; i < res.data.length; i++) {
+        data_history_regular[0][i].created_date = res.data[i].created_date
+          .replace("T", " ")
+          .slice(0, 19);
+      }
     });
   }
 
@@ -243,24 +272,24 @@ class AdminStuff extends React.Component {
   showModalOperator = () => {
     this.setState({
       visible_opertor: true,
-      Oname:'',
-      Oemail:'',
-      Opassword:''
+      Oname: "",
+      Oemail: "",
+      Opassword: ""
     });
   };
 
   showModalDentist = () => {
     this.setState({
       visible: true,
-      name: '',
-      email: '',
-      lastname: '',
-      phone: '',
-      address: '',
-      adli_number: '',
-      number: '',
-      password: '',
-      other_info: ''
+      name: "",
+      email: "",
+      lastname: "",
+      phone: "",
+      address: "",
+      adli_number: "",
+      number: "",
+      password: "",
+      other_info: ""
     });
   };
 
@@ -300,22 +329,22 @@ class AdminStuff extends React.Component {
 
   handleSubmit() {
     if (!this.state.name) {
-      message.error("Dentist name is empty");
+      message.error("Le nom du dentiste ne peut être vide !");
       return false;
     }
 
     if (!this.state.email) {
-      message.error("Dentist email is empty");
+      message.error("L'email du dentiste ne peut être vide !");
       return false;
     }
 
     if (!this.state.email.includes("@")) {
-      message.error("Dentist email is invalid");
+      message.error("L'email du dentiste est invalide !");
       return false;
     }
 
     if (!this.state.password) {
-      message.error("Dentist password is empty");
+      message.error("Le mot de passe du dentiste est vide !");
       return false;
     }
 
@@ -338,7 +367,7 @@ class AdminStuff extends React.Component {
       data: InserData,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
-      .then(function (response) {
+      .then(function(response) {
         if (response.status === 200) {
         }
 
@@ -347,34 +376,33 @@ class AdminStuff extends React.Component {
             data_dentists: [...that.state.data_dentists, InserData],
             visible: false
           },
-          () => { }
+          () => {}
         );
       })
 
-      .catch(function (response) {
+      .catch(function(response) {
         return;
       });
   }
 
   DeleteDentist(e, wholedata) {
-
     let that = this;
     const index = wholedata.findIndex(item => item._id === e._id);
 
     confirm({
-      title: 'Do you Want to delete these items?',
-      content: 'Delete Account',
+      title: "Voulez-vous supprimer ce compte ?",
+      content: "Attention, cette action irréversible !",
       onOk() {
         axios({
           method: "delete",
           url: `/api/members/` + e._id
         })
-          .then(function (response) {
+          .then(function(response) {
             if (response.status === 200) {
             }
           })
 
-          .catch(function (response) {
+          .catch(function(response) {
             return;
           });
 
@@ -382,7 +410,7 @@ class AdminStuff extends React.Component {
         array.splice(index, 1);
         that.setState({ data_dentists: array });
       },
-      onCancel() { },
+      onCancel() {}
     });
   }
 
@@ -419,17 +447,17 @@ class AdminStuff extends React.Component {
 
   handleUpdateDentist() {
     if (!this.state.update_name_d) {
-      message.error("Dentist name is empty");
+      message.error("Le nom du dentiste ne peut être vide !");
       return false;
     }
 
     if (!this.state.update_email_d) {
-      message.error("Dentist email is empty");
+      message.error("L'email du dentiste ne peut être vide !");
       return false;
     }
 
     if (!this.state.update_email_d.includes("@")) {
-      message.error("Dentist email is invalid");
+      message.error("L'email du dentiste est invalide !");
       return false;
     }
     const dentist = {
@@ -438,7 +466,7 @@ class AdminStuff extends React.Component {
       address: this.state.update_address_d,
       phone: this.state.update_phone_d,
       adli_number: this.state.update_number_d,
-      email: this.state.update_email_d,
+      email: this.state.update_email_d
     };
     this.props.UpdateDentistByAdmin(dentist, this.props.history);
     this.setState({
@@ -454,7 +482,7 @@ class AdminStuff extends React.Component {
       phone: this.state.update_phone_d,
       adli_number: this.state.update_number_d,
       email: this.state.update_email_d
-        };
+    };
     this.props.UpdateDentistByAdmin(dentist, this.props.history);
     this.setState({
       Update_dentist_visible: false
@@ -477,16 +505,16 @@ class AdminStuff extends React.Component {
     const index = wholedata.findIndex(item => item._id === e._id);
 
     confirm({
-      title: 'Do you Want to delete this account?',
-      content: 'Delete Account',
+      title: "Voulez-vous supprimer ce compte ?",
+      content: "Attention, cette action irréversible !",
       onOk() {
         axios({
           method: "delete",
           url: `/api/members/` + e._id
         })
-          .then(function (response) { })
+          .then(function(response) {})
 
-          .catch(function (response) {
+          .catch(function(response) {
             return;
           });
         var array = [...that.state.data_operators];
@@ -494,28 +522,28 @@ class AdminStuff extends React.Component {
         that.setState({ data_operators: array });
         window.location.href = "/admin";
       },
-      onCancel() { },
+      onCancel() {}
     });
   }
 
   handleSubmitO() {
     if (!this.state.Oname) {
-      message.error("Operator name is empty");
+      message.error("Le nom de l'opérateur ne peut être vide !");
       return false;
     }
 
     if (!this.state.Oemail) {
-      message.error("Operator email is empty");
+      message.error("L'email de l'opérateur ne peut être vide !");
       return false;
     }
 
     if (!this.state.Oemail.includes("@")) {
-      message.error("Operator email is invalid");
+      message.error("L'email de l'opérateur est invalide !");
       return false;
     }
 
     if (!this.state.Opassword) {
-      message.error("Operator password is empty");
+      message.error("Le mot de passe de l'opérateur ne peut être vide !");
       return false;
     }
 
@@ -533,19 +561,19 @@ class AdminStuff extends React.Component {
       data: InserDataO,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
-      .then(function (response) {
+      .then(function(response) {
         that.setState(
           {
             data_operators: [...that.state.data_operators, InserDataO],
             visible_opertor: false
           },
-          () => { }
+          () => {}
         );
         window.location.href = "/admin";
         message.success("New operator inserted!");
       })
 
-      .catch(function (response) {
+      .catch(function(response) {
         return;
       });
   }
@@ -556,7 +584,7 @@ class AdminStuff extends React.Component {
         <Row gutter={12}>
           <Col xs={12}>
             <Card>
-              Your Operators
+              Vos Opérateurs
               <List
                 itemLayout="horizontal"
                 dataSource={this.state.data_operators}
@@ -589,7 +617,7 @@ class AdminStuff extends React.Component {
                                 fontWeight: "400"
                               }}
                             >
-                              Dental Work History
+                              Historique de l'Opérateur
                             </span>
                             <Icon
                               type="file-pdf"
@@ -615,7 +643,7 @@ class AdminStuff extends React.Component {
                                 fontWeight: "400"
                               }}
                             >
-                              Edit Account
+                              Editez le Compte
                             </span>
                             <Icon
                               type="form"
@@ -641,7 +669,7 @@ class AdminStuff extends React.Component {
                                 fontWeight: "400"
                               }}
                             >
-                              Delete Account
+                              Supprimez le Compte
                             </span>
                             <Icon
                               onClick={(e, data) =>
@@ -686,7 +714,7 @@ class AdminStuff extends React.Component {
 
           <Col xs={12}>
             <Card>
-              Your Dentists
+              Vos Dentistes
               <List
                 itemLayout="horizontal"
                 dataSource={this.state.data_dentists}
@@ -719,7 +747,7 @@ class AdminStuff extends React.Component {
                                 fontWeight: "400"
                               }}
                             >
-                              Manage Subscriptions{" "}
+                              Gestion des abonnements{" "}
                             </span>
                             <Icon
                               type="file-pdf"
@@ -745,7 +773,7 @@ class AdminStuff extends React.Component {
                                 fontWeight: "400"
                               }}
                             >
-                              Edit Account
+                              Editez le Compte
                             </span>
                             <Icon
                               type="form"
@@ -771,7 +799,7 @@ class AdminStuff extends React.Component {
                                 fontWeight: "400"
                               }}
                             >
-                              Delete Account
+                              Supprimez le Compte
                             </span>
                             <Icon
                               onClick={(e, data) =>
@@ -819,20 +847,20 @@ class AdminStuff extends React.Component {
               type="primary"
               style={{ float: "right", marginLeft: 20, marginTop: 20 }}
             >
-              Main 2
+              Base de données Organismes de Prêts
             </Button>
           </CSVLink>
 
           <CSVLink data={this.state.dummy}>
             <Button type="primary" style={{ float: "right", marginTop: 20 }}>
-              Main 1
+              Base de donnée Mutuelles
             </Button>
           </CSVLink>
         </Row>
 
         <Modal
           centered={true}
-          title={"Add Information"}
+          title={"Ajoutez un Compte de Dentiste"}
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -951,24 +979,48 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <div>
-            <p style={{ cursor: 'pointer' }} onClick={() => { this.setState({ hidden_d: !this.state.hidden_d }) }}>Update Password</p>
+            <p
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                this.setState({ hidden_d: !this.state.hidden_d });
+              }}
+            >
+              Update Password
+            </p>
             <div hidden={this.state.hidden_d}>
-              <Input style={{ width: 200 }} name="dentist_password" value={this.state.dentist_password} onChange={this.handleInputChange} />
-              <Button style={{ marginLeft: 10 }} onClick={() => {
-                if (this.state.dentist_password.length < 6) {
-                  message.error('password length must be over 6 characters.');
-                  return false;
-                }
-                const update_password = {
-                  password: this.state.dentist_password
-                }
+              <Input
+                style={{ width: 200 }}
+                name="dentist_password"
+                value={this.state.dentist_password}
+                onChange={this.handleInputChange}
+              />
+              <Button
+                style={{ marginLeft: 10 }}
+                onClick={() => {
+                  if (this.state.dentist_password.length < 6) {
+                    message.error("password length must be over 6 characters.");
+                    return false;
+                  }
+                  const update_password = {
+                    password: this.state.dentist_password
+                  };
 
-                this.props.UpdateAdminPassword(update_password, this.state.update_id_d, this.props.history);
-                this.setState({
-                  dentist_password: '', hidden_d: true
-                })
-              }}>Update Password</Button>
-              <br /><br /><br />
+                  this.props.UpdateAdminPassword(
+                    update_password,
+                    this.state.update_id_d,
+                    this.props.history
+                  );
+                  this.setState({
+                    dentist_password: "",
+                    hidden_d: true
+                  });
+                }}
+              >
+                Update Password
+              </Button>
+              <br />
+              <br />
+              <br />
             </div>
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
@@ -1063,17 +1115,16 @@ class AdminStuff extends React.Component {
 
         <Modal
           centered={true}
-          title={"Operator Information"}
+          title={"Ajoutez un Compte d'Opérateur"}
           visible={this.state.visible_opertor}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[]}
         >
           <div>
-
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
-                <label style={{ fontWeight: "800" }}>Name</label>
+                <label style={{ fontWeight: "800" }}>Nom</label>
                 <Input
                   placeholder="Jammy"
                   style={{ border: "none" }}
@@ -1084,7 +1135,7 @@ class AdminStuff extends React.Component {
               </Col>
 
               <Col span={12}>
-                <label style={{ fontWeight: "800" }}>Password</label>
+                <label style={{ fontWeight: "800" }}>Mot de Passe</label>
                 <Input
                   placeholder="********"
                   style={{ border: "none" }}
@@ -1111,7 +1162,7 @@ class AdminStuff extends React.Component {
                 onClick={this.handleSubmitO.bind(this)}
                 style={{ width: "100%" }}
               >
-                Register
+                Enregistrer
               </button>
             </Row>
           </div>
@@ -1119,32 +1170,35 @@ class AdminStuff extends React.Component {
 
         <Modal
           centered={true}
-          title={"Personal Information"}
+          title={"Informations Personnelles"}
           visible={this.state.update_subscription_byadmin_visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[]}
         >
           <Collapse bordered={false}>
-            <Panel header="Choose an offer" key="1">
-              <RadioGroup onChange={this.onChange} value={this.state.subscription}>
-                <span style={{ marginLeft: 20 }}>Offer 1</span>
-                <Radio value={1} style={{ position: 'absolute', right: 40 }}></Radio>
+            <Panel header="Choisissez une Offre" key="1">
+              <RadioGroup
+                onChange={this.onChange}
+                value={this.state.subscription}
+              >
+                <span style={{ marginLeft: 20 }}>Offre 1</span>
+                <Radio value={1} style={{ position: "absolute", right: 40 }} />
                 <br />
-                <span style={{ marginLeft: 20 }}>Offer 2</span>
-                <Radio value={2} style={{ position: 'absolute', right: 40 }}></Radio>
+                <span style={{ marginLeft: 20 }}>Offre 2</span>
+                <Radio value={2} style={{ position: "absolute", right: 40 }} />
                 <br />
-                <span style={{ marginLeft: 20 }}>Offer 3</span>
-                <Radio value={3} style={{ position: 'absolute', right: 40 }}></Radio>
+                <span style={{ marginLeft: 20 }}>Offre 3</span>
+                <Radio value={3} style={{ position: "absolute", right: 40 }} />
                 <br />
-                <span style={{ marginLeft: 20 }}>Offer 4</span>
-                <Radio value={4} style={{ position: 'absolute', right: 40 }}></Radio>
+                <span style={{ marginLeft: 20 }}>Offre 4</span>
+                <Radio value={4} style={{ position: "absolute", right: 40 }} />
                 <br />
-                <span style={{ marginLeft: 20 }}>Offer 5</span>
-                <Radio value={5} style={{ position: 'absolute', right: 40 }}></Radio>
+                <span style={{ marginLeft: 20 }}>Offre 5</span>
+                <Radio value={5} style={{ position: "absolute", right: 40 }} />
                 <br />
-                <span style={{ marginLeft: 20 }}>Offer 6</span>
-                <Radio value={6} style={{ position: 'absolute', right: 40 }}></Radio>
+                <span style={{ marginLeft: 20 }}>Offre 6</span>
+                <Radio value={6} style={{ position: "absolute", right: 40 }} />
               </RadioGroup>
               <br />
               <br />
@@ -1154,7 +1208,7 @@ class AdminStuff extends React.Component {
                 onClick={this.handleUpdateSubscription}
                 className="btn btn-primary"
               >
-                Update Subscription
+                Mettre à Jour l'Abonnement
               </button>
               <br />
             </Panel>
@@ -1163,31 +1217,55 @@ class AdminStuff extends React.Component {
 
         <Modal
           centered={true}
-          title={"Edit Operator"}
+          title={"Editez Compte Opérateur"}
           visible={this.state.visible_opertor_byadmin}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[]}
         >
           <div>
-            <p style={{ cursor: 'pointer' }} onClick={() => { this.setState({ hidden_o: !this.state.hidden_o }) }}>Update Password</p>
+            <p
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                this.setState({ hidden_o: !this.state.hidden_o });
+              }}
+            >
+              Update Password
+            </p>
             <div hidden={this.state.hidden_o}>
-              <Input style={{ width: 200 }} name="operator_password" value={this.state.operator_password} onChange={this.handleInputChange} />
-              <Button style={{ marginLeft: 10 }} onClick={() => {
-                if (this.state.operator_password.length < 6) {
-                  message.error('password length must be over 6 characters.');
-                  return false;
-                }
-                const update_password = {
-                  password: this.state.operator_password
-                }
+              <Input
+                style={{ width: 200 }}
+                name="operator_password"
+                value={this.state.operator_password}
+                onChange={this.handleInputChange}
+              />
+              <Button
+                style={{ marginLeft: 10 }}
+                onClick={() => {
+                  if (this.state.operator_password.length < 6) {
+                    message.error("password length must be over 6 characters.");
+                    return false;
+                  }
+                  const update_password = {
+                    password: this.state.operator_password
+                  };
 
-                this.props.UpdateAdminPassword(update_password, this.state.Oid_byadmin, this.props.history);
-                this.setState({
-                  dentist_password: '', hidden_o: true
-                })
-              }}>Update Password</Button>
-              <br /><br /><br />
+                  this.props.UpdateAdminPassword(
+                    update_password,
+                    this.state.Oid_byadmin,
+                    this.props.history
+                  );
+                  this.setState({
+                    dentist_password: "",
+                    hidden_o: true
+                  });
+                }}
+              >
+                Update Password
+              </Button>
+              <br />
+              <br />
+              <br />
             </div>
 
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
@@ -1239,7 +1317,7 @@ class AdminStuff extends React.Component {
         <Modal
           centered={true}
           width={1800}
-          title={"Operator History"}
+          title={"Historique Opérateur"}
           visible={this.state.visible_history}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -1256,7 +1334,7 @@ class AdminStuff extends React.Component {
         <Modal
           centered={true}
           width={200}
-          title={"Operator History"}
+          title={"Téléchargez l'Historique"}
           visible={this.state.download_csv}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -1268,7 +1346,7 @@ class AdminStuff extends React.Component {
               this.setState({ download_csv: false });
             }}
           >
-            Download
+            Téléchargez
           </CSVLink>
         </Modal>
       </div>

@@ -4,6 +4,18 @@ body {
   font-family: sans-serif;
 }
 
+.navbar-nav .nav-link {
+  border: 1px solid #00d563 !important;
+  border-radius: 50% !important;
+  background-color: white !important;
+}
+
+.navbar-brand {
+  border: 1px solid #00d563 !important;
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+
 @media (min-width: 300px) {
   .navbar-expand-lg .navbar-collapse {
     display: -ms-flexbox !important;
@@ -11,7 +23,8 @@ body {
   }
 
   .navbar-nav .nav-link {
-    padding-right: 0 !important;
+    padding-right: 10px !important;
+    margin-left: 10px !important;
     padding-left: 10px !important;
   }
 

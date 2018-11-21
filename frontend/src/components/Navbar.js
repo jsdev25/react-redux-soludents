@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../actions/authentication";
 import { withRouter } from "react-router-dom";
-import  HorizontalNavbar  from "./Navbar/horizontalNavbar";
-import  VerticalNavbar  from "./Navbar/verticalNavbar";
+import HorizontalNavbar from "./Navbar/horizontalNavbar";
+import VerticalNavbar from "./Navbar/verticalNavbar";
 
 class Navbar extends Component {
   constructor() {
@@ -59,11 +59,9 @@ class Navbar extends Component {
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-
         <VerticalNavbar />
         <Link className="navbar-brand" to="/">
           <img
-            style={{marginLeft:25}}
             src="https://i.imgur.com/HhAxynm.jpg"
             alt="Smiley face"
             width="120"
