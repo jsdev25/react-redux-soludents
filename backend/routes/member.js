@@ -53,72 +53,45 @@ router.get('/:name', function (req, res) {
 });
 
 router.put('/update/dentist/:name', function (req, res) {
-    let newpass = '';
-    bcrypt.genSalt(10, (err, salt) => {
-        if (err) console.error('There was an error', err);
-        else {
-            bcrypt.hash(req.body.password, salt, (err, hash) => {
-                if (err) console.error('There was an error', err);
-                else {
-                    newpass = hash;
-                    Member.updateMany({ _id: req.params.name }, {
-                        $set: {
-                            name: req.body.name,
-                            lastname: req.body.lastname,
-                            email: req.body.email,
-                            phone: req.body.phone,
-                            address: req.body.address,
-                            adli_number: req.body.adli_number,
-                            password: newpass.toString()
-                        }
-                    }, function (err, member) {
-
-                        if (err) {
-                            res.status(500).json({ code: '500', message: 'fail', error: err });
-                        } else if (!member) {
-                            res.status(400).json({ code: '404', message: 'fail', error: "Not Found Member" });
-                        }
-                        else {
-                            res.status(200).json({ code: '200', message: 'success', data: req.body });
-                        }
-                    })
-                }
-            });
+    Member.updateMany({ _id: req.params.name }, {
+        $set: {
+            name: req.body.name,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            adli_number: req.body.adli_number
         }
-    });
+    }, function (err, member) {
 
+        if (err) {
+            res.status(500).json({ code: '500', message: 'fail', error: err });
+        } else if (!member) {
+            res.status(400).json({ code: '404', message: 'fail', error: "Not Found Member" });
+        }
+        else {
+            res.status(200).json({ code: '200', message: 'success', data: req.body });
+        }
+    })
 });
 
 router.put('/update/operator/:name', function (req, res) {
-    let newpass = '';
-    bcrypt.genSalt(10, (err, salt) => {
-        if (err) console.error('There was an error', err);
-        else {
-            bcrypt.hash(req.body.password, salt, (err, hash) => {
-                if (err) console.error('There was an error', err);
-                else {
-                    newpass = hash;
-                    Member.updateMany({ _id: req.params.name }, {
-                        $set: {
-                            name: req.body.name,
-                            email: req.body.email,
-                            password: newpass.toString()
-                        }
-                    }, function (err, member) {
-
-                        if (err) {
-                            res.status(500).json({ code: '500', message: 'fail', error: err });
-                        } else if (!member) {
-                            res.status(400).json({ code: '404', message: 'fail', error: "Not Found Member" });
-                        }
-                        else {
-                            res.status(200).json({ code: '200', message: 'success', data: req.body });
-                        }
-                    })
-                }
-            });
+    Member.updateMany({ _id: req.params.name }, {
+        $set: {
+            name: req.body.name,
+            email: req.body.email,
         }
-    });
+    }, function (err, member) {
+
+        if (err) {
+            res.status(500).json({ code: '500', message: 'fail', error: err });
+        } else if (!member) {
+            res.status(400).json({ code: '404', message: 'fail', error: "Not Found Member" });
+        }
+        else {
+            res.status(200).json({ code: '200', message: 'success', data: req.body });
+        }
+    })
 });
 
 router.put('/update/user_password/:name', function (req, res) {
@@ -247,7 +220,7 @@ router.post('/login', (req, res) => {
                             name: member.name,
                         }
                         jwt.sign(payload, 'secret', {
-                            expiresIn: 60 * 60 * 24
+                            expiresIn: 30 * 60
                         }, (err, token) => {
                             if (err) console.error('There is some error in token', err);
                             else {

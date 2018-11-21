@@ -128,8 +128,9 @@ export const logoutUser = (history) => dispatch => {
 export const UpdateDentist = (dentist, history) => dispatch => {
     axios.put('/api/members/update/dentist/' + JSON.parse(localStorage.getItem('UserAdmin')), dentist)
         .then(res => {
+            console.log('my data', res)
             message.success('Success Update Dentist')
-            history.push('/dentist')
+         //   history.push('/dentist')
         })
 
         .catch(err => {
@@ -147,8 +148,10 @@ export const UpdateOpertorByAdmin = (data, history) => dispatch => {
 
     axios.put('/api/members/update/operator/' + localStorage.getItem('update_dentist'), data)
         .then(res => {
+            
+            console.log('my data', res)
             message.success('Success Update Operator')
-            history.push('/admin')
+           // history.push('/admin')
         })
 
         .catch(err => {

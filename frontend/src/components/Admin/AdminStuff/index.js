@@ -210,12 +210,13 @@ class AdminStuff extends React.Component {
     const mydata = {
       name: this.state.Oname_byadmin,
       email: this.state.Oemail_byadmin,
-      password: this.state.Opassword_byadmin
+      password:'12345'
     };
 
     this.setState({
       visible_opertor_byadmin: false
     });
+  //  console.log('^^^^^^^^^^^^^^^^^^^^^^^^', mydata)
     this.props.UpdateOpertorByAdmin(mydata, this.props.history);
   }
 
@@ -438,7 +439,6 @@ class AdminStuff extends React.Component {
       phone: this.state.update_phone_d,
       adli_number: this.state.update_number_d,
       email: this.state.update_email_d,
-      password: this.state.update_password_d
     };
     this.props.UpdateDentistByAdmin(dentist, this.props.history);
     this.setState({
@@ -453,9 +453,8 @@ class AdminStuff extends React.Component {
       address: this.state.update_address_d,
       phone: this.state.update_phone_d,
       adli_number: this.state.update_number_d,
-      email: this.state.update_email_d,
-      password: this.state.update_password_d
-    };
+      email: this.state.update_email_d
+        };
     this.props.UpdateDentistByAdmin(dentist, this.props.history);
     this.setState({
       Update_dentist_visible: false
@@ -945,7 +944,7 @@ class AdminStuff extends React.Component {
 
         <Modal
           centered={true}
-          title={"Dentist Information"}
+          title={"Edit Dentist"}
           visible={this.state.Update_dentist_visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -1164,7 +1163,7 @@ class AdminStuff extends React.Component {
 
         <Modal
           centered={true}
-          title={"Operator Information"}
+          title={"Edit Operator"}
           visible={this.state.visible_opertor_byadmin}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
