@@ -6,7 +6,7 @@ import { Pricingitem } from "./pricingitem";
 import { Pricingitem2 } from "./pricingitem2";
 import { Pricingitem3 } from "./pricingitem3";
 import { TeamMemberSlider } from "./TeamMemberSlider";
-import Messageview from "./ContactView";
+import Messageview from "./contactview";
 import { Footer } from "./Footer";
 import { BackTop, Card } from "antd";
 
