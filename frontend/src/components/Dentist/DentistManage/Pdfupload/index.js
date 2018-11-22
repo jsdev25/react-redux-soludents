@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { addDocument } from '../../../../actions/authentication';
 import { Z_ASCII } from 'zlib';
 
-const endpoint = 'http://localhost:5000/api/documents/upload'
+const endpoint = 'http://localhost:5000/api/documents/upload/'
 const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
 let length = 0;
 let default_count = 9;
@@ -22,7 +22,7 @@ class ManageFile extends Component {
       data_lists:[],   
       me_lists:[],
       username:'',
-      real_count:10,
+      real_count:'',
       length
     }
   }
@@ -33,6 +33,7 @@ class ManageFile extends Component {
         const data_lists = res.data;
         this.setState({ data_lists });
         length = res.data.length;
+        console.log('mylength', length)
     });
     axios.get('/api/members/'+ useradmin)
     .then(res => {
@@ -45,6 +46,8 @@ class ManageFile extends Component {
         (this.state.me_lists.data.subscription == 5) ? default_count =29 : null;
         (this.state.me_lists.data.subscription == 6) ? default_count =29 : null;
         this.setState({real_count:default_count-length+1})
+        console.log('mylength 222', this.state.real_count)
+
 
     });
   }
@@ -117,6 +120,9 @@ class ManageFile extends Component {
           that.setState({real_count: that.state.real_count - 1})
           that.setState({data_lists: [...that.state.data_lists, NewData]}, () => {
           });
+      })
+      .catch(e=>{
+        console.log('💀💀💀💀💀💀💀💀💀💀💀💀💀💀', e)
       })
   }
 

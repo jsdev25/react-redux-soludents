@@ -764,9 +764,10 @@ class DentistManage extends React.Component {
                 />
               </center>
 
-              {this.state.offer_pay}
+              {/* {this.state.offer_pay} */}
 
               <button
+                hidden={true}
                 style={{ width: "100%", marginTop: 30 }}
                 onClick={this.handleSubmit}
                 className="btn btn-primary"
