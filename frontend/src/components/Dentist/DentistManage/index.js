@@ -506,8 +506,8 @@ class DentistManage extends React.Component {
               </Button>
             </Link>
             <div className="card-view">
-              <p>Dentist</p>
-              <Card style={{ backgroundColor: "#f5f6f8" }}>Item Options</Card>
+              <p>Dentiste</p>
+              <Card style={{ backgroundColor: "#f5f6f8" }}>Menu</Card>
               <Card>
                 View Profile Section
                 <Button
@@ -569,7 +569,7 @@ class DentistManage extends React.Component {
 
         <Modal
           centered={true}
-          title={"Personal Information"}
+          title={"Information Personelle"}
           visible={this.state.profile}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -578,7 +578,7 @@ class DentistManage extends React.Component {
           <div>
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
-                <label style={{ fontWeight: "800" }}>First Name</label>
+                <label style={{ fontWeight: "800" }}>Prénom</label>
                 <Input
                   style={{ border: "none" }}
                   name="name"
@@ -588,7 +588,7 @@ class DentistManage extends React.Component {
               </Col>
 
               <Col span={12}>
-                <label style={{ fontWeight: "800" }}>Last Name</label>
+                <label style={{ fontWeight: "800" }}>Nom de Famille</label>
                 <Input
                   style={{ border: "none" }}
                   name="lastname"
@@ -599,9 +599,9 @@ class DentistManage extends React.Component {
               <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
               <Col span={24}>
-                <label style={{ fontWeight: "800" }}>Password</label>
+                <label style={{ fontWeight: "800" }}>Mot de Passe</label>
                 <Input
-                  type="text"
+                  type="password"
                   style={{ border: "none" }}
                   name="password"
                   onChange={this.handleInputChange}
@@ -611,7 +611,7 @@ class DentistManage extends React.Component {
               <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
               <Col span={12}>
-                <label style={{ fontWeight: "800" }}>Phone</label>
+                <label style={{ fontWeight: "800" }}>Téléphone</label>
                 <Input
                   style={{ border: "none" }}
                   name="phone"
@@ -633,7 +633,7 @@ class DentistManage extends React.Component {
               <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
               <Col span={12}>
-                <label style={{ fontWeight: "800" }}>Address</label>
+                <label style={{ fontWeight: "800" }}>Adresse</label>
                 <Input
                   style={{ border: "none" }}
                   name="address"
@@ -643,7 +643,7 @@ class DentistManage extends React.Component {
               </Col>
 
               <Col span={12}>
-                <label style={{ fontWeight: "800" }}>Adzli Number</label>
+                <label style={{ fontWeight: "800" }}>Numéro Adeli</label>
                 <Input
                   style={{ border: "none" }}
                   name="adli_number"
@@ -661,7 +661,7 @@ class DentistManage extends React.Component {
                   marginTop: 20
                 }}
               >
-                <strong style={{ fontSize: 20 }}>Update</strong>
+                <strong style={{ fontSize: 20 }}>Mettre à jour</strong>
               </button>
             </Row>
           </div>
@@ -669,14 +669,14 @@ class DentistManage extends React.Component {
 
         <Modal
           centered={true}
-          title={"Personal Information"}
+          title={"Choisissez et Gérez votre Abonnement"}
           visible={this.state.subscription_modal}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[]}
         >
           <Collapse bordered={false}>
-            <Panel header="Choose an offer" key="1">
+            <Panel header="Choose your Offer" key="1">
               <RadioGroup
                 onChange={this.onChange}
                 value={this.state.subscription}
@@ -687,7 +687,7 @@ class DentistManage extends React.Component {
                   title="Subscription 1"
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                    Offer 1
+                    Offre 1
                   </span>
                 </Popover>
 
@@ -699,7 +699,7 @@ class DentistManage extends React.Component {
                   title="Subscription 2"
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                    Offer 2
+                    Offre 2
                   </span>
                 </Popover>
 
@@ -711,7 +711,7 @@ class DentistManage extends React.Component {
                   title="Subscription 3"
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                    Offer 3
+                    Offre 3
                   </span>
                 </Popover>
 
@@ -723,7 +723,7 @@ class DentistManage extends React.Component {
                   title="Subscription 4"
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                    Offer 4
+                    Offre 4
                   </span>
                 </Popover>
 
@@ -735,7 +735,7 @@ class DentistManage extends React.Component {
                   title="Subscription 5"
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                    Offer 5
+                    Offre 5
                   </span>
                 </Popover>
 
@@ -747,7 +747,7 @@ class DentistManage extends React.Component {
                   title="Subscription 6"
                 >
                   <span style={{ marginLeft: 20, cursor: "pointer" }}>
-                    Offer 6
+                    Offre 6
                   </span>
                 </Popover>
 

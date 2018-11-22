@@ -125,7 +125,7 @@ class AdminManage extends React.Component {
               style={{ backgroundColor: "#00a99d", color: "#fff" }}
               onClick={() => this.handleView(record)}
             >
-              Click here
+              Assigner
             </Button>
           </span>
         )

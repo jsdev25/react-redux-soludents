@@ -7,31 +7,41 @@ export class Footer extends React.Component {
     return (
       <div className="container-fluid">
         <Row className="footer-view">
+          <Col md={4} xs={24}>
+            {/* <div className="mb-5"> */}
+            <h1 className="text-black">
+              <strong>
+                <img
+                  src="https://i.imgur.com/HhAxynm.jpg"
+                  alt="Smiley face"
+                  width="120"
+                  height="50"
+                  style={{ border: "2px solid #00d563" }}
+                />
+              </strong>
+            </h1>
+            <br />
+            {/* </div> */}
+          </Col>
+
           <Col md={8} xs={24}>
-            <div className="mb-5">
-              <h1 className="text-black">
-                <strong>
-                  <img
-                    src="https://i.imgur.com/HhAxynm.jpg"
-                    alt="Smiley face"
-                    width="120"
-                    height="50"
-                    style={{ border: "2px solid #00d563" }}
-                  />
-                </strong>
-              </h1>
-              <br />
-              <div style={{ paddingRight: 30 }}>
-                <p>
-                  Quite a few companies decided to create watches on their own
-                  to compete with the tech giants in the smart watch industry
-                  versions&smart watches.
-                </p>
-              </div>
+            <div style={{ paddingRight: 5 }}>
+              <p>
+                Soludents vous assiste et vous accompagne en permanence !
+                <br />
+                Veuillez nous laisser un message et nous vous recontacterons.
+              </p>
             </div>
           </Col>
 
-          <Col md={4} xs={24}>
+          <Col md={8} xs={24}>
+            <div style={{ paddingRight: 30 }}>
+              {" "}
+              © Soludents 2018. Tous droits réservés. 1994-2018{" "}
+            </div>
+          </Col>
+
+          {/* <Col md={4} xs={24}>
             <div className="mb-5">
               <h3 className="text-black">
                 <strong>product</strong>
@@ -97,7 +107,7 @@ export class Footer extends React.Component {
                 style={{ color: "#323232", fontSize: 35, marginLeft: 15 }}
               />
             </div>
-          </Col>
+          </Col> */}
         </Row>
       </div>
     );
