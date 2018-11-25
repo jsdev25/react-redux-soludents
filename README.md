@@ -17,14 +17,14 @@ ____________________________
 12	pending	check aws deployment is correctly set up and can scale correctly to: 
 for example imagine that there are 10k documents uploaded to the ec2 instance of 100 terabytes that it will scale without issue 
 
-`You shouldn't put the files on EC2 instances then but on S3 instead, this on milestone is easily a week of work.`
+`You shouldn't put the files on EC2 instances, but on S3 instead, this one milestone is easily a week of work.`
 
 _____________________________
 16	pending	General Bugs:
 
 Potential bugs (only bugs, no edit or adding functionalities) that may appear along the way resulting from All the issues requested above
 
-`No one really know how many hidden bugs are there already.`
+`No one really knows how many hidden bugs are there already.`
 
 _____________________________
 I would totally help you with this project but it's just unrealistic. That's 4 - 5 weeks of work.
