@@ -1,3 +1,35 @@
+You are now here because the expectations are completely unreasonable. The deadline of 1st december is absolutely unrealistic. You are asking to complete 16 miletones in a span of 6.5 days. No one serious is going to apply to complete any of this, if you move the deadline to 1st January then I believe that it might be possible to build this on time.
+
+___________________________
+1	pending	Your first task will be to deploy current version of project on aws EC2 instance to the domain name https://www.soludents.com
+Each time a bug is fixed you will push and deploy new version to keep track of the progress and so I can test new version every time when bugs are fixed.
+Please also detail me here how to push and deploy new version so I can do some little change myself like changing text/color/image and so on…
+
+`If you want to deploy the code on AWS you should set up CI/CD pipelines, it's the reasonable way to do it.`
+
+__________________________
+2, 9 & 14 
+
+`If you want a secure and easy way to add admin accounts and manage everything then you might want to look into AWS Cognito, should
+solve these milestones.`
+
+____________________________
+12	pending	check aws deployment is correctly set up and can scale correctly to: 
+for example imagine that there are 10k documents uploaded to the ec2 instance of 100 terabytes that it will scale without issue 
+
+`You shouldn't put the files on EC2 instances then but on S3 instead, this on milestone is easily a week of work.`
+
+_____________________________
+16	pending	General Bugs:
+
+Potential bugs (only bugs, no edit or adding functionalities) that may appear along the way resulting from All the issues requested above
+
+`No one really know how many hidden bugs are there already.`
+
+_____________________________
+I would totally help you with this project but it's just unrealistic. That's 4 - 5 weeks of work.
+
+
 # react-redux-project
 
 1. Accessing to EC2 instance via putty.
