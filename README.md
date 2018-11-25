@@ -5,7 +5,7 @@ ___________________________
 Each time a bug is fixed you will push and deploy new version to keep track of the progress and so I can test new version every time when bugs are fixed.
 Please also detail me here how to push and deploy new version so I can do some little change myself like changing text/color/image and so on…
 
-`If you want to deploy the code on AWS you should set up CI/CD pipelines, it's the reasonable way to do it.`
+`If you want to deploy the code on AWS you should set up CI/CD pipelines, it's the only reasonable way to do it.`
 
 __________________________
 2, 9 & 14 
