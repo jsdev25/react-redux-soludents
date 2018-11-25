@@ -1,32 +1,29 @@
+---
 
-
-___________________________
-1	pending	Your first task will be to deploy current version of project on aws EC2 instance to the domain name https://www.soludents.com
+1 pending Your first task will be to deploy current version of project on aws EC2 instance to the domain name https://www.soludents.com
 Each time a bug is fixed you will push and deploy new version to keep track of the progress and so I can test new version every time when bugs are fixed.
 Please also detail me here how to push and deploy new version so I can do some little change myself like changing text/color/image and so on…
 
-` set up CI/CD pipelines, it's the only reasonable way to do it.`
+`set up CI/CD pipelines`
 
-__________________________
-2, 9 & 14 
+---
 
-`If you want a secure and easy way to add admin accounts and manage everything then you might want to look into AWS Cognito, should
-solve these milestones.`
+2, 9 & 14
 
-____________________________
-12	pending	check aws deployment is correctly set up and can scale correctly to: 
-for example imagine that there are 10k documents uploaded to the ec2 instance of 100 terabytes that it will scale without issue 
+`If you want a secure and easy way to add admin accounts and manage everything then you might want to look into AWS Cognito, should solve these milestones.`
 
-`You shouldn't put the files on EC2 instances, but on S3 instead.`
+---
 
+12 pending check aws deployment is correctly set up and can scale correctly to:
+for example imagine that there are 10k documents uploaded to the ec2 instance of 100 terabytes that it will scale without issue
 
-
+`You shouldn't put the files on EC2 instances, but on S3 instead. ? not sure leaving up the choice to you`
 
 # react-redux-project
 
 1. Accessing to EC2 instance via putty.
 
-Using puttygen, convert *.pem to *.ppk.
+Using puttygen, convert _.pem to _.ppk.
 In putty, it is used as auth key.
 (I think you will know how to use putty.)
 
@@ -35,7 +32,7 @@ In putty, it is used as auth key.
 Go to certain folder.
 Type the url as the following:
 
->> git clone https://github.com/soludents/react-redux-project.git
+> > git clone https://github.com/soludents/react-redux-project.git
 
 In the project folder, there are two directories: frontend and backend.
 
@@ -45,13 +42,13 @@ In the project folder, there are two directories: frontend and backend.
 
 Run the following command:
 
->>curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
->>sudo apt-get install -y nodejs
+> > curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+> > sudo apt-get install -y nodejs
 
 You may check node.js and npm version:
 
->> node.js -v
->> npm -v
+> > node.js -v
+> > npm -v
 
 - Installing mongodb
 
@@ -62,27 +59,27 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubunt
 
 In certain directory
 
->> npm install -g forever
+> > npm install -g forever
 
 - Setting up npm modules in project folder.
 
 Go to the folder "frontend" in project root.
 
->> npm install
+> > npm install
 
 And go to the folder "backend" in project root.
 
->> npm install
+> > npm install
 
 4. Running backend and frontend projects.
 
 Go to the folder "frontend" in project root.
 
->> npm start&
+> > npm start&
 
 And go to the folder "backend" in project root.
 
->> forever start app.js
+> > forever start app.js
 
 5. Configuring and running proxy server "nginx" for frontend.
 
@@ -90,11 +87,11 @@ To setup, configure and run nginx to instance, refer this url.
 
 https://www.rosehosting.com/blog/how-to-install-nginx-on-ubuntu-16-04/
 
-*************
+---
 
 You may check currently running ports.
 
->> netstat -tuplen
+> > netstat -tuplen
 
 Maybe backend is running on port 5000, frontend is running on port 3000, nginx is running on port 80 and mongodb is running on port 27017.
 
@@ -102,24 +99,23 @@ Now that all services are running, you may reconfigure nginx config.
 
 In certain directory
 
->> nano /etc/nginx/sites-available/default
+> > nano /etc/nginx/sites-available/default
 
 You may open the file.
 
 There, you must place as the following:
 
 server {
-    listen 80;
-    server_name 18.202.179.5;
-    root /opt/react-redux-project;
+listen 80;
+server_name 18.202.179.5;
+root /opt/react-redux-project;
 
     location / {
         include proxy_params;
         proxy_pass http://localhost:3000;
     }
+
 ...
 }
 
 This will have request redirect from clients to "localhost:3000" , react project when users requests http://18.202.179.5/
-
-
