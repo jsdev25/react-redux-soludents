@@ -27,7 +27,7 @@ const Mail = config => options => callback => {
     }
     })
 
-    connection.sendMail(sendMail(options, (error, info) => {
+    connection.sendMail(options, (error, info) => {
         if (error) {
         //    res.status(500).json({ code:'500',message:'fail',error: error });
            return console.log(error);
@@ -36,7 +36,7 @@ const Mail = config => options => callback => {
             callback(info);
             // res.status(200).json({ code:'200',message:'success'});
         }
-    }))
+    })
 
 } 
 
