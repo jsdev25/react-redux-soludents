@@ -6,7 +6,43 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
+const mailer = require('nodemailer'); 
 const Member = require('../models/Member');
+const mailConfig = require('./../models/constants/email')
+/* 
+email defination
+*/
+
+
+const Mail = config => options => callback => {
+   let connection =  mailer.createTransport({
+    host:'smtp.gmail.com',
+    port:587,
+    auth: {
+        user:config.username ,
+        pass: config.password
+    },
+    tls: {
+        rejectUnauthorized: true
+    }
+    })
+
+    connection.sendMail(sendMail(options, (error, info) => {
+        if (error) {
+        //    res.status(500).json({ code:'500',message:'fail',error: error });
+           return console.log(error);
+        } else {
+            console.log('Message %s sent: %s', info.messageId, info.response);
+            callback(info);
+            // res.status(200).json({ code:'200',message:'success'});
+        }
+    }))
+
+} 
+
+
+const MailerWithConfig = Mail(mailConfig);
+
 
 router.get('/', function (req, res) {
     Member.find(function (err, members) {
@@ -184,6 +220,15 @@ router.post('/register', function (req, res) {
                             newMember
                                 .save()
                                 .then(member => {
+                                    MailerWithConfig({
+                                        from: 'support@soludents.com', // sender address
+                                        to: member.email,
+                                        subject: `Soludents: Your account has been confirmed`,
+                                        text: `Hello, ${member.name} ${member.lastname}, your account has been successfully created. Go to www.soludents.com to select your offer and start using our services. Best regards, Soludents team`,
+                                        
+                                    })(
+                                        (success) => console.log(success)
+                                    )
                                     res.json(member)
                                 });
                         }
