@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const config = require("./db");
 const path = require("path");
-
+const  Subscription = require('./models/Subscription')
 const documents = require("./routes/document");
 const members = require("./routes/member");
 const histories = require("./routes/history");
@@ -45,8 +45,58 @@ app.use("/api/emails", emails);
 
 //////////////This is stripe test mode////////////////
 
+
+app.get('/api/subscriptions/:email', (req,res)=>{
+  Subscription.find({userId:req.params.email},(err, data)=>{
+    if(!err){
+      res.json(data)
+    }
+  })
+})
+
 app.post("/api/stripe", (req, res) => {
-  stripe.charges.create(req.body, postStripeCharge(res));
+  //stripe.charges.create(req.body, postStripeCharge(res));
+
+  const {planId,source,email,subscription} = req.body
+
+  stripe.customers.create({
+    description: `Customer for ${email}`,
+    source,
+    email
+  }, function(err, {id}) {
+      console.log(` customer is created with ${id}`)
+        stripe.subscriptions.create({
+          customer:id,
+          items: [
+            {
+              plan: planId,
+            },
+          ]
+        }, function(err, sub) {
+          if(err){
+            console.log(err)
+          }else{
+            const {customer,id,current_period_end:end,current_period_start:start} = sub
+            //console.log({sub,subscription,email,customer,id,start,end})
+             const s = new Subscription({
+              start:new Date(start),
+              end:new Date(end),
+              userId:email,
+              customerId:customer,
+              subscription,
+              subscriptionId:id,
+            })
+
+            s.save().then(
+              ss => {
+                console.log(ss);
+              }
+            )
+          }
+          })
+  });
+
+
 });
 
 const postStripeCharge = res => (stripeErr, stripeRes) => {

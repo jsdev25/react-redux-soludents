@@ -35,48 +35,60 @@ const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
 const RadioGroup = Radio.Group;
 
+
+const strFromDate = (str) => {
+  let d = new Date(str)
+  return `${d.getDate()}/${d.getDay()}/${d.getFullYear()}`
+}
+
 const data_billing = [
   {
     key: "1",
     Offernumber: "Subscription 1",
     day: "30",
     count: "10",
-    price: "390"
+    price: "390",
+    planId:'plan_E39fwV05g02Cb2'
   },
   {
     key: "2",
     Offernumber: "Subscription 2",
     day: "365",
     count: "10",
-    price: "3900"
+    price: "750",
+    planId:'plan_E39fS2RccKR32t'
   },
   {
     key: "3",
     Offernumber: "Subscription 3",
     day: "30",
     count: "20",
-    price: "750"
+    price: "990",
+    planId:'plan_E3A2IsyawGftyG'
   },
   {
     key: "4",
     Offernumber: "Subscription 4",
     day: "365",
     count: "20",
-    price: "7500"
+    price: "3900",
+    planId:'plan_E39heLSMTrmgz2'
   },
   {
     key: "5",
     Offernumber: "Subscription 5",
     day: "30",
     count: "30",
-    price: "990"
+    price: "7500",
+    planId:'plan_E39hqMhI66scAu'
   },
   {
     key: "6",
     Offernumber: "Subscription 6",
     day: "365",
     count: "30",
-    price: "9900"
+    price: "9900",
+    planId:'plan_E39iI5My03ajch'
   }
 ];
 
@@ -190,7 +202,8 @@ class DentistManage extends React.Component {
       subscription: 1,
       offer_content: "",
       password: pwa,
-      phone: ""
+      phone: "",
+      subscriptionDetails:null
     };
     this.showDragDrop = this.showDragDrop.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -205,7 +218,7 @@ class DentistManage extends React.Component {
         dataIndex: "Offernumber",
         key: "Offernumber"
       },
-      {
+      /* {
         title: "Subscription Date",
         key: "subscription_date",
         dataIndex: "subscription_date",
@@ -239,7 +252,7 @@ class DentistManage extends React.Component {
             </Button>
           </span>
         )
-      }
+      } */
     ];
 
     this.columnsbillings = [
@@ -291,7 +304,18 @@ class DentistManage extends React.Component {
         phone: res.data.data.phone,
         subscription: res.data.data.subscription
       });
+
+      axios.get(`/api/subscriptions/${res.data.data.email}`).then(
+        ({data})=> {
+          this.setState(
+            state=>({...state,subs:data}),
+            ()=>console.log(this.state)
+          )  
+        })
     });
+
+    console.log(useradmin)
+    
   }
 
   onChange = e => {
@@ -315,8 +339,20 @@ class DentistManage extends React.Component {
       this.setState({ offer_pay: 990, offer_content: "Offer 5" });
     }
     if (e.target.value == 6) {
-      this.setState({ offer_pay: 9900, offer_content: "Offer 6" });
-    }
+      this.setState({ offer_pay: 9900, offer_content: "Offer 6" }); }
+
+     if(e.target.value){
+      const [subscriptionDetails]= data_billing.filter(
+            item => item.key == e.target.value
+          )
+        
+      this.setState(
+        state=> ({...state,subscription:e.target.value,subscriptionDetails}),
+        ()=>console.log(this.state)
+      )    
+      
+     }
+    // }
   };
 
   state = {
@@ -761,6 +797,10 @@ class DentistManage extends React.Component {
                   name={"Payment Subscription"}
                   description={this.state.offer_content}
                   amount={this.state.offer_pay}
+                  planId={ this.state.subscriptionDetails && this.state.subscriptionDetails.planId}
+                  email={this.state.email}
+                  subscription={this.state.subscriptionDetails && this.state.subscriptionDetails}
+                 
                 />
               </center>
 
@@ -784,7 +824,24 @@ class DentistManage extends React.Component {
             <Panel header="Subscription Area" key="2">
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
-                  <Table columns={this.columns} />
+                <table>
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                      {this.state.subs && this.state.subs .map(
+                        ({start,end,subscription:{Offernumber},subscriptionId})=><tr>
+                          <td>{Offernumber}</td>
+                          <td>{strFromDate(start)}</td>
+                          <td>{strFromDate(end)}</td>
+                          <td>
+                            <button>Cancel</button>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+
                   {/* dataSource={this.state.data_document}  */}
                 </Card>
               </div>
@@ -798,7 +855,9 @@ class DentistManage extends React.Component {
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
                   <Table
-                    columns={this.columnsbillings}
+                    columns={[
+                      {title:'Offer Number',}
+                    ]}
                     dataSource={data_billing}
                   />
                   {/* dataSource={this.state.data_document}  */}
