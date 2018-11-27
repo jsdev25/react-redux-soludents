@@ -9,6 +9,9 @@ const validateLoginInput = require('../validation/login');
 const mailer = require('nodemailer'); 
 const Member = require('../models/Member');
 const mailConfig = require('./../models/constants/email')
+const PasswordReset = require('./../models/PasswordReset')
+const uuid = require('uuid/v1')
+const updateLink = require('./../models/constants/frontend')
 /* 
 email defination
 */
@@ -40,9 +43,95 @@ const Mail = config => options => callback => {
 
 } 
 
+const CalculateDiff = current => previous =>{
+  return (current.getHours()-previous.getHours()) <1
+}
+
+const DiffFromCurrent = CalculateDiff(new Date())
+const CanResetPassword = (timestamp, success, failure) => {
+    if (DiffFromCurrent(new Date(timestamp))) {
+        success('Reseting password ...')
+        
+    } else {
+        failure('your link expired')
+    }
+}
+
+const HookPasswordToTable = (email,token,callback) => {
+    PasswordReset.findOne({email},(err,data)=>{
+        if (err) {
+            console.log('DB connection connection cannot be setup')
+        } else {
+            if (data) {
+                  PasswordReset.updateOne({email},{
+                      $set:{
+                          token:token,
+                          timestamp:new Date()
+                        }}, (err,reset)=>{
+                            console.log(reset)
+                            callback({email,token})
+                        })
+            } else {
+                // insert
+                PasswordReset.insertMany([{
+                    token,email
+                }],(err,res)=>{
+                    console.log(res)
+                    callback(res)
+                })
+            }
+        }
+    })
+
+} 
+
 
 const MailerWithConfig = Mail(mailConfig);
 
+
+const CheckForExistence = (email,callback, failure=null) => {
+    Member.findOne({email},(err,data)=>{
+        if(!err){
+            if (data) {
+                callback(data)
+            } else {
+                failure({message:`${email} is not registered with us`})
+            }
+            
+        }else if(failure){
+            failure(err)
+        }
+    })
+}
+
+router.post('/password_reset/:email', (req, res)=>{
+    // HookPasswordToTable(req.params.email,uuid())
+    CheckForExistence(req.params.email, 
+                    (data)=>{
+                        HookPasswordToTable(data.email,uuid(),({email,token})=>{
+                            const {name,lastname=""} = data
+                            const linkURL = `${updateLink}/reset/${token}`
+                            console.log({linkURL,name,lastname})
+                            MailerWithConfig({
+                                from: 'support@soludents.com', // sender address
+                                to: email,
+                                subject: 'Soludents: Confirm this email reset your password',
+                                html: `
+                                <b>
+                                Hello, ${name} ${lastname}, To reset your password please click this link <a href=${linkURL}>Reset Password</a>. Please note this link will expire in the next hour..
+                                </b>
+                                `                                
+                            })(
+                                (success) => console.log(success)
+                            )                                     
+                        })
+
+                        res.json({message:'password reset link has been sent to your email address'})
+                    },
+                    (err)=> {
+                        res.json(err)
+                    })
+})
 
 router.get('/', function (req, res) {
     Member.find(function (err, members) {
@@ -296,3 +385,18 @@ router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) =
 });
 
 module.exports = router;
+
+
+/* MailerWithConfig({
+    to:email,
+    from:`support@soludents.com`,
+    subject:'Soludents: Confirm this email reset your password',
+    html:`<b>
+    Hello, ${name}${lastname}, To reset your password please click this link <a href=${linkURL}>Reset Password</a>. Please note this link will expire in the next hour..
+    </b>`
+
+})(
+    (info)=>{
+        console.log(info)
+    }
+)  */
