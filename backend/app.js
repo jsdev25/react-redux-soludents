@@ -54,6 +54,7 @@ app.get('/api/subscriptions/:email', (req,res)=>{
   })
 })
 
+
 app.post("/api/stripe", (req, res) => {
   //stripe.charges.create(req.body, postStripeCharge(res));
 
