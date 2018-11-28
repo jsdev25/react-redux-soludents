@@ -80,8 +80,8 @@ app.post("/api/stripe", (req, res) => {
             const {customer,id,current_period_end:end,current_period_start:start} = sub
             //console.log({sub,subscription,email,customer,id,start,end})
              const s = new Subscription({
-              start:new Date(start),
-              end:new Date(end),
+              start,
+              end,
               userId:email,
               customerId:customer,
               subscription,

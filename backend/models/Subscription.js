@@ -20,12 +20,12 @@ const SubscriptionSchema = new mongoose.Schema({
   },
 
   start:{
-      type:Date,
+      type:Number,
       required:true
   },
 
   end:{
-    type:Date,
+    type:Number,
     required:true
   }
 })
