@@ -857,10 +857,13 @@ class DentistManage extends React.Component {
                     {
                       title: 'Action',
                       key: 'subscriptionId',
-                      render:({subscriptionId}) => <a href="#" style={{textDecoration:'none',padding:'8px',border:'1px solid #eee', borderRadius:'7px',color:'#fff',background:'#d00'}} onClick={(e)=>{
+                      render:({subscriptionId,OfferNumber,userId}) => <a href="#" style={{textDecoration:'none',padding:'8px',border:'1px solid #eee', borderRadius:'7px',color:'#fff',background:'#d00'}} onClick={(e)=>{
                           e.preventDefault()
                           if( window.confirm("Are you sure ??"))
-                            axios.post(`api/subscription/cancel/${subscriptionId}`).then(
+                            axios.post(`api/subscription/cancel/${subscriptionId}`,{
+                              userId,
+                              OfferNumber
+                            }).then(
                               ({data}) => {
                                 alert(data.message)
                                 window.location.reload()
@@ -871,7 +874,7 @@ class DentistManage extends React.Component {
                   ]}
 
                     dataSource={this.state.subs && this.state.subs.map(
-                      ({start,end, subscriptionId,OfferNumber})=>({OfferNumber,start,end,subscriptionId})
+                      ({start,end, subscriptionId,OfferNumber,userId})=>({OfferNumber,start,end,subscriptionId,userId})
                     )}
                   
                   />

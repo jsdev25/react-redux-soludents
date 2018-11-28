@@ -156,7 +156,7 @@ app.post("/api/stripe", (req, res) => {
                         subject: 'Soludents: Your subscription has been processed',
                         html: `
                         <b>
-                        Hello, ${name} ${lastname || ""}, Your subscription ${id} based on the ${ subscription.Offernumber } has been processed and confirmed.Best regards, Soludents team
+                        Hello, ${name} ${lastname || ""}, Your subscription ${id} based on the ${ subscription.Offernumber } has been processed and confirmed.Best regards, Soludents team  
                         </b>
                         `                                
                     })(
