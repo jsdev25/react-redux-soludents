@@ -384,6 +384,21 @@ router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) =
     });
 });
 
+router.post('/verifyEmail/:token',(req,res)=>{
+    const {token} = req.params
+    PasswordReset.findOne({token:token},(err,data)=>{
+        if(!err){
+            const {timestamp} = data
+            const currentStamp = new Date()
+            const validHours = (timestamp.getHours() - currentStamp.getHours()) == 0 ? true:false
+            const validDate = (timestamp.getDate() - currentStamp.getDate()) == 0 ? true:false
+            const validYear = (timestamp.getFullYear() - currentStamp.getFullYear()) == 0 ? true:false
+            console.log({validDate,validHours,validYear}) 
+            res.json({isValid:validDate && validHours && validYear})
+        }
+    })
+})
+
 module.exports = router;
 
 
