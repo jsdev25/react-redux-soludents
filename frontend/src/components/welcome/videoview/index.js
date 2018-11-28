@@ -10,6 +10,7 @@ export class Videoview extends React.Component {
             <iframe
               style={{ width: "100%", height: "100%" }}
               src="https://www.youtube.com/embed/zYpb_4rcWl4"
+              title="Soludents Présentation"
             />
             {/* <div style={{width:'100%', height:'100%', backgroundColor:'#5cb4fb', borderRadius: 20}}></div> */}
           </Col>

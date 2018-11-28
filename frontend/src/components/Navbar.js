@@ -14,9 +14,9 @@ class Navbar extends Component {
   }
 
   goPanel() {
-    if (localStorage.getItem("admin") == 2) {
+    if (localStorage.getItem("admin") === 2) {
       window.location.href = "/admin";
-    } else if (localStorage.getItem("admin") == 1) {
+    } else if (localStorage.getItem("admin") === 1) {
       window.location.href = "/operator";
     } else {
       window.location.href = "/dentist";

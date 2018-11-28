@@ -8,3 +8,8 @@
 .ant-modal {
   width: 630px !important;
 }
+
+.ant-popover-inner {
+  /* width: 80% !important; */
+  width: 400px !important;
+}

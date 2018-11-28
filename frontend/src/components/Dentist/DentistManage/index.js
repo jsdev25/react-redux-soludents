@@ -35,20 +35,31 @@ const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
 const RadioGroup = Radio.Group;
 
-
-function timeConverter(UNIX_timestamp){
+function timeConverter(UNIX_timestamp) {
   var a = new Date(UNIX_timestamp * 1000);
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
   var year = a.getFullYear();
   var month = months[a.getMonth()];
   var date = a.getDate();
   return `${date}/${month}/${year}`;
 }
 
-
-const strFromDate = (str) => {
-  return timeConverter(str)
-}
+const strFromDate = str => {
+  return timeConverter(str);
+};
 
 const data_billing = [
   {
@@ -57,7 +68,7 @@ const data_billing = [
     day: "30",
     count: "10",
     price: "390",
-    planId:'plan_E39fwV05g02Cb2'
+    planId: "plan_E39fwV05g02Cb2"
   },
   {
     key: "2",
@@ -65,7 +76,7 @@ const data_billing = [
     day: "365",
     count: "10",
     price: "750",
-    planId:'plan_E39fS2RccKR32t'
+    planId: "plan_E39fS2RccKR32t"
   },
   {
     key: "3",
@@ -73,7 +84,7 @@ const data_billing = [
     day: "30",
     count: "20",
     price: "990",
-    planId:'plan_E3A2IsyawGftyG'
+    planId: "plan_E3A2IsyawGftyG"
   },
   {
     key: "4",
@@ -81,7 +92,7 @@ const data_billing = [
     day: "365",
     count: "20",
     price: "3900",
-    planId:'plan_E39heLSMTrmgz2'
+    planId: "plan_E39heLSMTrmgz2"
   },
   {
     key: "5",
@@ -89,7 +100,7 @@ const data_billing = [
     day: "30",
     count: "30",
     price: "7500",
-    planId:'plan_E39hqMhI66scAu'
+    planId: "plan_E39hqMhI66scAu"
   },
   {
     key: "6",
@@ -97,84 +108,144 @@ const data_billing = [
     day: "365",
     count: "30",
     price: "9900",
-    planId:'plan_E39iI5My03ajch'
+    planId: "plan_E39iI5My03ajch"
   }
 ];
 
 const content1 = (
   <div style={{ lineHeight: -5 }}>
-    <span>Dentist can upload up to 10 document during 30 days.</span>
+    <span>
+      Vous pouvez importer jusqu'à 10 devis tous les 30 jours pendant 3 mois.
+    </span>
     <br />
-    <span>Counter of document reset to 0 on the next 30 days period. </span>
+    <span>
+      Le compteur des documents se remettra automatiquement à jour afin de
+      savoir à tout moment le nombre de devis que vous pouvez importer.{" "}
+    </span>
     <br />
-    <span>Price 390euros per month during 3 months </span>
+    <span>
+      Le prix de cette offre est de 390 euros par mois pendant 3 mois, soit un
+      total de 1170 euros sur le trimestre.
+    </span>
+    <br />
+    <span>
+      Vous pouvez à tout moment annuler le renouvellement automatique pour la
+      prochaine période de facturation jusqu'à 30 jours à l'avance
+    </span>
   </div>
 );
 
 const content2 = (
   <div style={{ lineHeight: -5 }}>
-    <span>dentist can upload up to 10 document during 30 days. </span>
-    <br />
-    <span>counter of document reset to 0 on the next 30 days period.</span>
-    <br />
-    <span>(make the counter displayed on the front end, </span>
+    <span>
+      Vous pouvez importer jusqu'à 10 devis tous les 30 jours pendant 1 an.
+    </span>
     <br />
     <span>
-      price 3900euros per 365 days (credited 3900 euros in one time for 365
-      days){" "}
+      Le compteur des documents se remettra automatiquement à jour afin de
+      savoir à tout moment le nombre de devis que vous pouvez importer.{" "}
+    </span>
+    <br />
+    <span>
+      Le prix de cette offre est de 3900 euros sur 1 an (à compter de la date
+      d'abonnement).
+    </span>
+    <br />
+    <span>
+      Vous pouvez à tout moment annuler le renouvellement automatique pour la
+      prochaine période de facturation jusqu'à 30 jours à l'avance
     </span>
   </div>
 );
 
 const content4 = (
   <div style={{ lineHeight: -5 }}>
-    <span>dentist can upload up to 20 document during 30 days.</span>
+    <span>
+      Vous pouvez importer jusqu'à 20 devis tous les 30 jours pendant 1 an.
+    </span>
     <br />
-    <span>counter of document reset to 0 on the next 30 days period.</span>
+    <span>
+      Le compteur des documents se remettra automatiquement à jour afin de
+      savoir à tout moment le nombre de devis que vous pouvez importer.{" "}
+    </span>
     <br />
-    <span>price 7500euros per 365 days</span>
+    <span>
+      Le prix de cette offre est de 7500 euros sur 1 an (à compter de la date
+      d'abonnement).
+    </span>
     <br />
-    <span>(credited 7500 euros in one time for 365 days) </span>
+    <span>
+      Vous pouvez à tout moment annuler le renouvellement automatique pour la
+      prochaine période de facturation jusqu'à 30 jours à l'avance
+    </span>
   </div>
 );
 
 const content3 = (
   <div style={{ lineHeight: -5 }}>
-    <span>dentist can upload up to 20 document during 30 days. </span>
-    <br />
-    <span>counter of document reset to 0 on the next 30 days period. </span>
-    <br />
-    <span>price 750euros per month during 3 months </span>
+    <span>
+      Vous pouvez importer jusqu'à 20 devis tous les 30 jours pendant 3 mois.
+    </span>
     <br />
     <span>
-      (credited 750 euros per month 3 times, so total amount credited 2250euros){" "}
+      Le compteur des documents se remettra automatiquement à jour afin de
+      savoir à tout moment le nombre de devis que vous pouvez importer.{" "}
+    </span>
+    <br />
+    <span>
+      Le prix de cette offre est de 750 euros par mois pendant 3 mois, soit un
+      total de 2250 euros sur le trimestre.
+    </span>
+    <br />
+    <span>
+      Vous pouvez à tout moment annuler le renouvellement automatique pour la
+      prochaine période de facturation jusqu'à 30 jours à l'avance
     </span>
   </div>
 );
 
 const content5 = (
   <div style={{ lineHeight: -5 }}>
-    <span>dentist can upload up to 30 document during 30 days.</span>
-    <br />
-    <span>counter of document reset to 0 on the next 30 days period.</span>
-    <br />
-    <span>price 990euros per month during 3 months</span>
+    <span>
+      Vous pouvez importer jusqu'à 30 devis tous les 30 jours pendant 3 mois.
+    </span>
     <br />
     <span>
-      (credited 990 euros per month 3 times, so total amount credited 2970euros)
+      Le compteur des documents se remettra automatiquement à jour afin de
+      savoir à tout moment le nombre de devis que vous pouvez importer.{" "}
+    </span>
+    <br />
+    <span>
+      Le prix de cette offre est de 990 euros par mois pendant 3 mois, soit un
+      total de 2970 euros sur le trimestre.
+    </span>
+    <br />
+    <span>
+      Vous pouvez à tout moment annuler le renouvellement automatique pour la
+      prochaine période de facturation jusqu'à 30 jours à l'avance
     </span>
   </div>
 );
 
 const content6 = (
   <div style={{ lineHeight: -5 }}>
-    <span>dentist can upload up to 30 document during 30 days.</span>
-    <br />
-    <span>counter of document reset to 0 on the next 30 days period. </span>
+    <span>
+      Vous pouvez importer jusqu'à 10 devis tous les 30 jours pendant 1 an.
+    </span>
     <br />
     <span>
-      price 9900euros per 365 days (credited 9900 euros in one time for 365
-      days){" "}
+      Le compteur des documents se remettra automatiquement à jour afin de
+      savoir à tout moment le nombre de devis que vous pouvez importer.{" "}
+    </span>
+    <br />
+    <span>
+      Le prix de cette offre est de 9900 euros sur 1 an (à compter de la date
+      d'abonnement).
+    </span>
+    <br />
+    <span>
+      Vous pouvez à tout moment annuler le renouvellement automatique pour la
+      prochaine période de facturation jusqu'à 30 jours à l'avance
     </span>
   </div>
 );
@@ -212,7 +283,7 @@ class DentistManage extends React.Component {
       offer_content: "",
       password: pwa,
       phone: "",
-      subscriptionDetails:null
+      subscriptionDetails: null
     };
     this.showDragDrop = this.showDragDrop.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -226,7 +297,7 @@ class DentistManage extends React.Component {
         title: "Offer Number",
         dataIndex: "Offernumber",
         key: "Offernumber"
-      },
+      }
       /* {
         title: "Subscription Date",
         key: "subscription_date",
@@ -314,23 +385,33 @@ class DentistManage extends React.Component {
         subscription: res.data.data.subscription
       });
 
-      axios.get(`/api/subscriptions/${res.data.data.email}`).then(
-        ({data})=> {
+      axios
+        .get(`/api/subscriptions/${res.data.data.email}`)
+        .then(({ data }) => {
           const subs = data.map(
-            ({end,start,subscription:{Offernumber:OfferNumber},subscriptionId,userId})=>({
-              end:strFromDate(end),start:strFromDate(start),subscriptionId,OfferNumber,userId
-            }))
+            ({
+              end,
+              start,
+              subscription: { Offernumber: OfferNumber },
+              subscriptionId,
+              userId
+            }) => ({
+              end: strFromDate(end),
+              start: strFromDate(start),
+              subscriptionId,
+              OfferNumber,
+              userId
+            })
+          );
 
           this.setState(
-            state=>({...state,subs}),
-            ()=>console.log(this.state.subs)
-            )
-            
-        })
+            state => ({ ...state, subs }),
+            () => console.log(this.state.subs)
+          );
+        });
     });
 
-    console.log(useradmin)
-    
+    console.log(useradmin);
   }
 
   onChange = e => {
@@ -338,35 +419,39 @@ class DentistManage extends React.Component {
     this.setState({
       subscription: e.target.value
     });
-    if (e.target.value == 1) {
+    if (e.target.value === 1) {
       this.setState({ offer_pay: 390, offer_content: "Offer 1" });
     }
-    if (e.target.value == 2) {
+    if (e.target.value === 2) {
       this.setState({ offer_pay: 3900, offer_content: "Offer 2" });
     }
-    if (e.target.value == 3) {
+    if (e.target.value === 3) {
       this.setState({ offer_pay: 750, offer_content: "Offer 3" });
     }
-    if (e.target.value == 4) {
+    if (e.target.value === 4) {
       this.setState({ offer_pay: 7500, offer_content: "Offer 4" });
     }
-    if (e.target.value == 5) {
+    if (e.target.value === 5) {
       this.setState({ offer_pay: 990, offer_content: "Offer 5" });
     }
-    if (e.target.value == 6) {
-      this.setState({ offer_pay: 9900, offer_content: "Offer 6" }); }
+    if (e.target.value === 6) {
+      this.setState({ offer_pay: 9900, offer_content: "Offer 6" });
+    }
 
-     if(e.target.value){
-      const [subscriptionDetails]= data_billing.filter(
-            item => item.key == e.target.value
-          )
-        
+    if (e.target.value) {
+      const [subscriptionDetails] = data_billing.filter(
+        item => item.key === e.target.value
+      );
+
       this.setState(
-        state=> ({...state,subscription:e.target.value,subscriptionDetails}),
-        ()=>console.log(this.state)
-      )    
-      
-     }
+        state => ({
+          ...state,
+          subscription: e.target.value,
+          subscriptionDetails
+        }),
+        () => console.log(this.state)
+      );
+    }
     // }
   };
 
@@ -812,10 +897,15 @@ class DentistManage extends React.Component {
                   name={"Payment Subscription"}
                   description={this.state.offer_content}
                   amount={this.state.offer_pay}
-                  planId={ this.state.subscriptionDetails && this.state.subscriptionDetails.planId}
+                  planId={
+                    this.state.subscriptionDetails &&
+                    this.state.subscriptionDetails.planId
+                  }
                   email={this.state.email}
-                  subscription={this.state.subscriptionDetails && this.state.subscriptionDetails}
-                 
+                  subscription={
+                    this.state.subscriptionDetails &&
+                    this.state.subscriptionDetails
+                  }
                 />
               </center>
 
@@ -839,44 +929,79 @@ class DentistManage extends React.Component {
             <Panel header="Subscription Area" key="2">
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
-                  <Table 
-                    columns={[{
-                      title: 'Offer Number',
-                      dataIndex: 'OfferNumber',
-                      key: 'OfferNumber',
-                    }, {
-                      title: 'Subscription Date',
-                      dataIndex: 'start',
-                      key: 'start',
-                    }, {
-                      title: 'Renew Date',
-                      dataIndex: 'end',
-                      key: 'end',
-                    },
-                  
-                    {
-                      title: 'Action',
-                      key: 'subscriptionId',
-                      render:({subscriptionId,OfferNumber,userId}) => <a href="#" style={{textDecoration:'none',padding:'8px',border:'1px solid #eee', borderRadius:'7px',color:'#fff',background:'#d00'}} onClick={(e)=>{
-                          e.preventDefault()
-                          if( window.confirm("Are you sure ??"))
-                            axios.post(`api/subscription/cancel/${subscriptionId}`,{
-                              userId,
-                              OfferNumber
-                            }).then(
-                              ({data}) => {
-                                alert(data.message)
-                                window.location.reload()
-                              }
-                            )
-                      }}>Cancel</a>
-                    }
-                  ]}
+                  <Table
+                    rowKey="uid"
+                    columns={[
+                      {
+                        title: "Offer Number",
+                        dataIndex: "OfferNumber",
+                        key: "OfferNumber"
+                      },
+                      {
+                        title: "Subscription Date",
+                        dataIndex: "start",
+                        key: "start"
+                      },
+                      {
+                        title: "Renew Date",
+                        dataIndex: "end",
+                        key: "end"
+                      },
 
-                    dataSource={this.state.subs && this.state.subs.map(
-                      ({start,end, subscriptionId,OfferNumber,userId})=>({OfferNumber,start,end,subscriptionId,userId})
-                    )}
-                  
+                      {
+                        title: "Action",
+                        key: "subscriptionId",
+                        render: ({ subscriptionId, OfferNumber, userId }) => (
+                          <a
+                            // href="#"
+                            style={{
+                              textDecoration: "none",
+                              padding: "8px",
+                              border: "1px solid #eee",
+                              borderRadius: "7px",
+                              color: "#fff",
+                              background: "#d00"
+                            }}
+                            onClick={e => {
+                              e.preventDefault();
+                              if (window.confirm("Are you sure ??"))
+                                axios
+                                  .post(
+                                    `api/subscription/cancel/${subscriptionId}`,
+                                    {
+                                      userId,
+                                      OfferNumber
+                                    }
+                                  )
+                                  .then(({ data }) => {
+                                    alert(data.message);
+                                    window.location.reload();
+                                  });
+                            }}
+                          >
+                            Cancel
+                          </a>
+                        )
+                      }
+                    ]}
+                    dataSource={
+                      this.state.subs &&
+                      this.state.subs.map(
+                        ({
+                          start,
+                          end,
+                          subscriptionId,
+                          OfferNumber,
+                          userId
+                        }) => ({
+                          OfferNumber,
+                          start,
+                          end,
+                          subscriptionId,
+                          userId
+                        })
+                      )
+                    }
                   />
 
                   {/* dataSource={this.state.data_document}  */}
@@ -892,9 +1017,8 @@ class DentistManage extends React.Component {
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
                   <Table
-                    columns={[
-                      {title:'Offer Number',}
-                    ]}
+                    rowKey="uid"
+                    columns={[{ title: "Offer Number" }]}
                     dataSource={data_billing}
                   />
                   {/* dataSource={this.state.data_document}  */}

@@ -100,6 +100,7 @@ class Register extends Component {
             src="https://cdn.icon-icons.com/icons2/209/PNG/128/go-back256_24856.png"
             width="50"
             height="50"
+            alt="Retourner à l'Accueuil"
             style={{ margin: 30 }}
           />
         </Link>

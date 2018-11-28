@@ -387,6 +387,7 @@ class AdminManage extends React.Component {
             <div className="card-view">
               <Card>
                 <Table
+                  rowKey="uid"
                   columns={this.columns}
                   dataSource={this.state.data_document}
                 />

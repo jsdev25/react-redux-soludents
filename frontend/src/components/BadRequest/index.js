@@ -8,6 +8,7 @@ class Error extends Component {
         <img
           style={{ height: "100vh", width: "100%" }}
           src="https://issues.jboss.org/secure/attachment/12387931/404-page-04.png"
+          alt="Retourner à l'Accueuil"
         />
         <Link
           to="/"

@@ -1,93 +1,90 @@
-import React, { Component } from 'react';
-import { Row, Col, List, Card, Progress, message} from 'antd';
-import axios from 'axios';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { addDocument } from '../../../../actions/authentication';
-import { Z_ASCII } from 'zlib';
+import React, { Component } from "react";
+import { Row, Col, List, Card, Progress, message } from "antd";
+import axios from "axios";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { addDocument } from "../../../../actions/authentication";
+// import { Z_ASCII } from 'zlib';
 
-const endpoint = 'http://localhost:5000/api/documents/upload/'
-const useradmin=JSON.parse(localStorage.getItem("UserAdmin"));
+const endpoint = "http://localhost:5000/api/documents/upload/";
+const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 let length = 0;
 let default_count = 9;
 
 class ManageFile extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       selectedFile: null,
       loaded: 0,
-      hidden:true,
-      data_lists:[],   
-      me_lists:[],
-      username:'',
-      real_count:'',
+      hidden: true,
+      data_lists: [],
+      me_lists: [],
+      username: "",
+      real_count: "",
       length
-    }
+    };
   }
 
-  componentDidMount(){
-    axios.get('/api/documents/'+ useradmin)
-    .then(res => {
-        const data_lists = res.data;
-        this.setState({ data_lists });
-        length = res.data.length;
-        console.log('mylength', length)
+  componentDidMount() {
+    axios.get("/api/documents/" + useradmin).then(res => {
+      const data_lists = res.data;
+      this.setState({ data_lists });
+      length = res.data.length;
+      console.log("mylength", length);
     });
-    axios.get('/api/members/'+ useradmin)
-    .then(res => {
-        const me_lists = res.data;
-        this.setState({ me_lists });
-        (this.state.me_lists.data.subscription == 1) ? default_count =9 : null;
-        (this.state.me_lists.data.subscription == 2) ? default_count =9 : null;
-        (this.state.me_lists.data.subscription == 3) ? default_count =19 : null;
-        (this.state.me_lists.data.subscription == 4) ? default_count =19 : null;
-        (this.state.me_lists.data.subscription == 5) ? default_count =29 : null;
-        (this.state.me_lists.data.subscription == 6) ? default_count =29 : null;
-        this.setState({real_count:default_count-length+1})
-        console.log('mylength 222', this.state.real_count)
-
-
+    axios.get("/api/members/" + useradmin).then(res => {
+      const me_lists = res.data;
+      this.setState({ me_lists });
+      this.state.me_lists.data.subscription === 1 ? (default_count = 9) : null;
+      this.state.me_lists.data.subscription === 2 ? (default_count = 9) : null;
+      this.state.me_lists.data.subscription === 3 ? (default_count = 19) : null;
+      this.state.me_lists.data.subscription === 4 ? (default_count = 19) : null;
+      this.state.me_lists.data.subscription === 5 ? (default_count = 29) : null;
+      this.state.me_lists.data.subscription === 6 ? (default_count = 29) : null;
+      this.setState({ real_count: default_count - length + 1 });
+      console.log("mylength 222", this.state.real_count);
     });
   }
 
   handleselectedFile = event => {
     this.setState({
       selectedFile: event.target.files[0],
-      loaded: 0,
-    })
-  }
+      loaded: 0
+    });
+  };
 
   handleUpload = () => {
-
     let that = this;
 
-    if(this.state.selectedFile == null){
-      message.error('Please input file!')
+    if (this.state.selectedFile == null) {
+      message.error("Please input file!");
       return true;
     }
 
-    const data = new FormData()
-    data.append('file', this.state.selectedFile, this.state.selectedFile.name)
+    const data = new FormData();
+    data.append("file", this.state.selectedFile, this.state.selectedFile.name);
 
     if (length > default_count) {
-      message.error('Your document count is limited ');
+      message.error("Your document count is limited ");
       return false;
     }
 
-    if (this.state.selectedFile.name.slice(-4) === '.pdf' ||
-        this.state.selectedFile.name.slice(-4) === '.png' ||
-        this.state.selectedFile.name.slice(-4) === '.doc' ||
-        this.state.selectedFile.name.slice(-5) === '.docx' ||
-        this.state.selectedFile.name.slice(-5) === '.jpeg') {
+    if (
+      this.state.selectedFile.name.slice(-4) === ".pdf" ||
+      this.state.selectedFile.name.slice(-4) === ".png" ||
+      this.state.selectedFile.name.slice(-4) === ".doc" ||
+      this.state.selectedFile.name.slice(-5) === ".docx" ||
+      this.state.selectedFile.name.slice(-5) === ".jpeg"
+    ) {
     } else {
-      message.error ('wrong file extension');
+      message.error("wrong file extension");
       return false;
-    } 
+    }
 
     if (this.state.selectedFile.size > 10240000) {
-      message.error ('Maximun size 10MB!');
+      message.error("Maximun size 10MB!");
       return false;
     }
 
@@ -95,9 +92,9 @@ class ManageFile extends Component {
       .post(endpoint, data, {
         onUploadProgress: ProgressEvent => {
           this.setState({
-            loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100,
-          })
-        },
+            loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+          });
+        }
       })
       .then(res => {
         length++;
@@ -105,38 +102,49 @@ class ManageFile extends Component {
           Filename: "",
           directory: "",
           dentist_id: useradmin,
-          dentist_name :this.props.username,
+          dentist_name: this.props.username,
           operator_id: "",
           operator_name: ""
-      }
-      var today = new Date().toJSON().slice(0,24).replace(/-/g,'/');
+        };
+        var today = new Date()
+          .toJSON()
+          .slice(0, 24)
+          .replace(/-/g, "/");
 
         const NewData = {
           Filename: this.state.selectedFile.name,
           created_date: today,
-          status: "In Progress",
-      }
-          this.props.addDocument(document, this.props.history);
-          that.setState({real_count: that.state.real_count - 1})
-          that.setState({data_lists: [...that.state.data_lists, NewData]}, () => {
-          });
+          status: "In Progress"
+        };
+        this.props.addDocument(document, this.props.history);
+        that.setState({ real_count: that.state.real_count - 1 });
+        that.setState(
+          { data_lists: [...that.state.data_lists, NewData] },
+          () => {}
+        );
       })
-      .catch(e=>{
-        console.log('💀💀💀💀💀💀💀💀💀💀💀💀💀💀', e)
-      })
-  }
+      .catch(e => {
+        console.log("💀💀💀💀💀💀💀💀💀💀💀💀💀💀", e);
+      });
+  };
 
   showModal = () => {
     this.setState({
-      hidden:false,
+      hidden: false
     });
-  }
+  };
 
   render() {
     return (
       <div className="App">
-      <p>You can currently upload <span style={{color:'red',fontSize:20}}>{this.state.real_count}</span> documents based on your active subscriptions.</p>
-        <Card style={{backgroundColor:'#f5f6f8', height:50}}>
+        <p>
+          You can currently upload{" "}
+          <span style={{ color: "red", fontSize: 20 }}>
+            {this.state.real_count}
+          </span>{" "}
+          documents based on your active subscriptions.
+        </p>
+        <Card style={{ backgroundColor: "#f5f6f8", height: 50 }}>
           <Row>
             <Col xs={12}>File</Col>
             <Col xs={5}>Status</Col>
@@ -144,46 +152,58 @@ class ManageFile extends Component {
           </Row>
         </Card>
         <List
-            itemLayout="horizontal"
-            dataSource={this.state.data_lists}
-            renderItem={item => (
+          itemLayout="horizontal"
+          dataSource={this.state.data_lists}
+          renderItem={item => (
             <List.Item>
-                <List.Item.Meta
-                    title={
-                        <div style={{paddingLeft:12}}>
-                          <Row>
-                            <Col xs={8}>{item.Filename}</Col>
-                            <Col xs={4}>{item.status}</Col>
-                            <Col xs={4}>
-                             {  
-                                item.status === 'Successful'
-                                ?<Progress percent={100}/>
-                                : item.status === 'Un Successful' 
-                                  ? <Progress percent={50} status="exception" showInfo={false}/>
-                                  : <Progress percent={50} showInfo={false}/>
-                             }  
-                            </Col>
-                            <Col xs={8}>{item.created_date.replace('T',' ').substring(0,19)}</Col>
-                          </Row>
-                        </div>
-                    }
-                />
+              <List.Item.Meta
+                title={
+                  <div style={{ paddingLeft: 12 }}>
+                    <Row>
+                      <Col xs={8}>{item.Filename}</Col>
+                      <Col xs={4}>{item.status}</Col>
+                      <Col xs={4}>
+                        {item.status === "Successful" ? (
+                          <Progress percent={100} />
+                        ) : item.status === "Un Successful" ? (
+                          <Progress
+                            percent={50}
+                            status="exception"
+                            showInfo={false}
+                          />
+                        ) : (
+                          <Progress percent={50} showInfo={false} />
+                        )}
+                      </Col>
+                      <Col xs={8}>
+                        {item.created_date.replace("T", " ").substring(0, 19)}
+                      </Col>
+                    </Row>
+                  </div>
+                }
+              />
             </List.Item>
-            )}
+          )}
         />
 
-        <div style={{textAlign:'center',marginTop:20}}>
-          <input type="file" name="" id="" onChange={this.handleselectedFile} accept=".jpg, .jpeg, .png, .doc, .docx, .pdf"/> 
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <input
+            type="file"
+            name=""
+            id=""
+            onChange={this.handleselectedFile}
+            accept=".jpg, .jpeg, .png, .doc, .docx, .pdf"
+          />
           <button onClick={this.handleUpload.bind(this)}>File Upload</button>
           <div> {Math.round(this.state.loaded, 2)} %</div>
         </div>
       </div>
-    )
+    );
   }
 }
 
 ManageFile.propTypes = {
-  addDocument: PropTypes.func.isRequired,
+  addDocument: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -191,4 +211,7 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps,{ addDocument })(withRouter(ManageFile))
+export default connect(
+  mapStateToProps,
+  { addDocument }
+)(withRouter(ManageFile));

@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css";
 import {
   Avatar,
   Button,
@@ -43,7 +44,10 @@ const columns_history = [
   {
     title: "Fichier",
     dataIndex: "Filename",
-    key: "Filename"
+    key: "Filename",
+    onFilter: (value, record) => record.Filename.indexOf(value) === 0,
+    sorter: (a, b) =>
+      a.Filename ? a.Filename.length : 0 - b.Filename ? b.Filename.length : 0
   },
   {
     title: "Statut",
@@ -842,20 +846,44 @@ class AdminStuff extends React.Component {
             </Card>
           </Col>
 
-          <CSVLink data={this.state.dummy}>
+          <a
+            href="https://docs.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button
-              type="primary"
-              style={{ float: "right", marginLeft: 20, marginTop: 20 }}
+              style={{
+                marginTop: 20,
+                float: "right",
+                backgroundColor: "#00a99d",
+                color: "#fff",
+                width: "270px",
+                marginLeft: "10px",
+                height: 50
+              }}
             >
               Base de données Organismes de Prêts
             </Button>
-          </CSVLink>
+          </a>
 
-          <CSVLink data={this.state.dummy}>
-            <Button type="primary" style={{ float: "right", marginTop: 20 }}>
+          <a
+            href="https://docs.google.com/spreadsheets/d/1B9QqcMaeTJaLu86nOO13n8XXfpmor54-B0lx2nHOVcA/edit?usp=sharing"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <Button
+              style={{
+                marginTop: 20,
+                float: "right",
+                backgroundColor: "#00a99d",
+                color: "#fff",
+                width: 200,
+                height: 50
+              }}
+            >
               Base de donnée Mutuelles
             </Button>
-          </CSVLink>
+          </a>
         </Row>
 
         <Modal
@@ -1324,11 +1352,15 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <Table
+            rowKey="uid"
             dataSource={this.state.data_histories}
             columns={columns_history}
           />
 
-          <Button onClick={this.DownloadCSV.bind(this)}> View History</Button>
+          <Button onClick={this.DownloadCSV.bind(this)}>
+            {" "}
+            Voir l'historique
+          </Button>
         </Modal>
 
         <Modal

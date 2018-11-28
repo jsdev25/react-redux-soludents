@@ -10,8 +10,7 @@ import {
   Collapse,
   Input,
   Progress,
-  Select,
-  message
+  Select
 } from "antd";
 import {
   logoutUser,
@@ -336,28 +335,50 @@ class OperatorManage extends React.Component {
             <div className="card-view">
               <Card>
                 <Table
+                  rowKey="uid"
                   columns={this.columns}
                   dataSource={this.state.data_document}
                 />
               </Card>
 
-              <CSVLink data={this.state.dummy}>
+              <a
+                href="https://docs.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Button
-                  type="primary"
-                  style={{ float: "right", marginLeft: 20, marginTop: 20 }}
+                  style={{
+                    marginTop: 20,
+                    float: "right",
+                    backgroundColor: "#00a99d",
+                    color: "#fff",
+                    width: "270px",
+                    marginLeft: "10px",
+                    height: 50
+                  }}
                 >
                   Base de données Organismes de Prêts
                 </Button>
-              </CSVLink>
+              </a>
 
-              <CSVLink data={this.state.dummy}>
+              <a
+                href="https://docs.google.com/spreadsheets/d/1B9QqcMaeTJaLu86nOO13n8XXfpmor54-B0lx2nHOVcA/edit?usp=sharing"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 <Button
-                  type="primary"
-                  style={{ float: "right", marginTop: 20 }}
+                  style={{
+                    marginTop: 20,
+                    float: "right",
+                    backgroundColor: "#00a99d",
+                    color: "#fff",
+                    width: 200,
+                    height: 50
+                  }}
                 >
                   Base de donnée Mutuelles
                 </Button>
-              </CSVLink>
+              </a>
             </div>
           </Col>
         </Row>

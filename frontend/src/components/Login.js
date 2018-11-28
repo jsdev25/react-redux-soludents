@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginAdmin } from "../actions/authentication";
 import classnames from "classnames";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 
 class Login extends Component {
@@ -61,6 +61,7 @@ class Login extends Component {
         <Link to="/">
           <img
             src="https://cdn.icon-icons.com/icons2/209/PNG/128/go-back256_24856.png"
+            alt="Retourner à l'Accueuil"
             width="50"
             height="50"
             style={{ margin: 30 }}
@@ -122,7 +123,7 @@ class Login extends Component {
               </Link>
 
               <Link to="/reset/password">
-              <button
+                <button
                   className="btn btn-success"
                   style={{
                     width: "100%",
