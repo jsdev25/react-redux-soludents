@@ -55,6 +55,20 @@ app.get('/api/subscriptions/:email', (req,res)=>{
 })
 
 
+app.post('/api/subscription/cancel/:id', (req,res)=>{
+  const {id} = req.params
+  stripe.subscriptions.del(id,(err,response)=>{
+    if(!err)
+      Subscription.deleteOne({subscriptionId:id}, (err)=>{
+        if(!err)
+          res.json({message:'Your subscription has been cancelled'})
+      })
+    else
+      res.json({message:'Some Error has been Occured'})
+  })
+})
+
+
 app.post("/api/stripe", (req, res) => {
   //stripe.charges.create(req.body, postStripeCharge(res));
 

@@ -12,11 +12,13 @@ const fromEuroToCent = amount => amount * 100;
 const successPayment = data => {
   alert('Payment Successful');
   localStorage.setItem('payment', 1);
+  window.location.reload()
   //console.log(data);
 };
 
 const errorPayment = data => {
   alert('Payment Error');
+  window.location.reload()
   //console.log(data);
 };
 

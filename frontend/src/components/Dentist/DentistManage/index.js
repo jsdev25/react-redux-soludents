@@ -859,9 +859,13 @@ class DentistManage extends React.Component {
                       key: 'subscriptionId',
                       render:({subscriptionId}) => <a href="#" style={{textDecoration:'none',padding:'8px',border:'1px solid #eee', borderRadius:'7px',color:'#fff',background:'#d00'}} onClick={(e)=>{
                           e.preventDefault()
-                          axios.post(`api/subscription/cancel/${subscriptionId}`).then(
-                            ({data}) => alert(data.message)
-                          )
+                          if( window.confirm("Are you sure ??"))
+                            axios.post(`api/subscription/cancel/${subscriptionId}`).then(
+                              ({data}) => {
+                                alert(data.message)
+                                window.location.reload()
+                              }
+                            )
                       }}>Cancel</a>
                     }
                   ]}
