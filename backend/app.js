@@ -99,11 +99,31 @@ const getUserDetailsByEmail = (email) =>{
 
 app.post('/api/subscription/cancel/:id', (req,res)=>{
   const {id} = req.params
+  const {OfferNumber,userId} = req.body
   stripe.subscriptions.del(id,(err,response)=>{
     if(!err)
       Subscription.deleteOne({subscriptionId:id}, (err)=>{
         if(!err){
-          res.json({message:'Your subscription has been cancelled'})
+          getUserDetailsByEmail(userId).then(
+            ({name,lastname}) =>{
+              console.log({name,lastname})
+              MailerWithConfig({
+                from: 'info@soludents.com', // sender address
+                to: userId,
+                subject: 'Soludents: Your subscription has been cancelled',
+                html:`
+                <b>
+                Hello, ${name} ${lastname || ""},
+                Your subscription ${ id } based on the ${ OfferNumber } has been successfully cancelled.
+                Best regards, Soludents team
+               </b>
+                `                                
+            })(
+              rs=> res.json({message:'Your subscription has been cancelled'})
+            )
+            }
+          )
+          
         }
           
       })
