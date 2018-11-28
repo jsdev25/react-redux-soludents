@@ -36,9 +36,18 @@ const pwa = JSON.parse(localStorage.getItem("pwa"));
 const RadioGroup = Radio.Group;
 
 
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  return `${date}/${month}/${year}`;
+}
+
+
 const strFromDate = (str) => {
-  let d = new Date(str)
-  return `${d.getDate()}/${d.getDay()}/${d.getFullYear()}`
+  return timeConverter(str)
 }
 
 const data_billing = [
@@ -850,7 +859,9 @@ class DentistManage extends React.Component {
                       key: 'subscriptionId',
                       render:({subscriptionId}) => <a href="#" style={{textDecoration:'none',padding:'8px',border:'1px solid #eee', borderRadius:'7px',color:'#fff',background:'#d00'}} onClick={(e)=>{
                           e.preventDefault()
-                          alert(subscriptionId)
+                          axios.post(`api/subscription/cancel/${subscriptionId}`).then(
+                            ({data}) => alert(data.message)
+                          )
                       }}>Cancel</a>
                     }
                   ]}
