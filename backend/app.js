@@ -9,7 +9,9 @@ const documents = require("./routes/document");
 const members = require("./routes/member");
 const histories = require("./routes/history");
 const emails = require("./routes/email");
-
+const mailer = require('nodemailer')
+const mailConfig = require('./models/constants/email')
+const Member = require('./models/Member')
 //This is stripe mode.
 const stripe = require("./models/constants/stripe");
 
@@ -45,6 +47,33 @@ app.use("/api/emails", emails);
 
 //////////////This is stripe test mode////////////////
 
+const Mail = config => options => callback => {
+  let connection =  mailer.createTransport({
+   host:'smtp.gmail.com',
+   port:587,
+   auth: {
+       user:config.username ,
+       pass: config.password
+   },
+   tls: {
+       rejectUnauthorized: true
+   }
+   })
+
+   connection.sendMail(options, (error, info) => {
+       if (error) {
+       //    res.status(500).json({ code:'500',message:'fail',error: error });
+          return console.log(error);
+       } else {
+           console.log('Message %s sent: %s', info.messageId, info.response);
+           callback(info);
+           // res.status(200).json({ code:'200',message:'success'});
+       }
+   })
+
+} 
+
+const MailerWithConfig = Mail(mailConfig);
 
 app.get('/api/subscriptions/:email', (req,res)=>{
   Subscription.find({userId:req.params.email},(err, data)=>{
@@ -54,14 +83,29 @@ app.get('/api/subscriptions/:email', (req,res)=>{
   })
 })
 
+const getUserDetailsByEmail = (email) =>{
+  return new Promise(
+    (resolve,reject)=>{
+      Member.findOne({email},(err,data)=>{
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    }
+  )
+}
 
 app.post('/api/subscription/cancel/:id', (req,res)=>{
   const {id} = req.params
   stripe.subscriptions.del(id,(err,response)=>{
     if(!err)
       Subscription.deleteOne({subscriptionId:id}, (err)=>{
-        if(!err)
+        if(!err){
           res.json({message:'Your subscription has been cancelled'})
+        }
+          
       })
     else
       res.json({message:'Some Error has been Occured'})
@@ -104,7 +148,23 @@ app.post("/api/stripe", (req, res) => {
 
             s.save().then(
               ss => {
-                res.json({message:`subscription added successfully`})
+                getUserDetailsByEmail(email).then(
+                  ({name,lastname})=> {
+                    MailerWithConfig({
+                        from: 'info@soludents.com', // sender address
+                        to: email,
+                        subject: 'Soludents: Your subscription has been processed',
+                        html: `
+                        <b>
+                        Hello, ${name} ${lastname || ""}, Your subscription ${id} based on the ${ subscription.Offernumber } has been processed and confirmed.Best regards, Soludents team
+                        </b>
+                        `                                
+                    })(
+                      rs=> res.json({message:`subscription added successfully`})
+                    )
+                  }
+                )
+                
               }
             )
           }
@@ -121,6 +181,14 @@ const postStripeCharge = res => (stripeErr, stripeRes) => {
     res.status(200).send({ success: stripeRes });
   }
 };
+
+app.get('/emails/test/:email',(req,res)=>{
+  getUserDetailsByEmail(req.params.email).then(
+    data => res.json(data)
+  ).catch(
+    err=> res.json({error:JSON.stringify(err)})
+  )
+})
 //////////////////////////////////////////////////////
 
 const PORT = process.env.PORT || 5000;
