@@ -307,10 +307,16 @@ class DentistManage extends React.Component {
 
       axios.get(`/api/subscriptions/${res.data.data.email}`).then(
         ({data})=> {
+          const subs = data.map(
+            ({end,start,subscription:{Offernumber:OfferNumber},subscriptionId,userId})=>({
+              end:strFromDate(end),start:strFromDate(start),subscriptionId,OfferNumber,userId
+            }))
+
           this.setState(
-            state=>({...state,subs:data}),
-            ()=>console.log(this.state)
-          )  
+            state=>({...state,subs}),
+            ()=>console.log(this.state.subs)
+            )
+            
         })
     });
 
@@ -824,23 +830,36 @@ class DentistManage extends React.Component {
             <Panel header="Subscription Area" key="2">
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
-                <table>
-                    <thead>
+                  <Table 
+                    columns={[{
+                      title: 'Offer Number',
+                      dataIndex: 'OfferNumber',
+                      key: 'OfferNumber',
+                    }, {
+                      title: 'Subscription Date',
+                      dataIndex: 'start',
+                      key: 'start',
+                    }, {
+                      title: 'Renew Date',
+                      dataIndex: 'end',
+                      key: 'end',
+                    },
+                  
+                    {
+                      title: 'Action',
+                      key: 'subscriptionId',
+                      render:({subscriptionId}) => <a href="#" style={{textDecoration:'none',padding:'8px',border:'1px solid #eee', borderRadius:'7px',color:'#fff',background:'#d00'}} onClick={(e)=>{
+                          e.preventDefault()
+                          alert(subscriptionId)
+                      }}>Cancel</a>
+                    }
+                  ]}
 
-                    </thead>
-                    <tbody>
-                      {this.state.subs && this.state.subs .map(
-                        ({start,end,subscription:{Offernumber},subscriptionId})=><tr>
-                          <td>{Offernumber}</td>
-                          <td>{strFromDate(start)}</td>
-                          <td>{strFromDate(end)}</td>
-                          <td>
-                            <button>Cancel</button>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+                    dataSource={this.state.subs && this.state.subs.map(
+                      ({start,end, subscriptionId,OfferNumber})=>({OfferNumber,start,end,subscriptionId})
+                    )}
+                  
+                  />
 
                   {/* dataSource={this.state.data_document}  */}
                 </Card>
