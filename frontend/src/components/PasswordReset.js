@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios"
 import {Input,Button} from "antd"
-const Wrapper = ({children,visible})=> <div style={{padding:'5px 0px 5px 0px',display:visible?'block':'none'}}>
+export const Wrapper = ({children,visible})=> <div style={{padding:'5px 0px 5px 0px',display:visible?'block':'none'}}>
     {children}
 </div>
 
@@ -17,9 +17,7 @@ class PasswordReset extends React.Component {
     }
 
     sendEmail(email){
-        axios.post(`/api/members/password_reset/${email}`,(err,{data})=>{
-            console.log(data)
-        }).then(
+        axios.post(`/api/members/password_reset/${email}`).then(
             ({data:{message}})=>alert(message)
         )
     }

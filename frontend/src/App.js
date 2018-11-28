@@ -15,7 +15,8 @@ import axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Operator from './components/Operator';
 import Dentist from './components/Dentist';
-
+import {Button,Input} from "antd"
+import {Wrapper} from "./components/PasswordReset"
 if(localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
   const decoded = jwt_decode(localStorage.jwtToken);
@@ -28,18 +29,64 @@ if(localStorage.jwtToken) {
   }
 }
 
+const LoadForm = (props)=>{
+  return (
+    <div>
+      <Wrapper>
+        <h4>
+        ajouter un nouveau mot de passe
+        </h4>
+      </Wrapper>
+
+      <Wrapper>
+        <Input placeholder={'New Password'}/>
+      </Wrapper>
+
+      <Wrapper>
+        <Input placeholder={'Confirm Password'}/>
+      </Wrapper>
+
+      <Wrapper>
+        <Button type={'primary'} style={{width:'100%'}}>
+            Submit
+        </Button>
+      </Wrapper>
+    </div>
+  )
+}
+
+
+const LoadError = (props) =>(
+  <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}}>
+      <h4>
+        Désolé, le lien reste mot de passe est expiré s'il vous plaît essayez à nouveau
+      </h4>
+      <a href="#">
+        réessayer
+      </a>
+  </div>
+
+)
 
 class LoadOrFail extends React.Component{
   constructor(props){
     super(props)
+    this.state={isValid:null}
   }
 
   componentDidMount(){
-    console.log(this.props)
+   axios.post(`/api/members/verifyEmail/${this.props.token}`).then(
+     ({data:{isValid}})=>{
+       this.setState(
+         state=>({...state,isValid})
+       )
+     }
+   )
   }
 
   render(){
-    return null;
+    console.log(this.state)
+    return <LoadOrFail />
   }
 }
 
