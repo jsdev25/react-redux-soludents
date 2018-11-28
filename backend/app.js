@@ -89,7 +89,7 @@ app.post("/api/stripe", (req, res) => {
           ]
         }, function(err, sub) {
           if(err){
-            console.log(err)
+            res.json({message:`Some error has occured while in between transaction`})
           }else{
             const {customer,id,current_period_end:end,current_period_start:start} = sub
             //console.log({sub,subscription,email,customer,id,start,end})
@@ -104,7 +104,7 @@ app.post("/api/stripe", (req, res) => {
 
             s.save().then(
               ss => {
-                console.log(ss);
+                res.json({message:`subscription added successfully`})
               }
             )
           }
