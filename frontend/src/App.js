@@ -5,13 +5,13 @@ import store from './store';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authentication';
-
+import PasswordReset from "./components/PasswordReset"
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
 import BadRequest from './components/BadRequest';
 import Admin from './components/Admin';
-
+import axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Operator from './components/Operator';
 import Dentist from './components/Dentist';
@@ -28,6 +28,21 @@ if(localStorage.jwtToken) {
   }
 }
 
+
+class LoadOrFail extends React.Component{
+  constructor(props){
+    super(props)
+  }
+
+  componentDidMount(){
+    console.log(this.props)
+  }
+
+  render(){
+    return null;
+  }
+}
+
 class App extends Component {
   render() {
     return (
@@ -35,11 +50,21 @@ class App extends Component {
        <Router>
         <Switch>
             <Route exact path="/" component={ Home } />
+            <Route path="/reset/password" exact render={
+              (match)=>(
+                  <PasswordReset {...match}/>
+              )
+            }/>
             <Route  path="/register" component={ Register } />
             <Route  path="/login" component={ Login } />
             <Route  path="/admin" component={ Admin } />
             <Route  path="/operator" component={ Operator } />
             <Route  path="/dentist" component={ Dentist } />
+            <Route path="/reset/:token" render={
+              ({match:{params:{token}}}) => (
+                <LoadOrFail token={token} />
+              )
+            } />
             <Route exact component={BadRequest} />
           </Switch>
           </Router>

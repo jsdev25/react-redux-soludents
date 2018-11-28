@@ -120,6 +120,19 @@ class Login extends Component {
                   <strong style={{ fontSize: 20 }}>Créér un Compte</strong>
                 </button>
               </Link>
+
+              <Link to="/reset/password">
+              <button
+                  className="btn btn-success"
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#00d563",
+                    marginTop: 10
+                  }}
+                >
+                  <strong style={{ fontSize: 20 }}>mot de passe oublié</strong>
+                </button>
+              </Link>
             </div>
           </form>
         </div>
