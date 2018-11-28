@@ -29,25 +29,62 @@ if(localStorage.jwtToken) {
   }
 }
 
-const LoadForm = (props)=>{
+const resetPasswordUtil = (password,email) => {
+  axios.put(`/api/members/update/password_for_user/${email}`,{
+    password
+  }).then(
+    ({data}) =>{
+      if(window.confirm('continue to login')){
+          window.location.href = '/login'
+      }
+    }
+  );
+}
+
+const LoadForm = ({store,email})=>{
   return (
-    <div>
-      <Wrapper>
+    <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh',flexDirection:'column'}}>
+      <Wrapper visible={true}>
         <h4>
         ajouter un nouveau mot de passe
         </h4>
       </Wrapper>
 
-      <Wrapper>
-        <Input placeholder={'New Password'}/>
+      <Wrapper visible={true}>
+        <Input placeholder={'New Password'} onChange={
+          (evt)=>{
+            const password = evt.target.value
+            store.setState(
+              state=>({...state,password})
+            )
+          }
+        } type={'password'}/>
       </Wrapper>
 
-      <Wrapper>
-        <Input placeholder={'Confirm Password'}/>
+      <Wrapper visible={true}>
+        <Input placeholder={'Confirm Password'}
+          onChange={
+            (evt)=>{
+              const confirm = evt.target.value
+              store.setState(
+                state=>({...state,confirm})
+              )
+            }
+          }
+
+          type={'password'}
+        />
       </Wrapper>
 
-      <Wrapper>
-        <Button type={'primary'} style={{width:'100%'}}>
+      <Wrapper visible={true}>
+        <Button type={'primary'} style={{width:'100%'}} onClick={()=>{
+          const {confirm,password} = store.state
+          if(confirm == password){
+            resetPasswordUtil(password,email)
+          }else{
+            alert('password not matches')
+          }
+        }}>
             Submit
         </Button>
       </Wrapper>
@@ -57,11 +94,11 @@ const LoadForm = (props)=>{
 
 
 const LoadError = (props) =>(
-  <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}}>
+  <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh', flexDirection:'column'}}>
       <h4>
         Désolé, le lien reste mot de passe est expiré s'il vous plaît essayez à nouveau
-      </h4>
-      <a href="#">
+      </h4> 
+      <a href="/reset/password">
         réessayer
       </a>
   </div>
@@ -71,7 +108,8 @@ const LoadError = (props) =>(
 class LoadOrFail extends React.Component{
   constructor(props){
     super(props)
-    this.state={isValid:null}
+    this.state={isValid:null,password:null,confirm:null}
+    LoadForm.bind(this)
   }
 
   componentDidMount(){
@@ -85,8 +123,11 @@ class LoadOrFail extends React.Component{
   }
 
   render(){
-    console.log(this.state)
-    return <LoadOrFail />
+    const {isValid} = this.state
+    console.log(isValid)
+    return (<div>
+      {isValid ? <LoadForm store={this} email={this.props.email}/> :<LoadError/>}
+    </div>)
   }
 }
 
@@ -98,8 +139,8 @@ class App extends Component {
         <Switch>
             <Route exact path="/" component={ Home } />
             <Route path="/reset/password" exact render={
-              (match)=>(
-                  <PasswordReset {...match}/>
+              ({match:{params:{token}}})=>(
+                  <PasswordReset />
               )
             }/>
             <Route  path="/register" component={ Register } />
@@ -107,9 +148,9 @@ class App extends Component {
             <Route  path="/admin" component={ Admin } />
             <Route  path="/operator" component={ Operator } />
             <Route  path="/dentist" component={ Dentist } />
-            <Route path="/reset/:token" render={
-              ({match:{params:{token}}}) => (
-                <LoadOrFail token={token} />
+            <Route path="/reset/:email/:token" render={
+              ({match:{params:{token,email}}}) => (
+                <LoadOrFail token={token} email={email} />
               )
             } />
             <Route exact component={BadRequest} />
@@ -123,5 +164,6 @@ class App extends Component {
 
 
 export default App;
+
 
 

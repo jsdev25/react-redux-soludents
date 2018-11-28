@@ -110,10 +110,10 @@ router.post('/password_reset/:email', (req, res)=>{
                     (data)=>{
                         HookPasswordToTable(data.email,uuid(),({email,token})=>{
                             const {name,lastname=""} = data
-                            const linkURL = `${updateLink}/reset/${token}`
+                            const linkURL = `${updateLink}/reset/${email}/${token}`
                             console.log({linkURL,name,lastname})
                             MailerWithConfig({
-                                from: 'support@soludents.com', // sender address
+                                from: 'info@soludents.com', // sender address
                                 to: email,
                                 subject: 'Soludents: Confirm this email reset your password',
                                 html: `
@@ -250,6 +250,56 @@ router.put('/update/user_password/:name', function (req, res) {
 
 });
 
+
+
+router.put('/update/password_for_user/:email', function (req, res) {
+    let newpass = '';
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) console.error('There was an error', err);
+        else {
+            bcrypt.hash(req.body.password, salt, (err, hash) => {
+                if (err) console.error('There was an error', err);
+                else {
+                    newpass = hash;
+                    Member.updateMany({ email: req.params.email }, {
+                        $set: {
+                            password: newpass.toString()
+                        }
+                    }, function (err, member) {
+
+                        if (err) {
+                            res.status(500).json({ code: '500', message: 'fail', error: err });
+                        } else if (!member) {
+                            res.status(400).json({ code: '404', message: 'fail', error: "Not Found Member" });
+                        }
+                        else {
+                            Member.findOne({email:req.params.email},(err,data)=>{
+                                if(!err){
+                                    const {name,lastname} = data
+                                    MailerWithConfig({
+                                        from: 'info@soludents.com', // sender address
+                                        to: req.params.email,
+                                        subject: 'Soludents: Your password has been updated',
+                                        html: `
+                                        <b>
+                                        Hello, ${name} ${lastname || ""}, Your password has been updated successfully.Best regards soludents
+                                        </b>
+                                        `                                
+                                    })(
+                                        (success) => res.status(200).json({ code: '200', message: 'success', data: req.body })
+                                    )
+                                }
+                            })
+                            
+                        }
+                    })
+                }
+            });
+        }
+    });
+
+});
+
 router.put('/update/subscription/:name', function (req, res) {
     Member.updateMany({ _id: req.params.name }, {
         $set: req.body
@@ -310,7 +360,7 @@ router.post('/register', function (req, res) {
                                 .save()
                                 .then(member => {
                                     MailerWithConfig({
-                                        from: 'support@soludents.com', // sender address
+                                        from: 'info@soludents.com', // sender address
                                         to: member.email,
                                         subject: `Soludents: Your account has been confirmed`,
                                         text: `Hello, ${member.name} ${member.lastname}, your account has been successfully created. Go to www.soludents.com to select your offer and start using our services. Best regards, Soludents team`,
