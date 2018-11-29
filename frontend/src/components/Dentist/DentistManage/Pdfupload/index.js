@@ -5,8 +5,11 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { addDocument } from "../../../../actions/authentication";
+import {Upload,Icon} from "antd"
 // import { Z_ASCII } from 'zlib';
 
+
+const Uploader = Upload.Dragger
 const endpoint = "http://localhost:5000/api/documents/upload/";
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 let length = 0;
@@ -187,15 +190,41 @@ class ManageFile extends Component {
         />
 
         <div style={{ textAlign: "center", marginTop: 20 }}>
-          <input
+          {/* <input
             type="file"
             name=""
             id=""
             onChange={this.handleselectedFile}
             accept=".jpg, .jpeg, .png, .doc, .docx, .pdf"
-          />
+          /> */}
+
+          <div>
+          <Uploader 
+            accept=".pdf"
+            multiple={true}
+            customRequest={
+              (options) => {
+                const {file} = options
+                if(file.size > 10240000){
+                  throw TypeError('size cannot exceed more than 10 mb')
+                }
+
+                console.log(options)
+              }
+            }
+            
+          >
+            <p className="ant-upload-drag-icon">
+                      <Icon type="inbox" />
+            </p> 
+            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+            <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
+          </Uploader>
+          </div>
+          
+         {/*  
           <button onClick={this.handleUpload.bind(this)}>File Upload</button>
-          <div> {Math.round(this.state.loaded, 2)} %</div>
+          <div> {Math.round(this.state.loaded, 2)} %</div> */}
         </div>
       </div>
     );

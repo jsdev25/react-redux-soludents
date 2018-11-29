@@ -102,6 +102,8 @@ function callback(key) {}
 class AdminStuff extends React.Component {
   constructor() {
     super();
+    this.search = React.createRef()
+    this.Osearch = React.createRef()
     this.state = {
       name: "",
       Oname: "",
@@ -203,8 +205,16 @@ class AdminStuff extends React.Component {
 
     axios.get("/api/members/operator").then(res => {
       const data_operators = res.data;
-      this.setState({ data_operators });
+      this.setState({ data_operators,OSnap:data_operators });
     });
+
+
+    axios.get("/api/get_users/").then(res => {
+      const dentistsV2 = res.data;
+      this.setState({ dentistsV2,tmpSnapshot:dentistsV2 });
+    });
+
+    
   }
 
   UpdateOperator(e, wholedata) {
@@ -583,12 +593,63 @@ class AdminStuff extends React.Component {
   }
 
   render() {
+
+    console.log(this.state.dentistsV2)
     return (
       <div>
         <Row gutter={12}>
           <Col xs={12}>
             <Card>
-              Vos Opérateurs
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <div>Vos opérateurs</div> 
+              <div style={{margin:0,padding:0}}>
+                  <input ref={this.Osearch} style={{height:'100%',padding:'3px'}}/>
+                  <select style={{height:'100%',padding:'3px'}} onChange={(e)=>{
+                    const value = this.Osearch.current.value
+                    switch(e.target.value){
+                      case '1':{
+                            if(this.state.OSnap){
+                              const list = this.state.OSnap.filter(
+                                ({name}) => {
+                                  return name.includes(value)
+                                }
+                              )
+                              
+                              this.setState(state=>({state,data_operators:list}))
+                            }
+                        }
+                        break;
+                      case '2':{
+                        if(this.state.OSnap){
+                          const list = this.state.OSnap.filter(
+                            ({email}) => {
+                              return email.includes(value)
+                            }
+                          )
+                          
+                          this.setState(state=>({state,data_operators:list}))
+                        }
+                      }
+                        break;
+                      
+                      default:
+                        break;
+                    }
+                  }}>
+                    <option value="___">---</option>
+                    <option value="1">name</option>
+                    <option value="2">email</option>
+                  </select>
+
+                  <button style={{height:'80%'}} onClick={()=>{
+                      this.setState(state =>({state,data_operators:state.OSnap}))
+                  }}>
+                    Reset
+                  </button>
+
+                </div>
+      
+              </div>
               <List
                 itemLayout="horizontal"
                 dataSource={this.state.data_operators}
@@ -718,10 +779,72 @@ class AdminStuff extends React.Component {
 
           <Col xs={12}>
             <Card>
-              Vos Dentistes
+              <div style={{display:'flex',width:'100%', justifyContent:'space-around',alignItems:'center'}}>
+                <div>Vos Dentistes</div>
+                <div style={{margin:0,padding:0}}>
+                  <input ref={this.search} style={{height:'100%',padding:'3px'}}/>
+                  <select style={{height:'100%',padding:'3px'}} onChange={(e)=>{
+                    const value = this.search.current.value
+                    switch(e.target.value){
+                      case '1':{
+                            if(this.state.dentistsV2){
+                              const list = this.state.dentistsV2.filter(
+                                ({name}) => {
+                                  return name.includes(value)
+                                }
+                              )
+                              
+                              this.setState(state=>({state,dentistsV2:list}))
+                            }
+                        }
+                        break;
+                      case '2':{
+                        if(this.state.dentistsV2){
+                          const list = this.state.dentistsV2.filter(
+                            ({email}) => {
+                              return email.includes(value)
+                            }
+                          )
+                          
+                          this.setState(state=>({state,dentistsV2:list}))
+                        }
+                      }
+                        break;
+                      case '3':
+                          if(this.state.dentistsV2){
+                            const list = this.state.dentistsV2.filter(
+                              ({active}) => {
+                                return active==true
+                              }
+                            )
+                            
+                            this.setState(state=>({state,dentistsV2:list}))
+                          }
+                        break;
+
+                      default:
+                        break;
+                    }
+                  }}>
+                    <option value="___">---</option>
+                    <option value="1">name</option>
+                    <option value="2">email</option>
+                    <option value="3">active</option>
+                  </select>
+
+                  <button style={{height:'80%'}} onClick={()=>{
+                      this.setState(state =>({state,dentistsV2:state.tmpSnapshot}))
+                  }}>
+                    Reset
+                  </button>
+
+                </div>
+      
+
+              </div>
               <List
                 itemLayout="horizontal"
-                dataSource={this.state.data_dentists}
+                dataSource={this.state.dentistsV2}
                 renderItem={item => (
                   <List.Item>
                     <List.Item.Meta

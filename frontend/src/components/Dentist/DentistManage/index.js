@@ -283,13 +283,15 @@ class DentistManage extends React.Component {
       offer_content: "",
       password: pwa,
       phone: "",
-      subscriptionDetails: null
+      subscriptionDetails: null,
+      subs:[]
     };
     this.showDragDrop = this.showDragDrop.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleBilling = this.handleBilling.bind(this);
+    this.hasSubscriptions.bind(this)
     // this.props.onHeaderClick = this.props.onHeaderClick.bind(this);
 
     this.columns = [
@@ -388,7 +390,7 @@ class DentistManage extends React.Component {
       axios
         .get(`/api/subscriptions/${res.data.data.email}`)
         .then(({ data }) => {
-          const subs = data.map(
+          const subs = data.filter(({active})=>active).map(
             ({
               end,
               start,
@@ -412,6 +414,11 @@ class DentistManage extends React.Component {
     });
 
     console.log(useradmin);
+  }
+
+
+  hasSubscriptions(){
+    return this.state.subs.length > 0
   }
 
   onChange = e => {
@@ -1044,7 +1051,11 @@ class DentistManage extends React.Component {
           width={820}
           footer={[]}
         >
-          <Managefile username={this.state.name} />
+          {
+            this.hasSubscriptions() ? <Managefile username={this.state.name} /> :<div style={{textAlign:'center'}}>
+              <b>You need to purcahase subscription</b>
+            </div>
+          }
         </Modal>
 
         <Modal

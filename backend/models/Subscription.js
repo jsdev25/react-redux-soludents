@@ -27,7 +27,13 @@ const SubscriptionSchema = new mongoose.Schema({
   end:{
     type:Number,
     required:true
+  },
+
+  active:{
+      type:Boolean,
+      default:true
   }
+  
 })
 
 const Subscription = mongoose.model('subscriptions',SubscriptionSchema)

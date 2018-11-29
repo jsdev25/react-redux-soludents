@@ -40,6 +40,10 @@ app.use("/api/documents", documents);
 app.use("/api/members", members);
 app.use("/api/histories", histories);
 app.use("/api/emails", emails);
+app.use((req,res,next)=>{
+    //console.log(req)
+    next()
+})
 
 // app.get('/', function(req, res) {
 //     res.send('hello');
@@ -97,12 +101,43 @@ const getUserDetailsByEmail = (email) =>{
   )
 }
 
+app.get('/api/get_users',(req,res)=>{
+  const UserWithSubscription = (user) => {
+    const {email} = user
+    return new Promise((resolve,reject)=>{
+        Subscription.findOne({userId:email},(err,res)=>{
+          if(!err){
+            const {active} = res || {active:'---'}
+            console.log(res)
+            resolve({...user,active})}
+          else
+            resolve(user)
+        })
+    })
+  }
+
+  Member.find((err,data)=>{
+    if(!err){
+        const users = Promise.all(data.filter(({admin})=> admin ==0).map(
+          ({email,name,lastname})=> UserWithSubscription({email,name,lastname}).then(data=>data)
+        ))
+
+        users.then(files=>{
+          res.json(files)
+        })
+          
+      }
+    else
+      res.json({'message':'Some error occured'})
+ })
+})
+
 app.post('/api/subscription/cancel/:id', (req,res)=>{
   const {id} = req.params
   const {OfferNumber,userId} = req.body
   stripe.subscriptions.del(id,(err,response)=>{
     if(!err)
-      Subscription.deleteOne({subscriptionId:id}, (err)=>{
+      Subscription.updateOne({subscriptionId:id},{active:false},(err)=>{
         if(!err){
           getUserDetailsByEmail(userId).then(
             ({name,lastname}) =>{
