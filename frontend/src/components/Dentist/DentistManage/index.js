@@ -437,12 +437,18 @@ class DentistManage extends React.Component {
     if (e.target.value === 6) {
       this.setState({ offer_pay: 9900, offer_content: "Offer 6" });
     }
-
+ 
+    //please dont btouch this block
     if (e.target.value) {
       const [subscriptionDetails] = data_billing.filter(
-        item => item.key === e.target.value
+        item => item.key == e.target.value
       );
 
+      console.log(data_billing.filter(
+        ({key})=>{
+          return key==e.target.value
+        }
+      ))
       this.setState(
         state => ({
           ...state,
