@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./index.css";
+import axios from "axios"
 
 const { TextArea } = Input;
 class Contactview extends Component {
@@ -26,17 +27,23 @@ class Contactview extends Component {
   }
 
   onhandleSendMessage() {
-    if (!this.state.html) {
+   /*  if (!this.state.html) {
       message.error("Please input your content.");
       return false;
-    }
-
-    const message_data = {
-      user: this.state.email,
-      pass: this.state.password,
-      html: this.state.html
-    };
-    this.props.messageSend(message_data, this.props.history);
+    } */
+    const {email,html} = this.state
+    axios.post(
+      `api/emails/send`,{
+        email,
+        html   
+      }
+    ).then(
+      ({data}) => {
+        alert('Yoir mail has been sent successfully')
+      }
+    )
+    
+    /* this.props.messageSend(message_data, this.props.history); */
   }
 
   render() {
@@ -57,17 +64,7 @@ class Contactview extends Component {
             onChange={this.handleInputChange}
           />
 
-          <h4 style={{ float: "left", marginTop: 50 }} className="text-white">
-            Password
-          </h4>
-          <Input
-            type="password"
-            placeholder="Password"
-            value={this.state.password}
-            name="password"
-            onChange={this.handleInputChange}
-          />
-
+          
           <h4 style={{ float: "left", marginTop: 50 }} className="text-white">
             Comment pouvons-nous vous aider ?
           </h4>
