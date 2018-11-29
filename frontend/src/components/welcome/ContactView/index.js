@@ -39,7 +39,10 @@ class Contactview extends Component {
       }
     ).then(
       ({data}) => {
-        alert('Yoir mail has been sent successfully')
+        this.setState(
+          state=>({...state,email:"",html:""})
+        )
+        alert('Your mail has been sent successfully')
       }
     )
     
