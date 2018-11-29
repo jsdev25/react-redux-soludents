@@ -19,8 +19,8 @@ email defination
 
 const Mail = config => options => callback => {
    let connection =  mailer.createTransport({
-    host:'smtp.gmail.com',
-    port:587,
+    host:config.host,
+    port:config.port,
     auth: {
         user:config.username ,
         pass: config.password

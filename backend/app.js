@@ -53,8 +53,8 @@ app.use((req,res,next)=>{
 
 const Mail = config => options => callback => {
   let connection =  mailer.createTransport({
-   host:'smtp.gmail.com',
-   port:587,
+   host:config.host,
+   port:config.port,
    auth: {
        user:config.username ,
        pass: config.password
@@ -67,7 +67,7 @@ const Mail = config => options => callback => {
    connection.sendMail(options, (error, info) => {
        if (error) {
        //    res.status(500).json({ code:'500',message:'fail',error: error });
-          return console.log(error);
+          return console.log(config);
        } else {
            console.log('Message %s sent: %s', info.messageId, info.response);
            callback(info);
