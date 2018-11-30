@@ -200,7 +200,8 @@ class Dragdrop extends Component {
                                             dentist_id: userId,
                                             dentist_name: this.props.username,
                                             operator_id: "",
-                                            operator_name: ""
+                                            operator_name: "",
+                                            archived:true
                                         }
 
                                         axios.post('http://localhost:5000/api/documents/archive',{

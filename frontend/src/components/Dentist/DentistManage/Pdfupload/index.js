@@ -7,9 +7,9 @@ import { withRouter } from "react-router-dom";
 import { addDocument } from "../../../../actions/authentication";
 import {Upload,Icon} from "antd"
 // import { Z_ASCII } from 'zlib';
+import Dropzone from "react-dropzone"
 
 
-const Uploader = Upload.Dragger
 const endpoint = "http://localhost:5000/api/documents/upload/";
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 let length = 0;
@@ -26,7 +26,10 @@ class ManageFile extends Component {
       me_lists: [],
       username: "",
       real_count: "",
-      length
+      length,
+      counter:0,
+      usedFiles:0,
+      exceed:false,files:[]
     };
   }
 
@@ -35,7 +38,20 @@ class ManageFile extends Component {
       const data_lists = res.data.filter(
         ({archived}) => !archived
       )
-      this.setState({ data_lists });
+      const {subscription} = this.props
+      if(subscription.length > 0) {
+        const sub = subscription.reduce(
+          ({count:a=0},{count:b})=>{
+            return a+b
+          },
+          0
+        )
+
+        this.setState({ data_lists, usedFiles:data_lists.length,counter:sub});
+        console.log(this.state)
+      }
+
+       
       length = res.data.length;
       console.log(data_lists);
     });
@@ -51,6 +67,8 @@ class ManageFile extends Component {
       this.setState({ real_count: default_count - length + 1 });
       console.log("mylength 222", this.state.real_count);
     });
+
+    
   }
 
   handleselectedFile = event => {
@@ -145,7 +163,7 @@ class ManageFile extends Component {
         <p>
           You can currently upload{" "}
           <span style={{ color: "red", fontSize: 20 }}>
-            {this.state.real_count}
+            {(this.state.counter-this.state.usedFiles) < 0?0:(this.state.counter-this.state.usedFiles)}
           </span>{" "}
           documents based on your active subscriptions.
         </p>
@@ -201,29 +219,111 @@ class ManageFile extends Component {
           /> */}
 
           <div>
-          <Uploader 
-            accept=".pdf"
-            multiple={true}
-            customRequest={
-              (options) => {
-                const {file} = options
-                if(file.size > 10240000){
-                  throw TypeError('size cannot exceed more than 10 mb')
-                }
+          <Dropzone onDrop={
+                    (files)=> {
+                      if(files.length > (this.state.counter-this.state.usedFiles)){
+                        const {usedFiles} = this.state
+                        this.setState(
+                          state =>({
+                            ...state,
+                            exceed:true  
+                          })
+                        )
+                        const extras = ( (files.length)- (this.state.counter-usedFiles))
+                        const available = (this.state.counter-this.state.usedFiles)
+                        const modified = files.slice(0,available)
+                        console.log({extras,usedFiles,files:files.length,available,modified})
+                        
+                      }else{
+                          this.setState( state=>({
+                            ...state,
+                            usedFiles:(state.usedFiles+files.length),
+                            files
+                          }))
 
-                console.log(options)
-              }
-            }
-            
-          >
-            <p className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
-            </p> 
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
-          </Uploader>
+                      }
+                    }
+                }
+                style={{width:'100%',height:'200px',border:'1px dashed rgb(38, 141, 214)', textAlign:'center',justifyContent:'center',alignItems:'center', display:'flex', flexDirection:'column'}} 
+                disabled={false}
+                accept ={"image/jpeg, image/png, image/jpg, application/pdf, application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+                maxSize={10240000}
+                disabled={this.state.exceed}
+                disabledStyle={{border:'1px dashed #d00'}}
+                >
+                   {
+                     !this.state.exceed 
+                     ?
+                     <React.Fragment>
+                       <p className="ant-upload-drag-icon">
+                            <Icon type="inbox" style={{color:'rgb(38, 141, 214)', fontSize:'50px'}}/>
+                        </p>
+                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                        <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
+                     </React.Fragment>
+                     :
+                    <React.Fragment>
+                        <p className="ant-upload-drag-icon">
+                            <Icon type="warning" style={{color:'#d00', fontSize:'50px'}}/>
+                        </p>
+                        
+                        <p className="ant-upload-text">You have exceed the limit of your plan</p>
+                        
+                    </React.Fragment>
+                   }   
+                </Dropzone>
+
+                <ul style={{listStyle:'none'}}>
+                    
+                      {this.state.files.map(
+                        (file) => (<li>{file.name}</li>)
+                      )}
+                    
+                </ul>
           </div>
           
+          {<button onClick={
+            ()=>{
+              const files = this.state.files
+              const userId = localStorage.getItem('UserAdmin') 
+              files.forEach(
+                  file=>{
+                      const fileData = new FormData()
+                            fileData.append('file',file)  
+                      fetch('http://localhost:5000/api/documents/upload',{
+                          method:'post',
+                          body:fileData
+                      }).then(j=>j.json()).then(
+                          ({file,fileName,Directory})=>{
+                              const doc = {
+                                  Filename: fileName,
+                                  directory: Directory,
+                                  dentist_id: userId,
+                                  dentist_name: this.props.username,
+                                  operator_id: "",
+                                  operator_name: "",
+                                  archived:false
+                              }
+
+                              axios.post('http://localhost:5000/api/documents/archive',{
+                                  ...doc
+                              }).then(
+                                  ({data})=>console.log(data)
+                              ).catch(err=>console.log(err))
+                          }
+                      )
+                  }
+              )
+              this.setState(
+                  state => ({...state,files:[]}),
+                  ()=>{
+                      console.log('state have been reset')
+                      //window.location.reload()
+                  }
+                  )
+          }
+          }>Upload Files</button>
+}
          {/*  
           <button onClick={this.handleUpload.bind(this)}>File Upload</button>
           <div> {Math.round(this.state.loaded, 2)} %</div> */}
@@ -241,6 +341,7 @@ const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors
 });
+
 
 export default connect(
   mapStateToProps,

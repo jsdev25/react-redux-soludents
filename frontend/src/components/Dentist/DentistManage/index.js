@@ -394,7 +394,7 @@ class DentistManage extends React.Component {
             ({
               end,
               start,
-              subscription: { Offernumber: OfferNumber },
+              subscription: { Offernumber: OfferNumber,count },
               subscriptionId,
               userId
             }) => ({
@@ -402,7 +402,8 @@ class DentistManage extends React.Component {
               start: strFromDate(start),
               subscriptionId,
               OfferNumber,
-              userId
+              userId,
+              count:parseInt(count)
             })
           );
 
@@ -1052,7 +1053,7 @@ class DentistManage extends React.Component {
           footer={[]}
         >
           {
-            this.hasSubscriptions() ? <Managefile username={this.state.name} /> :<div style={{textAlign:'center'}}>
+            this.hasSubscriptions() ? <Managefile username={this.state.name} subscription={this.state.subs}/> :<div style={{textAlign:'center'}}>
               <b>You need to purcahase subscription</b>
             </div>
           }
