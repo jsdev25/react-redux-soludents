@@ -32,10 +32,12 @@ class ManageFile extends Component {
 
   componentDidMount() {
     axios.get("/api/documents/" + useradmin).then(res => {
-      const data_lists = res.data;
+      const data_lists = res.data.filter(
+        ({archived}) => !archived
+      )
       this.setState({ data_lists });
       length = res.data.length;
-      console.log("mylength", length);
+      console.log(data_lists);
     });
     axios.get("/api/members/" + useradmin).then(res => {
       const me_lists = res.data;

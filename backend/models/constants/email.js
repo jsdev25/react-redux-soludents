@@ -1,8 +1,8 @@
 const EMAIL_CONFIG = {
-    username:'info',
-    password:'I262626!',
-    host:'smtp.mail.eu-west-1.awsapps.com',
-    port:465
+    username:'AKIAJAMZ7EB7FE2PD2PQ',
+    password:'AuR6dmLvFF//ye3lLOX9YKmu+qvR49z+4cXRxvSud7px',
+    host:'smtp.us-west-2.amazonaws.com',
+    port:25
 }
 
 module.exports = EMAIL_CONFIG;

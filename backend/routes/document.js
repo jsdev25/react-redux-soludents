@@ -70,6 +70,8 @@ router.post('/upload', (req, res, next) => {
 
       res.json({
         file: `public/${req.files.file.name}`,
+        Directory:`http://localhost:5000/files/${req.files.file.name}`,
+        fileName:req.files.file.name
       })
 
       directory = 'http://localhost:5000/files/' + fileName;  
@@ -95,7 +97,6 @@ router.post('/document', function(req, res){
 
 
 router.post('/archive', function(req, res){
-
   var document = new Document(req.body);
   document.directory = directory;
   document.Filename = fileName;
@@ -108,6 +109,28 @@ router.post('/archive', function(req, res){
         }
     });
 });
+
+
+
+router.post('/archive/:name', function(req, res){
+
+  // document.directory = directory;
+  // document.Filename = fileName;
+ 
+  Document.updateOne({ _id: req.params.name }, {
+        archived:false
+       }, function(err, member){
+     if(err){
+         res.status(500).json({ code:'500',message:'fail',error: err });
+     }else if(!member){
+         res.status(400).json({code:'404',message:'fail',error:"Not Found Member" });
+     }
+     else {
+         res.status(200).json({ code:'200',message:'success',data:req.body });
+     }
+   })
+   });
+
 
 
 router.post('/insertremark/:name', function(req, res){

@@ -1067,7 +1067,7 @@ class DentistManage extends React.Component {
           width={820}
           footer={[]}
         >
-          <Dragdrop username={this.state.name} />
+          <Dragdrop username={this.state.name} {...this.state} />
         </Modal>
       </div>
     );
