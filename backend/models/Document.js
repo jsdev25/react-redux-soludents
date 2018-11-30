@@ -42,6 +42,10 @@ const DocumentSchema = new Schema({
     },
     update_date: {
         type: Date
+    },
+    archived:{
+        type:Boolean,
+        default:true
     }
 });
 

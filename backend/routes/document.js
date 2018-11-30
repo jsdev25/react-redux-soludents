@@ -83,6 +83,23 @@ router.post('/document', function(req, res){
   var document = new Document(req.body);
   document.directory = directory;
   document.Filename = fileName;
+  document.archived = false;
+  document.save(function(err){
+        if(err){
+            res.status(500).json({ code:'500',message:'fail',error: err });
+        } else {
+            res.status(201).json({ code:'201',message:'success - new pay Document is created',data:req.body });
+        }
+    });
+});
+
+
+router.post('/archive', function(req, res){
+
+  var document = new Document(req.body);
+  document.directory = directory;
+  document.Filename = fileName;
+  document.archived = true;
   document.save(function(err){
         if(err){
             res.status(500).json({ code:'500',message:'fail',error: err });

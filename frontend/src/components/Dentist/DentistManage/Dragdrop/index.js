@@ -14,12 +14,13 @@ const props = {
             return false;
         }
 
-        if (info.file.name.slice(-4) === '.pdf' ||
-            info.file.name.slice(-4) === '.png' ||
-            info.file.name.slice(-4) === '.doc' ||
-            info.file.name.slice(-5) === '.docx' ||
-            info.file.name.slice(-5) === '.xlsx' ||
-            info.file.name.slice(-5) === '.jpeg') {
+        if (info.file.name.slice(-4) == '.pdf' ||
+            info.file.name.slice(-4) == '.png' ||
+            info.file.name.slice(-4) == '.doc' ||
+            info.file.name.slice(-5) == '.docx' ||
+            info.file.name.slice(-5) == '.xlsx' ||
+            info.file.name.slice(-5) == '.jpeg') {
+                console.log(info.file)
         } else {
             message.error('wrong file extension');
             return false;

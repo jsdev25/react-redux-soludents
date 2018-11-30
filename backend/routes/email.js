@@ -9,15 +9,16 @@ const mailConfig = require('./../models/constants/email')
 
 const Mail = config => options => callback => {
     let connection =  mailer.createTransport({
-     host:'smtp.gmail.com',
-     port:587,
+     host:config.host,
+     port:config.port,
      auth: {
          user:config.username ,
          pass: config.password
      },
      tls: {
          rejectUnauthorized: true
-     }
+     },
+     secure:true
      })
   
      connection.sendMail(options, (error, info) => {

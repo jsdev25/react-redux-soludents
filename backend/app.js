@@ -61,7 +61,8 @@ const Mail = config => options => callback => {
    },
    tls: {
        rejectUnauthorized: true
-   }
+   },
+   debug:true
    })
 
    connection.sendMail(options, (error, info) => {
