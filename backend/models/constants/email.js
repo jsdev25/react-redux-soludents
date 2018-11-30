@@ -1,7 +1,7 @@
 const EMAIL_CONFIG = {
-    username:'ar31213@gmail.com',
-    password:'ankitmegha',
-    host:'smtp.gmail.com',
+    username:'info',
+    password:'I262626!',
+    host:'smtp.mail.eu-west-1.awsapps.com',
     port:465
 }
 
