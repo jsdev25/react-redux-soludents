@@ -220,7 +220,7 @@ class Dragdrop extends Component {
                             state => ({...state,files:[]}),
                             ()=>{
                                 console.log('state have been reset')
-                                //window.location.reload()
+                                window.location.reload()
                             }
                             )
                     }

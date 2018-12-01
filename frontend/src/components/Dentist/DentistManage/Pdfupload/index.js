@@ -317,7 +317,7 @@ class ManageFile extends Component {
                                   ({data})=>{
                                     console.log({doc,url:'/api/documents/document'})
                                     console.log(data)
-                                    //window.location.reload()
+                                    window.location.reload()
                                   }
                                   
                               ).catch(err=>console.log(err))
