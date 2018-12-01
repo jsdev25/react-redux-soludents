@@ -1,4 +1,5 @@
 const express = require("express");
+const expressHandlebars = require('express-handlebars')
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
@@ -12,6 +13,7 @@ const emails = require("./routes/email");
 const mailer = require('nodemailer')
 const mailConfig = require('./models/constants/email')
 const Member = require('./models/Member')
+const puppeteer = require('puppeteer')
 //This is stripe mode.
 const stripe = require("./models/constants/stripe");
 
@@ -29,6 +31,7 @@ mongoose
     }
   );
 
+const moment = require('moment')
 const app = express();
 app.use(passport.initialize());
 require("./passport")(passport);
@@ -41,10 +44,7 @@ app.use("/api/documents", documents);
 app.use("/api/members", members);
 app.use("/api/histories", histories);
 app.use("/api/emails", emails);
-app.use((req,res,next)=>{
-    //console.log(req)
-    next()
-})
+app.engine('html',expressHandlebars())
 
 // app.get('/', function(req, res) {
 //     res.send('hello');
@@ -79,7 +79,75 @@ const Mail = config => options => callback => {
 
 } 
 
+const computeUserData = ({address:dentistaddress,phone:dentistphone="",name,lastname,_id:dentistId})=>{
+  return {dentistaddress,dentistphone,dentistfullname:`${name} ${lastname || ''}`,dentistId}
+}
+
+const computeSubscription = ({_id:InvoiceNumber, start,subscription}) => {
+  const {price:amount,Offernumber:offerNumber} = subscription
+
+  return {
+    InvoiceNumber,
+    InvoiceDate:moment.unix(start).add('0','days').format('DD/MM/YYYY'),
+    amount,
+    offerNumber,
+    TotalHT:amount,
+    TotalTTC:amount
+  }
+}
+
+const computePdf =  (_id, subId) =>{
+ 
+  return new Promise(
+    (resolve,reject)=>{
+      Member.findOne({_id},(err,data)=>{
+        if(!err){
+          const userData = computeUserData(data)
+         // console.log(data)
+          Subscription.findOne({_id:subId},(err,resp)=>{
+            if(!err){
+              const subscriptionData = computeSubscription(resp)
+              resolve({...subscriptionData,...userData})
+            }
+          })
+        }
+    
+      })
+    
+    }
+  )
+  
+}
+
 const MailerWithConfig = Mail(mailConfig);
+
+app.get('/export/html/:id/:subId',(req,res)=>{
+  computePdf(req.params.id,req.params.subId).then(
+    d => {
+      res.render('output.html',d)
+    }
+  )
+  //res.json({'message':'Done'})
+})
+
+app.get('/export/pdf/:id/:subId',(req,res)=>{
+  (async () => {
+    const {id,subId} = req.params
+     
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+
+    await page.goto(`http://localhost:5000/export/html/${id}/${subId}`)
+    const buffer = await page.pdf({format: 'A4'})
+
+    res.type('application/pdf')
+    res.send(buffer)
+
+    browser.close()
+})()
+  //res.json({'message':'Done'})
+})
+
 
 app.get('/api/subscriptions/:email', (req,res)=>{
   Subscription.find({userId:req.params.email},(err, data)=>{
@@ -202,6 +270,7 @@ app.post("/api/stripe", (req, res) => {
              const s = new Subscription({
               start,
               end,
+              updated:start,
               userId:email,
               customerId:customer,
               subscription,

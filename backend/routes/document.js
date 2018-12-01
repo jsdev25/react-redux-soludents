@@ -17,8 +17,53 @@ router.use(
     extended: false,
   }),
 )
+
+
+
+const Compute = (d1,d2)=>{
+ let month = (d2.getFullYear() - d1.getFullYear()) * 12
+     month -= d1.getMonth()+1
+     month +=d2.getMonth()
+     return month <=0?0:month
+}
+
 router.use(fileUpload())
 router.use('/public', express.static(__dirname + '/public'))
+router.use(function(req, res, next){
+    if(req.path.includes('/document')){
+        console.log('_________________INTERCEPTION START_______________')
+        const User = require('./../models/Member')
+        const {dentist_id:_id} = req.body
+        User.findOne({_id}, (err,data)=>{
+            if(data){
+                const {email:userId} = data
+                  const Subscription = require('./../models/Subscription')
+                      Subscription.find({userId},(err,data)=>{
+                          const moment = require('moment')
+                          data.forEach(
+                              ({active,updated}) => {
+                                  const next_date = moment.unix(updated).add('1','month').format('DD/MM/YYYY')
+                                  const timestamp = parseInt(new Date().getTime().toString().substr(0,10))
+                                  //update timestamp as it is in db 
+                                  const today = moment.unix(timestamp).add('0', 'month').format('DD/MM/YYYY')
+                                  //const dummy = moment().unix(new Date().getDate()).format('DD/MM/YYYY')
+                                  if(active)
+                                    if(today === next_date){
+                                        console.log({message:'updated', next_date,updated, today})
+                                    }else{
+                                        console.log({message:'canot be updated', next_date,today})
+                                    }
+                              }
+                          )
+                      })  
+            }
+        })
+        
+        console.log('_________________INTERCEPTION END_________________')
+    }
+    next()
+})
+
 
 router.get('/', function(req,res){
   Document.find(function(err, documents){
@@ -83,7 +128,7 @@ router.post('/upload', (req, res, next) => {
 
 router.post('/document', function(req, res){
 
-  var document = new Document(req.body);
+  /* var document = new Document(req.body);
   document.archived = false;
   document.save(function(err){
         if(err){
@@ -92,7 +137,9 @@ router.post('/document', function(req, res){
             console.log(document)
             res.status(201).json({ code:'201',message:'success - new pay Document is created',data:req.body });
         }
-    });
+    }); */
+
+    res.json({message:'under construction'})
 });
 
 

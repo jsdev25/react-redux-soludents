@@ -15,7 +15,7 @@ import {
   Radio,
   Table,
   message,
-  Progress
+  Progress,
 } from "antd";
 import { customPanelStyle } from "./const";
 import { connect } from "react-redux";
@@ -135,7 +135,7 @@ class AdminStuff extends React.Component {
       data_histories: [],
       selectKey: -1,
       errors: {},
-
+      dentistsV2:[],
       Oname_byadmin: "",
       Opassword_byadmin: "",
       Oemail_byadmin: "",
@@ -199,7 +199,7 @@ class AdminStuff extends React.Component {
   componentDidMount() {
     axios.get("/api/members/dentist").then(res => {
       const data_dentists = res.data;
-      this.setState({ data_dentists });
+      this.setState({ data_dentists,dentistsV2:data_dentists,tmpSnapshot:data_dentists});
       //console.log('this is my dentist data', data_dentists)
     });
 
@@ -209,10 +209,10 @@ class AdminStuff extends React.Component {
     });
 
 
-    axios.get("/api/get_users/").then(res => {
+   /*  axios.get("/api/get_users/").then(res => {
       const dentistsV2 = res.data;
       this.setState({ dentistsV2,tmpSnapshot:dentistsV2 });
-    });
+    }); */
 
     
   }
@@ -474,6 +474,13 @@ class AdminStuff extends React.Component {
       message.error("L'email du dentiste est invalide !");
       return false;
     }
+
+    if (this.state.dentist_password.length < 6) {
+      message.error("password length must be over 6 characters.");
+      return false;
+    }
+
+
     const dentist = {
       name: this.state.update_name_d,
       lastname: this.state.update_lastname_d,
@@ -482,10 +489,28 @@ class AdminStuff extends React.Component {
       adli_number: this.state.update_number_d,
       email: this.state.update_email_d
     };
+    
     this.props.UpdateDentistByAdmin(dentist, this.props.history);
+        
+    const update_password = {
+      password: this.state.dentist_password
+    };
+
+    this.props.UpdateAdminPassword(
+      update_password,
+      this.state.update_id_d,
+      this.props.history
+    );
+
+    this.setState({
+      dentist_password: "",
+    });
+
     this.setState({
       Update_dentist_visible: false
     });
+
+
   }
 
   handleUpdateOperator() {
@@ -1138,14 +1163,14 @@ class AdminStuff extends React.Component {
             >
               Update Password
             </p>
-            <div hidden={this.state.hidden_d}>
+            <div hidden={false /* this.state.hidden_d */}>
               <Input
                 style={{ width: 200 }}
                 name="dentist_password"
                 value={this.state.dentist_password}
                 onChange={this.handleInputChange}
               />
-              <Button
+              {/* <Button
                 style={{ marginLeft: 10 }}
                 onClick={() => {
                   if (this.state.dentist_password.length < 6) {
@@ -1168,7 +1193,7 @@ class AdminStuff extends React.Component {
                 }}
               >
                 Update Password
-              </Button>
+              </Button> */}
               <br />
               <br />
               <br />

@@ -398,20 +398,23 @@ class DentistManage extends React.Component {
               start,
               subscription: { Offernumber: OfferNumber,count },
               subscriptionId,
-              userId
+              userId,
+              _id
             }) => ({
               end: strFromDate(end),
               start: strFromDate(start),
               subscriptionId,
               OfferNumber,
               userId,
-              count:parseInt(count)
+              count:parseInt(count),
+              _id
             })
           );
-
+           
+          console.log({data})
           this.setState(
             state => ({ ...state, subs }),
-            () => console.log(this.state.subs)
+            () => console.log('subscriptions loaded')
           );
         });
     });
@@ -1044,7 +1047,7 @@ class DentistManage extends React.Component {
                         {
                           title: "Action",
                           key: "subscriptionId",
-                          render: ({ subscriptionId, OfferNumber, userId }) => (
+                          render: ({_id}) => (
                             <a
                               // href="#"
                               style={{
@@ -1058,7 +1061,8 @@ class DentistManage extends React.Component {
                               onClick={e => {
                                 e.preventDefault();
                                 if (window.confirm("Print Invoice"))
-                                  console.log('printing your advice')
+                                //console.log(obj)
+                                  window.open(`http://localhost:5000/export/pdf/${trim(localStorage.getItem('UserAdmin'))}/${_id}`)
                               }}
                             >
                               Print
@@ -1075,13 +1079,15 @@ class DentistManage extends React.Component {
                           end,
                           subscriptionId,
                           OfferNumber,
-                          userId
+                          userId,
+                          _id
                         }) => ({
                           OfferNumber,
                           start,
                           end,
                           subscriptionId,
-                          userId
+                          userId,
+                          _id
                         })
                       )
                     }

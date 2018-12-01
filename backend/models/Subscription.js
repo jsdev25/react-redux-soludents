@@ -29,6 +29,11 @@ const SubscriptionSchema = new mongoose.Schema({
     required:true
   },
 
+  updated:{
+      type:Number,
+      default:true
+  },
+
   active:{
       type:Boolean,
       default:true

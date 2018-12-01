@@ -201,7 +201,7 @@ export const UpdateDentistByAdmin = (dentist, history) => dispatch => {
     axios.put('/api/members/update/dentist/' + localStorage.getItem('update_dentist'), dentist)
         .then(res => {
             message.success('Success Update Dentist By Admin')
-            window.location.href = '/admin'
+            //window.location.href = '/admin'
         })
 
         .catch(err => {
