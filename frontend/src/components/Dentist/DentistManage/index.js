@@ -250,6 +250,8 @@ const content6 = (
   </div>
 );
 
+const trim = (item) => item.substr(1,item.length-2)
+
 class ComponentToPrint extends React.Component {
   render() {
     return (
@@ -1032,8 +1034,57 @@ class DentistManage extends React.Component {
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
                   <Table
                     rowKey="uid"
-                    columns={[{ title: "Offer Number" }]}
-                    dataSource={data_billing}
+                    columns={
+                      [
+                        {
+                          title: "Billing",
+                          dataIndex: "OfferNumber",
+                          key: "OfferNumber"
+                        },
+                        {
+                          title: "Action",
+                          key: "subscriptionId",
+                          render: ({ subscriptionId, OfferNumber, userId }) => (
+                            <a
+                              // href="#"
+                              style={{
+                                textDecoration: "none",
+                                padding: " 5px 18px",
+                                border: "1px solid #eee",
+                                borderRadius: "7px",
+                                color: "#fff",
+                                background: "#aed100"
+                              }}
+                              onClick={e => {
+                                e.preventDefault();
+                                if (window.confirm("Print Invoice"))
+                                  console.log('printing your advice')
+                              }}
+                            >
+                              Print
+                            </a>
+                          )
+                        }
+                      ]
+                    }
+                    dataSource={
+                      this.state.subs &&
+                      this.state.subs.map(
+                        ({
+                          start,
+                          end,
+                          subscriptionId,
+                          OfferNumber,
+                          userId
+                        }) => ({
+                          OfferNumber,
+                          start,
+                          end,
+                          subscriptionId,
+                          userId
+                        })
+                      )
+                    }
                   />
                   {/* dataSource={this.state.data_document}  */}
                 </Card>
@@ -1053,7 +1104,7 @@ class DentistManage extends React.Component {
           footer={[]}
         >
           {
-            this.hasSubscriptions() ? <Managefile username={this.state.name} subscription={this.state.subs}/> :<div style={{textAlign:'center'}}>
+            this.hasSubscriptions() ? <Managefile username={this.state.name} subscription={this.state.subs} userId={trim(localStorage.getItem('UserAdmin'))}/> :<div style={{textAlign:'center'}}>
               <b>You need to purcahase subscription</b>
             </div>
           }

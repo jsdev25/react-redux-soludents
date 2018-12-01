@@ -35,6 +35,7 @@ class ManageFile extends Component {
 
   componentDidMount() {
     axios.get("/api/documents/" + useradmin).then(res => {
+      console.log(res.data);
       const data_lists = res.data.filter(
         ({archived}) => !archived
       )
@@ -285,8 +286,13 @@ class ManageFile extends Component {
           {<button onClick={
             ()=>{
               const files = this.state.files
-              const userId = localStorage.getItem('UserAdmin') 
-              files.forEach(
+              //const userId = localStorage.getItem('UserAdmin') 
+              if(this.state.exceed){
+                  if(window.confirm('Your upload limits has exceeds')){
+                    window.location.reload()
+                  }
+              }else{
+                files.forEach(
                   file=>{
                       const fileData = new FormData()
                             fileData.append('file',file)  
@@ -298,22 +304,28 @@ class ManageFile extends Component {
                               const doc = {
                                   Filename: fileName,
                                   directory: Directory,
-                                  dentist_id: userId,
+                                  dentist_id: this.props.userId,
                                   dentist_name: this.props.username,
                                   operator_id: "",
                                   operator_name: "",
                                   archived:false
                               }
 
-                              axios.post('http://localhost:5000/api/documents/archive',{
+                              axios.post('/api/documents/document',{
                                   ...doc
                               }).then(
-                                  ({data})=>console.log(data)
+                                  ({data})=>{
+                                    console.log({doc,url:'/api/documents/document'})
+                                    console.log(data)
+                                    //window.location.reload()
+                                  }
+                                  
                               ).catch(err=>console.log(err))
                           }
                       )
                   }
               )
+              }
               this.setState(
                   state => ({...state,files:[]}),
                   ()=>{

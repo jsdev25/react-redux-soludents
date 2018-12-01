@@ -23,6 +23,7 @@ router.use('/public', express.static(__dirname + '/public'))
 router.get('/', function(req,res){
   Document.find(function(err, documents){
       if(err) return res.status(500).send({error: 'database failure'});
+      console.log(documents)
       res.json(documents);
   })
 });
@@ -103,6 +104,7 @@ router.post('/archive', function(req, res){
         if(err){
             res.status(500).json({ code:'500',message:'fail',error: err });
         } else {
+            console.log(document)
             res.status(201).json({ code:'201',message:'success - new pay Document is created',data:req.body });
         }
     });

@@ -207,7 +207,10 @@ class Dragdrop extends Component {
                                         axios.post('http://localhost:5000/api/documents/archive',{
                                             ...doc
                                         }).then(
-                                            res=>console.log(res)
+                                            res=>{
+                                                console.log({doc,url:'http://localhost:5000/api/documents/archive'})
+                                                console.log(res)
+                                            }
                                         ).catch(err=>console.log(err))
                                     }
                                 )
@@ -217,7 +220,7 @@ class Dragdrop extends Component {
                             state => ({...state,files:[]}),
                             ()=>{
                                 console.log('state have been reset')
-                                window.location.reload()
+                                //window.location.reload()
                             }
                             )
                     }

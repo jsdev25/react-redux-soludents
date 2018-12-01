@@ -36,6 +36,7 @@ require("./passport")(passport);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public/client/build")));
+app.use(express.static(path.join(__dirname, "public/files")));
 app.use("/api/documents", documents);
 app.use("/api/members", members);
 app.use("/api/histories", histories);
@@ -116,6 +117,11 @@ app.get('/api/get_users',(req,res)=>{
         })
     })
   }
+
+
+  app.get('/files/:name',(req,res)=>{
+    res.json({name:req.params.name})
+  })
 
   Member.find((err,data)=>{
     if(!err){
