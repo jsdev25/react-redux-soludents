@@ -4,6 +4,35 @@ import { Row, Col, List, Card, Progress, message,Icon, Input } from "antd";
 import Dropzone from "react-dropzone"
 import axios from "axios";
 
+const  uploadTransaction = (files, username)=>{
+    return new Promise((res,reject)=>{
+        const filePromise = files.map(
+           async file=>{
+                const fileData = new FormData()
+                      fileData.append('file',file)  
+                      const {file:resource,fileName,Directory} =  await fetch('http://localhost:5000/api/documents/upload',{method:'post',body:fileData}).then(j=>j.json())
+                      const doc = {
+                        Filename: fileName,
+                        directory: Directory,
+                        dentist_id: userId,
+                        dentist_name: username,
+                        operator_id: "",
+                        operator_name: "",
+                        archived:true
+                    }
+
+                    const res = await axios.post('http://localhost:5000/api/documents/archive',{...doc})
+                    return res   
+                 
+            }
+        )
+
+        Promise.all(filePromise).then(
+            responses => res(responses)
+        )
+
+    })
+}
 const userId = JSON.parse(localStorage.getItem("UserAdmin"));
 /* onChange(info) {
     const status = info.file.status;
@@ -123,7 +152,7 @@ class Dragdrop extends Component {
                                                             <a href="#" onClick={(e)=>{
                                                                 e.preventDefault()
                                                                 if(window.confirm('want to assign file to manage view section')){
-                                                                    axios.post(`http://localhost:5000/api/documents/archive/${item._id}`).then(
+                                                                    axios.post(`http://localhost:5000/api/documents/archive/${item._id}`,{email:item.userId,counter:this.state.files.filter(({archived})=>!archived).length}).then(
                                                                         ({data}) =>{
                                                                             alert('file has been moved to manage view section')
                                                                             window.location.reload()
@@ -185,44 +214,10 @@ class Dragdrop extends Component {
                 <button onClick ={
                     ()=>{
                         const files = this.state.files 
-                        files.forEach(
-                            file=>{
-                                const fileData = new FormData()
-                                      fileData.append('file',file)  
-                                fetch('http://localhost:5000/api/documents/upload',{
-                                    method:'post',
-                                    body:fileData
-                                }).then(j=>j.json()).then(
-                                    ({file,fileName,Directory})=>{
-                                        const doc = {
-                                            Filename: fileName,
-                                            directory: Directory,
-                                            dentist_id: userId,
-                                            dentist_name: this.props.username,
-                                            operator_id: "",
-                                            operator_name: "",
-                                            archived:true
-                                        }
-
-                                        axios.post('http://localhost:5000/api/documents/archive',{
-                                            ...doc
-                                        }).then(
-                                            res=>{
-                                                console.log({doc,url:'http://localhost:5000/api/documents/archive'})
-                                                console.log(res)
-                                            }
-                                        ).catch(err=>console.log(err))
-                                    }
-                                )
-                            }
+                        uploadTransaction(files, this.props.username).then(
+                            res => console.log(res)
                         )
-                        this.setState(
-                            state => ({...state,files:[]}),
-                            ()=>{
-                                console.log('state have been reset')
-                                window.location.reload()
-                            }
-                            )
+                        
                     }
                 }>
                     Save

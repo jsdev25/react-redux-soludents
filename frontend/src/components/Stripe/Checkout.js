@@ -10,10 +10,20 @@ const CURRENCY = 'EUR';
 const fromEuroToCent = amount => amount * 100;
 
 const successPayment = data => {
-  alert('Payment Successful');
-  localStorage.setItem('payment', 1);
-  window.location.reload()
-  //console.log(data);
+ 
+  if(data){
+    const {data:{code}} = data
+    if(code=="400"){
+      alert('Payment Error');
+      window.location.reload()
+    }else{
+      localStorage.setItem('payment', 1);
+      alert('Payment Successful');
+      //window.location.reload()
+      console.log(data);
+    } 
+  }
+  
 };
 
 const errorPayment = data => {

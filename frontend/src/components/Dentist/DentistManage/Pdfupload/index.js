@@ -40,7 +40,8 @@ class ManageFile extends Component {
         ({archived}) => !archived
       )
 
-      
+      this.setState(state=>({ ...state,data_lists, usedFiles:data_lists.length}));
+
       length = res.data.length;
       if(this.props.subscription){
          if(this.props.subscription.length > 1){
@@ -54,7 +55,7 @@ class ManageFile extends Component {
               }
             }
 
-            this.setState({ data_lists, usedFiles:data_lists.length,counter:count});
+            this.setState(state =>({...state,counter:count}));
             console.log('this b;lock is executed')
            }
 
