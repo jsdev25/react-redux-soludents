@@ -302,14 +302,15 @@ app.post('/api/subscription/cancel/:id', (req,res)=>{
 
 app.post("/api/stripe", (req, res) => {
   //stripe.charges.create(req.body, postStripeCharge(res));
-
-  const {planId,source,email,subscription} = req.body
-  const {count} = subscription
-  stripe.customers.create({
-    description: `Customer for ${email}`,
-    source,
-    email
-  }, function(err, {id}) {
+  
+  try {
+    const {planId,source,email,subscription} = req.body
+    const {count} = subscription
+    stripe.customers.create({
+      description: `Customer for ${email}`,
+      source,
+      email
+    }, function(err, {id}) {
       console.log(` customer is created with ${id}`)
         stripe.subscriptions.create({
           customer:id,
@@ -319,8 +320,10 @@ app.post("/api/stripe", (req, res) => {
             },
           ]
         }, function(err, sub) {
+
           if(err){
             res.json({message:`Some error has occured while in between transaction`})
+            return
           }else{
             const {customer,id,current_period_end:end,current_period_start:start} = sub
             //console.log({sub,subscription,email,customer,id,start,end})
@@ -359,6 +362,9 @@ app.post("/api/stripe", (req, res) => {
           }
           })
   });
+  } catch (error) {
+     res.json({message:'payment error', code:'400'})
+  }
 
 
 });
