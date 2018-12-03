@@ -34,61 +34,30 @@ router.use(function(req, res, next){
         console.log('_________________INTERCEPTION START_______________')
         const User = require('./../models/Member')
         const {dentist_id:_id} = req.body
-        User.findOne({_id}, (err,data)=>{
-            if(data){
-                const {email:userId} = data
-                  const Subscription = require('./../models/Subscription')
-                  Subscription.findOne({active:true,userId}).sort('-_id').gt('available',0).exec(function(err, post) { 
-                    if(!err){
-                        Subscription.updateOne({_id:post._id, active:true},{
-                            available:post.available-1
-                        },(err,data)=>{
-                            console.log(data)
-                        })
+        User.findOne({_id}, function(err,data){
+            if(!err)
+                Subscription.find({userId:data.email,active:true}).sort('updated').exec(
+                    function(err,data){
+                        if(!err){
+                            let subscriptions = data
+                             const [subscription] = subscriptions
+                             if(subscription.available == 0){
+                                 subscriptions.pop()
+                             }
+                             const [target] = subscriptions
+                             if(target){
+                                Subscription.updateOne({_id:target._id},{available:target.available-1},(err,data)=>{
+                                    if(!err)
+                                    console.log(data)
+                                })
+                             }else{
+                                 console.log('exhausted')
+                             }
+
+                        }
                     }
-                 });
-
-                      /* Subscription.find({userId,active:true},(err,data)=>{
-                          const moment = require('moment')
-                          if(data.length > 1){
-                            // has many subscription
-                            var canBlock = null
-
-                            for (let subscipt = 0; subscipt < data.length; subscipt++) {
-                                const element = data[subscipt];
-                                const {available,subscription:{count},subscriptionId,_id} = element
-                                const used = count-available
-                                
-                                if (available > 0) {
-                                    canBlock = false
-                                    const a = available > 0 ? available-1:0
-                                    Subscription.updateOne({_id},{available:a}).then(
-                                        data => console.log(data)
-                                    )
-                                }else{
-                                    canBlock = true
-                                }                                    
-                            }
-
-                           /*  if(canBlock){
-                                res.error({message:'sorry you have exceeds your limits of upload'})
-                            } 
-
-                          }else{
-                            // has one subscription
-                            const [s] = data;
-                            const {_id, available} = s;
-                            //console.log(s)
-                            const a = available > 0 ? available-1:0
-                            Subscription.updateOne({_id},{available:a}).then(
-                                data=>console.log(data)
-                            )
-                            
-                          }
-                      })  */ 
-            }
+                )
         })
-        
         
         console.log('_________________INTERCEPTION END_________________')
     }
@@ -158,11 +127,9 @@ router.post('/upload', (req, res, next) => {
 })
 
 router.post('/document', function(req, res){
-
-  
   var document = new Document(req.body);
-  document.directory = directory;
-  document.Filename = fileName;
+  //document.directory = directory;
+  //document.Filename = fileName;
   document.save(function(err){
         if(err){
             res.status(500).json({ code:'500',message:'fail',error: err });
@@ -206,33 +173,38 @@ router.post('/archive/:name', function(req, res){
          res.status(400).json({code:'404',message:'fail',error:"Not Found Member" });
      }
      else {
-        Subscription.findOne({active:true}).sort('-_id').gt('available',0).exec(function(err, post) { 
-            if(!err){
-                Subscription.updateOne({_id:post._id, active:true},{
-                    available:post.available-1
-                },(err,data)=>{
-                    console.log(data)
-                })
-            }
-         });
+       const {_id} = req.body
+        User.findOne({_id}, function(err,data){
+            if(!err)
+                Subscription.find({userId:data.email,active:true}).sort('updated').exec(
+                    function(err,data){
+                        if(!err){
+                            let subscriptions = data
+                             const [subscription] = subscriptions
+                             if(subscription.available == 0){
+                                 subscriptions.pop()
+                             }
+                             const [target] = subscriptions
+                             if(target){
+                                Subscription.updateOne({_id:target._id},{available:target.available-1},(err,data)=>{
+                                    if(!err)
+                                     res.status(200).json({ code:'200',message:'success',data:req.body });
+                                })
+                             }else{
+                                res.status(400).json({ code:'200',message:'exhausted',data:req.body });
+                             }
 
-         /* Subscription.find({active:true},(err,data)=>{
-             data.forEach(
-                 f =>{
-                    if(f.available > 0){
-                        Subscription.updateOne({_id:f._id, active:true},{
-                            available:f.available-1
-                        },(err,data)=>{
-                            console.log(data)
-                        })
+                        }
                     }
-                 }
-             )
-         }) */  
-         res.status(200).json({ code:'200',message:'success',data:req.body });
+                )
+        })
+        
+         
      }
    })
-   });
+
+   console.log(req.body)
+});
 
 
 

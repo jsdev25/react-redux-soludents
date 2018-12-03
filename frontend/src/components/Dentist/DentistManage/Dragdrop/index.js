@@ -152,7 +152,7 @@ class Dragdrop extends Component {
                                                             <a href="#" onClick={(e)=>{
                                                                 e.preventDefault()
                                                                 if(window.confirm('want to assign file to manage view section')){
-                                                                    axios.post(`http://localhost:5000/api/documents/archive/${item._id}`,{email:item.userId,counter:this.state.files.filter(({archived})=>!archived).length}).then(
+                                                                    axios.post(`http://localhost:5000/api/documents/archive/${item._id}`,{_id:item.dentist_id}).then(
                                                                         ({data}) =>{
                                                                             alert('file has been moved to manage view section')
                                                                             window.location.reload()
