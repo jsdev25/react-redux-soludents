@@ -16,7 +16,7 @@ const Member = require('./models/Member')
 const puppeteer = require('puppeteer')
 //This is stripe mode.
 const stripe = require("./models/constants/stripe");
-
+const scheduler = require('node-cron')
 mongoose
   .connect(
     config.DB,
@@ -51,6 +51,63 @@ app.engine('html',expressHandlebars())
 // });
 
 //////////////This is stripe test mode////////////////
+
+const BackgroundScheduler = () => {
+ return new Promise((resolve,reject)=>{
+  Member.find((err,output)=>{
+    if(!err){
+     
+        output.filter(
+          ({admin}) => admin =='0'
+        ).forEach( ({email}) => {
+            Subscription.find({userId:email},(err,data)=>{
+        
+                data.filter(
+                  ({active}) => active
+                ).forEach(
+                    (obj) => {
+                      if(obj){
+                        const {active,updated,_id} = obj
+                        const next_date = moment.unix(updated).add('1','month').format('DD/MM/YYYY')
+                        const timestamp = parseInt(new Date().getTime().toString().substr(0,10))
+                        //update timestamp as it is in db 
+                        const today = moment.unix(timestamp).add('0', 'month').format('DD/MM/YYYY')
+                        //const dummy = moment().unix(new Date().getDate()).format('DD/MM/YYYY')
+                        const supl1 = parseInt(next_date.split('/')[1])
+                        const supl2 = parseInt(today.split('/')[1]) 
+                        if(active)
+                          if(today === next_date){
+                              
+                              Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
+                                resolve({message:'updated', next_date,updated, today})
+                              })
+                          }else if(supl1+1 == supl2){
+                            Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
+                              resolve({message:'updated', next_date,updated, today})
+                            })
+                          }else{
+                            resolve({message:'without updations'})
+                          }
+                        }
+                  }
+                )
+          
+            })
+        })
+    
+      
+    }
+  })
+ })
+}
+
+
+scheduler.schedule(/* "* * * * *" */"0 0 * * *",function(){
+  console.log('started')
+  BackgroundScheduler().then(
+    data => console.log(data)
+  )
+})
 
 const Mail = config => options => callback => {
   let connection =  mailer.createTransport({
@@ -315,45 +372,9 @@ const postStripeCharge = res => (stripeErr, stripeRes) => {
 };
 
 app.get('/emails/test/',(req,res)=>{
-  Member.find((err,output)=>{
-    if(!err){
-      console.log(
-        output.filter(
-          ({admin}) => admin =='0'
-        ).forEach( ({email}) => {
-            Subscription.find({userId:email},(err,data)=>{
-              console.log(
-                data.filter(
-                  ({active}) => active
-                ).forEach(
-                    (obj) => {
-                      if(obj){
-                        const {active,updated,_id} = obj
-                        const next_date = moment.unix(updated).add('1','month').format('DD/MM/YYYY')
-                        const timestamp = parseInt(new Date().getTime().toString().substr(0,10))
-                        //update timestamp as it is in db 
-                        const today = moment.unix(timestamp).add('0', 'month').format('DD/MM/YYYY')
-                        //const dummy = moment().unix(new Date().getDate()).format('DD/MM/YYYY')
-                        if(active)
-                          if(today === next_date){
-                              console.log({message:'updated', next_date,updated, today})
-                              Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
-                                console.log(success)
-                              })
-                          }else{
-                              console.log({message:'canot be updated', next_date,today})
-                          }}
-                  }
-                )
-
-                
-              )
-            })
-        })
-      )
-      res.json({'message':'ok'})
-    }
-  })
+  BackgroundScheduler().then(
+    data=>res.json(data)
+  )
 })
 //////////////////////////////////////////////////////
 
