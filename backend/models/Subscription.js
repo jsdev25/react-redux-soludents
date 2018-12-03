@@ -19,6 +19,11 @@ const SubscriptionSchema = new mongoose.Schema({
       required:true
   },
 
+  available:{
+      type:Number,
+      required:true
+  },
+
   start:{
       type:Number,
       required:true

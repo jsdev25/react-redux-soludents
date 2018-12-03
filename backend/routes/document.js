@@ -40,21 +40,23 @@ router.use(function(req, res, next){
                   const Subscription = require('./../models/Subscription')
                       Subscription.find({userId},(err,data)=>{
                           const moment = require('moment')
-                          data.forEach(
-                              ({active,updated}) => {
-                                  const next_date = moment.unix(updated).add('1','month').format('DD/MM/YYYY')
-                                  const timestamp = parseInt(new Date().getTime().toString().substr(0,10))
-                                  //update timestamp as it is in db 
-                                  const today = moment.unix(timestamp).add('0', 'month').format('DD/MM/YYYY')
-                                  //const dummy = moment().unix(new Date().getDate()).format('DD/MM/YYYY')
-                                  if(active)
-                                    if(today === next_date){
-                                        console.log({message:'updated', next_date,updated, today})
-                                    }else{
-                                        console.log({message:'canot be updated', next_date,today})
-                                    }
-                              }
-                          )
+                          if(data.length > 1){
+                            // has many subscription
+                            for (const sub of data) {
+
+                            }
+
+                          }else{
+                            // has one subscription
+                            const [s] = data;
+                            const {_id, available} = s;
+                            //console.log(s)
+                            const a = available > 0 ? available-1:0
+                            Subscription.updateOne({_id},{available:a}).then(
+                                data=>console.log(data)
+                            )
+                            
+                          }
                       })  
             }
         })
@@ -128,8 +130,10 @@ router.post('/upload', (req, res, next) => {
 
 router.post('/document', function(req, res){
 
-  /* var document = new Document(req.body);
-  document.archived = false;
+  /*
+  var document = new Document(req.body);
+  document.directory = directory;
+  document.Filename = fileName;
   document.save(function(err){
         if(err){
             res.status(500).json({ code:'500',message:'fail',error: err });
@@ -137,7 +141,8 @@ router.post('/document', function(req, res){
             console.log(document)
             res.status(201).json({ code:'201',message:'success - new pay Document is created',data:req.body });
         }
-    }); */
+    });
+  */
 
     res.json({message:'under construction'})
 });
