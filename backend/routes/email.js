@@ -18,7 +18,7 @@ const Mail = config => options => callback => {
      tls: {
          rejectUnauthorized: true
      },
-     secure:true
+     secure:false
      })
   
      connection.sendMail(options, (error, info) => {
@@ -42,7 +42,7 @@ router.post('/send', function (req, res) {
         MailerWithConfig(
             {
                 from: email, // sender address
-                to: "ishendrapratap@gmail.com",
+                to: "support@soludents.com",
                 subject: `You have recieved query from ${email}`,
                 html:`
                 <b>

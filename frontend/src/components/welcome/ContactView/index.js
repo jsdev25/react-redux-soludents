@@ -27,10 +27,10 @@ class Contactview extends Component {
   }
 
   onhandleSendMessage() {
-   /*  if (!this.state.html) {
+    if (!this.state.html) {
       message.error("Please input your content.");
       return false;
-    } */
+    }
     const {email,html} = this.state
     axios.post(
       `api/emails/send`,{
