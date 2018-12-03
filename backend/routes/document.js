@@ -42,9 +42,27 @@ router.use(function(req, res, next){
                           const moment = require('moment')
                           if(data.length > 1){
                             // has many subscription
-                            for (const sub of data) {
+                            var canBlock = null
 
+                            for (let subscipt = 0; subscipt < data.length; subscipt++) {
+                                const element = data[subscipt];
+                                const {available,subscription:{count},subscriptionId,_id} = element
+                                const used = count-available
+                                
+                                if (available > 0) {
+                                    canBlock = false
+                                    const a = available > 0 ? available-1:0
+                                    Subscription.updateOne({_id},{available:a}).then(
+                                        data => console.log(data)
+                                    )
+                                }else{
+                                    canBlock = true
+                                }                                    
                             }
+
+                           /*  if(canBlock){
+                                res.error({message:'sorry you have exceeds your limits of upload'})
+                            } */
 
                           }else{
                             // has one subscription
@@ -60,6 +78,7 @@ router.use(function(req, res, next){
                       })  
             }
         })
+        
         
         console.log('_________________INTERCEPTION END_________________')
     }
@@ -143,8 +162,7 @@ router.post('/document', function(req, res){
         }
     });
  
-
-    res.json({message:'under construction'})
+    //res.json({message:'under construction'})
 });
 
 

@@ -39,16 +39,33 @@ class ManageFile extends Component {
       const data_lists = res.data.filter(
         ({archived}) => !archived
       )
-      const {subscription} = this.props
-      if(subscription.length > 0) {
-        const {available:sub} = subscription
-        this.setState({ data_lists, usedFiles:data_lists.length,counter:sub});
-        console.log(subscription)
-      }
 
-       
+      
       length = res.data.length;
-      console.log(data_lists);
+      if(this.props.subscription){
+         if(this.props.subscription.length > 1){
+           const {subscription} = this.props
+           if(subscription){
+            var count = 0;
+            for (const chit in subscription) {
+              if (subscription.hasOwnProperty(chit)) {
+                count+= subscription[chit].available;
+                console.log(subscription[chit])
+              }
+            }
+
+            this.setState({ data_lists, usedFiles:data_lists.length,counter:count});
+            console.log('this b;lock is executed')
+           }
+
+           console.log(subscription)
+         }else{
+           const [{available:counter}] = this.props.subscription
+           this.setState(
+             state=>({...state,counter})
+           )
+         }
+      }
     });
     axios.get("/api/members/" + useradmin).then(res => {
       const me_lists = res.data;
@@ -216,7 +233,7 @@ class ManageFile extends Component {
           <div>
           <Dropzone onDrop={
                     (files)=> {
-                      if(files.length > this.state.counter){
+                      if(files.length >= this.state.counter){
                         
                         this.setState(
                           state =>({
@@ -239,11 +256,11 @@ class ManageFile extends Component {
                
                 accept ={"image/jpeg, image/png, image/jpg, application/pdf, application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
                 maxSize={10240000}
-                disabled={this.state.exceed}
+                disabled={this.state.counter == 0}
                 disabledStyle={{border:'1px dashed #d00'}}
                 >
                    {
-                     !this.state.exceed 
+                     !this.state.counter == 0 
                      ?
                      <React.Fragment>
                        <p className="ant-upload-drag-icon">
@@ -277,7 +294,7 @@ class ManageFile extends Component {
             ()=>{
               const files = this.state.files
               //const userId = localStorage.getItem('UserAdmin') 
-              if(this.state.exceed){
+              if(this.state.counter <=0){
                   if(window.confirm('Your upload limits has exceeds')){
                     window.location.reload()
                   }
