@@ -248,10 +248,20 @@ class AdminStuff extends React.Component {
       return false;
     }
 
+    if (this.state.operator_password.length < 6) {
+      message.error("password length must be over 6 characters.");
+      return false;
+    }
+
+
     const mydata = {
       name: this.state.Oname_byadmin,
       email: this.state.Oemail_byadmin,
       password: "12345"
+    };
+
+    const update_password = {
+      password: this.state.operator_password
     };
 
     this.setState({
@@ -259,6 +269,17 @@ class AdminStuff extends React.Component {
     });
     //  console.log('^^^^^^^^^^^^^^^^^^^^^^^^', mydata)
     this.props.UpdateOpertorByAdmin(mydata, this.props.history);
+
+    this.props.UpdateAdminPassword(
+      update_password,
+      this.state.Oid_byadmin,
+      this.props.history
+    );
+
+    this.setState({
+      dentist_password: "",
+    });
+    
   }
 
   HandleHistories(e, wholedata) {
@@ -1155,49 +1176,6 @@ class AdminStuff extends React.Component {
           footer={[]}
         >
           <div>
-            <p
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                this.setState({ hidden_d: !this.state.hidden_d });
-              }}
-            >
-              Update Password
-            </p>
-            <div hidden={false /* this.state.hidden_d */}>
-              <Input
-                style={{ width: 200 }}
-                name="dentist_password"
-                value={this.state.dentist_password}
-                onChange={this.handleInputChange}
-              />
-              {/* <Button
-                style={{ marginLeft: 10 }}
-                onClick={() => {
-                  if (this.state.dentist_password.length < 6) {
-                    message.error("password length must be over 6 characters.");
-                    return false;
-                  }
-                  const update_password = {
-                    password: this.state.dentist_password
-                  };
-
-                  this.props.UpdateAdminPassword(
-                    update_password,
-                    this.state.update_id_d,
-                    this.props.history
-                  );
-                  this.setState({
-                    dentist_password: "",
-                    hidden_d: true
-                  });
-                }}
-              >
-                Update Password
-              </Button> */}
-              <br />
-              <br />
-              <br />
-            </div>
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
                 <label style={{ fontWeight: "800" }}>First Name</label>
@@ -1258,14 +1236,15 @@ class AdminStuff extends React.Component {
               <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
               <Col span={12}>
-                <label style={{ fontWeight: "800" }}>Address</label>
+                <label style={{ fontWeight: "800" }}>Password</label>
                 <Input
-                  placeholder="10 Woodford St, California CA 9820"
-                  style={{ border: "none" }}
-                  name="update_address_d"
-                  value={this.state.update_address_d}
+                  style={{ border: 'none' }}
+                  name="dentist_password"
+                  value={this.state.dentist_password}
                   onChange={this.handleInputChange}
+                  type={'password'}
                 />
+              
               </Col>
 
               <Col span={12}>
@@ -1275,6 +1254,19 @@ class AdminStuff extends React.Component {
                   style={{ border: "none" }}
                   value={this.state.update_number_d}
                   name="update_number_d"
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+
+              <Divider />
+
+              <Col span={24}>
+                <label style={{ fontWeight: "800" }}>Address</label>
+                <Input
+                  placeholder="10 Woodford St, California CA 9820"
+                  style={{ border: "none" }}
+                  name="update_address_d"
+                  value={this.state.update_address_d}
                   onChange={this.handleInputChange}
                 />
               </Col>
@@ -1399,51 +1391,6 @@ class AdminStuff extends React.Component {
           onCancel={this.handleCancel}
           footer={[]}
         >
-          <div>
-            <p
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                this.setState({ hidden_o: !this.state.hidden_o });
-              }}
-            >
-              Update Password
-            </p>
-            <div hidden={this.state.hidden_o}>
-              <Input
-                style={{ width: 200 }}
-                name="operator_password"
-                value={this.state.operator_password}
-                onChange={this.handleInputChange}
-              />
-              <Button
-                style={{ marginLeft: 10 }}
-                onClick={() => {
-                  if (this.state.operator_password.length < 6) {
-                    message.error("password length must be over 6 characters.");
-                    return false;
-                  }
-                  const update_password = {
-                    password: this.state.operator_password
-                  };
-
-                  this.props.UpdateAdminPassword(
-                    update_password,
-                    this.state.Oid_byadmin,
-                    this.props.history
-                  );
-                  this.setState({
-                    dentist_password: "",
-                    hidden_o: true
-                  });
-                }}
-              >
-                Update Password
-              </Button>
-              <br />
-              <br />
-              <br />
-            </div>
-
             <Row gutter={48} style={{ padding: 0, margin: 0 }}>
               <Col span={12}>
                 <label style={{ fontWeight: "800" }}>Name</label>
@@ -1454,18 +1401,22 @@ class AdminStuff extends React.Component {
                   value={this.state.Oname_byadmin}
                   onChange={this.handleInputChange}
                 />
+
+                
               </Col>
 
-              {/* <Col span={12}>
-                <label style={{ fontWeight: "800" }}>Password</label>
+              <Col span={12}>
+              <label style={{ fontWeight: "800" }}>Password</label>
                 <Input
-                  placeholder="********"
-                  style={{ border: "none" }}
-                  name="Opassword_byadmin"
-                  value={this.state.Opassword_byadmin}
-                  onChange={this.handleInputChange}
+                    style={{ border: 'none' }}
+                    type={'password'}
+                    name="operator_password"
+                    value={this.state.operator_password}
+                    onChange={this.handleInputChange}
+                    placeholder={'*******'}
                 />
-              </Col> */}
+              </Col>
+
               <Divider style={{ padding: 0, marginTop: 5, marginBottom: 15 }} />
 
               <Col span={12}>
@@ -1487,7 +1438,7 @@ class AdminStuff extends React.Component {
                 Edit
               </button>
             </Row>
-          </div>
+         
         </Modal>
 
         <Modal
