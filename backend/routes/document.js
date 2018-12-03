@@ -130,7 +130,7 @@ router.post('/upload', (req, res, next) => {
 
 router.post('/document', function(req, res){
 
-  /*
+  
   var document = new Document(req.body);
   document.directory = directory;
   document.Filename = fileName;
@@ -142,7 +142,7 @@ router.post('/document', function(req, res){
             res.status(201).json({ code:'201',message:'success - new pay Document is created',data:req.body });
         }
     });
-  */
+ 
 
     res.json({message:'under construction'})
 });
