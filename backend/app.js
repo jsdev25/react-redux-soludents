@@ -247,7 +247,7 @@ app.post("/api/stripe", (req, res) => {
   //stripe.charges.create(req.body, postStripeCharge(res));
 
   const {planId,source,email,subscription} = req.body
-
+  const {count} = subscription
   stripe.customers.create({
     description: `Customer for ${email}`,
     source,
@@ -275,6 +275,7 @@ app.post("/api/stripe", (req, res) => {
               customerId:customer,
               subscription,
               subscriptionId:id,
+              available:parseInt(count)
             })
 
             s.save().then(
@@ -313,12 +314,46 @@ const postStripeCharge = res => (stripeErr, stripeRes) => {
   }
 };
 
-app.get('/emails/test/:email',(req,res)=>{
-  getUserDetailsByEmail(req.params.email).then(
-    data => res.json(data)
-  ).catch(
-    err=> res.json({error:JSON.stringify(err)})
-  )
+app.get('/emails/test/',(req,res)=>{
+  Member.find((err,output)=>{
+    if(!err){
+      console.log(
+        output.filter(
+          ({admin}) => admin =='0'
+        ).forEach( ({email}) => {
+            Subscription.find({userId:email},(err,data)=>{
+              console.log(
+                data.filter(
+                  ({active}) => active
+                ).forEach(
+                    (obj) => {
+                      if(obj){
+                        const {active,updated,_id} = obj
+                        const next_date = moment.unix(updated).add('1','month').format('DD/MM/YYYY')
+                        const timestamp = parseInt(new Date().getTime().toString().substr(0,10))
+                        //update timestamp as it is in db 
+                        const today = moment.unix(timestamp).add('0', 'month').format('DD/MM/YYYY')
+                        //const dummy = moment().unix(new Date().getDate()).format('DD/MM/YYYY')
+                        if(active)
+                          if(today === next_date){
+                              console.log({message:'updated', next_date,updated, today})
+                              Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
+                                console.log(success)
+                              })
+                          }else{
+                              console.log({message:'canot be updated', next_date,today})
+                          }}
+                  }
+                )
+
+                
+              )
+            })
+        })
+      )
+      res.json({'message':'ok'})
+    }
+  })
 })
 //////////////////////////////////////////////////////
 
