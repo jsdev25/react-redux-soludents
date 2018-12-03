@@ -399,6 +399,7 @@ class DentistManage extends React.Component {
               subscription: { Offernumber: OfferNumber,count },
               subscriptionId,
               userId,
+              available,
               _id
             }) => ({
               end: strFromDate(end),
@@ -407,6 +408,7 @@ class DentistManage extends React.Component {
               OfferNumber,
               userId,
               count:parseInt(count),
+              available,
               _id
             })
           );

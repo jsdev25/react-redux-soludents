@@ -41,15 +41,9 @@ class ManageFile extends Component {
       )
       const {subscription} = this.props
       if(subscription.length > 0) {
-        const sub = subscription.reduce(
-          ({count:a=0},{count:b})=>{
-            return a+b
-          },
-          0
-        )
-
+        const {available:sub} = subscription
         this.setState({ data_lists, usedFiles:data_lists.length,counter:sub});
-        console.log(this.state)
+        console.log(subscription)
       }
 
        
@@ -164,7 +158,7 @@ class ManageFile extends Component {
         <p>
           You can currently upload{" "}
           <span style={{ color: "red", fontSize: 20 }}>
-            {(this.state.counter-this.state.usedFiles) < 0?0:(this.state.counter-this.state.usedFiles)}
+            {this.state.counter}
           </span>{" "}
           documents based on your active subscriptions.
         </p>
@@ -222,23 +216,19 @@ class ManageFile extends Component {
           <div>
           <Dropzone onDrop={
                     (files)=> {
-                      if(files.length > (this.state.counter-this.state.usedFiles)){
-                        const {usedFiles} = this.state
+                      if(files.length > this.state.counter){
+                        
                         this.setState(
                           state =>({
                             ...state,
                             exceed:true  
                           })
                         )
-                        const extras = ( (files.length)- (this.state.counter-usedFiles))
-                        const available = (this.state.counter-this.state.usedFiles)
-                        const modified = files.slice(0,available)
-                        console.log({extras,usedFiles,files:files.length,available,modified})
                         
                       }else{
                           this.setState( state=>({
                             ...state,
-                            usedFiles:(state.usedFiles+files.length),
+                            usedFiles:files.length,
                             files
                           }))
 
@@ -246,7 +236,7 @@ class ManageFile extends Component {
                     }
                 }
                 style={{width:'100%',height:'200px',border:'1px dashed rgb(38, 141, 214)', textAlign:'center',justifyContent:'center',alignItems:'center', display:'flex', flexDirection:'column'}} 
-                disabled={false}
+               
                 accept ={"image/jpeg, image/png, image/jpg, application/pdf, application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
                 maxSize={10240000}
                 disabled={this.state.exceed}
