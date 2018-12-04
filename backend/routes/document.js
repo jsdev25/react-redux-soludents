@@ -39,20 +39,19 @@ router.use(function(req, res, next){
                 Subscription.find({userId:data.email,active:true}).sort('updated').exec(
                     function(err,data){
                         if(!err){
-                            let subscriptions = data
-                             const [subscription] = subscriptions
-                             if(subscription.available == 0){
-                                 subscriptions.pop()
-                             }
-                             const [target] = subscriptions
-                             if(target){
-                                Subscription.updateOne({_id:target._id},{available:target.available-1},(err,data)=>{
-                                    if(!err)
-                                    console.log(data)
-                                })
-                             }else{
-                                 console.log('exhausted')
-                             }
+                            for (const sub of data) {
+                                if (sub.available > 0) {
+                                    const available = sub.available > 0?sub.available -1 : 0
+                                    Subscription.updateOne({_id:sub._id},{available},(err,res)=>{
+                                        console.log(`deducted from ${sub.subscriptionId}`)
+                                        
+                                    })
+                                    
+                                    break
+                                } else {
+                                    continue                                    
+                                }
+                            }
 
                         }
                     }
@@ -158,6 +157,25 @@ router.post('/archive', function(req, res){
 });
 
 
+const Reductor = (data,res) =>{
+        let subscriptions = data
+        const [subscription] = subscriptions
+        if(subscription.available == 0){
+            subscriptions.pop()
+        }
+        
+        const [target] = subscriptions
+        if(target){
+            Subscription.updateOne({_id:target._id},{available:target.available-1},(err,data)=>{
+            if(!err)
+                res.status(200).json({ code:'200',message:'success',data:req.body });
+        })
+        }
+        else {
+            res.status(400).json({ code:'200',message:'exhausted',data:req.body });
+        }
+}
+
 
 router.post('/archive/:name', function(req, res){
 
@@ -174,32 +192,29 @@ router.post('/archive/:name', function(req, res){
      }
      else {
        const {_id} = req.body
+       const User = require('./../models/Member')
         User.findOne({_id}, function(err,data){
             if(!err)
-                Subscription.find({userId:data.email,active:true}).sort('updated').exec(
-                    function(err,data){
-                        if(!err){
-                            let subscriptions = data
-                             const [subscription] = subscriptions
-                             if(subscription.available == 0){
-                                 subscriptions.pop()
-                             }
-                             const [target] = subscriptions
-                             if(target){
-                                Subscription.updateOne({_id:target._id},{available:target.available-1},(err,data)=>{
-                                    if(!err)
-                                     res.status(200).json({ code:'200',message:'success',data:req.body });
+            Subscription.find({userId:data.email,active:true}).sort('updated').exec(
+                function(err,data){
+                    if(!err){
+                        for (const sub of data) {
+                            if (sub.available > 0) {
+                                const available = sub.available > 0?sub.available -1 : 0
+                                Subscription.updateOne({_id:sub._id},{available},(err,res)=>{
+                                    console.log(`deducted from ${sub.subscriptionId}`)
+                                    
                                 })
-                             }else{
-                                res.status(400).json({ code:'200',message:'exhausted',data:req.body });
-                             }
-
+                                break
+                            } else {
+                                continue                                    
+                            }
                         }
+
                     }
-                )
-        })
-        
-         
+                }
+            )
+        })      
      }
    })
 
