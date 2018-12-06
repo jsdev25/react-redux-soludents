@@ -1,0 +1,7 @@
+#!/bin/bash
+mkdir -p /var/www/vhosts/soludents/public/
+cd /var/www/vhosts/soludents/public/frontend
+npm start &
+cd /var/www/vhosts/soludents/public/backend
+forever start app.js
+service mongod restart
