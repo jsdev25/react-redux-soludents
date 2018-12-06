@@ -7,5 +7,5 @@ npm start &
 cd /var/www/vhosts/soludents/public/backend
 npm install -unsafe-perm=true &
 sleep 2m
-forever start app.js
+forever start app.js &
 service mongod restart
