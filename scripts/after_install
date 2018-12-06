@@ -2,6 +2,8 @@
 mkdir -p /var/www/vhosts/soludents/public/
 cd /var/www/vhosts/soludents/public/frontend
 npm install -unsafe-perm=true &
+sleep 5m
 cd /var/www/vhosts/soludents/public/backend
 npm install -unsafe-perm=true &
+sleep 5m
 service mongod restart
