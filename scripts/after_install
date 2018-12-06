@@ -1,7 +1,9 @@
 #!/bin/bash
 mkdir -p /var/www/vhosts/soludents/public/
 cd /var/www/vhosts/soludents/public/frontend
+npm install -unsafe-perm=true
 npm start &
 cd /var/www/vhosts/soludents/public/backend
+npm install -unsafe-perm=true
 forever start app.js
 service mongod restart
