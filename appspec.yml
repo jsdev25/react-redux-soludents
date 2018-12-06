@@ -15,4 +15,4 @@ hooks:
   ApplicationStart:
     - location: scripts/start_service
       timeout: 300
-       runas: root
+      runas: root
