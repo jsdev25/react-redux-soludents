@@ -1,2 +1,3 @@
 #!/bin/bash
+pkill node
 rm -rf /var/www/vhosts/soludents/public/
