@@ -59,12 +59,12 @@ export const loginAdmin = (user, history) => dispatch => {
             const { token } = res.data;
             localStorage.setItem('jwtToken', token);
             localStorage.setItem('UserAdmin', JSON.stringify(res.data.member._id));
-            localStorage.setItem('pwa', JSON.stringify(res.data.password));
+            // localStorage.setItem('pwa', JSON.stringify(res.data.password));
 
-            if (res.data.member.admin === 0) {
+            if (res.data.member.admin == 0) {
                 localStorage.setItem('admin', 0);
                 window.location.href = '/dentist'
-            } else if (res.data.member.admin === 1) {
+            } else if (res.data.member.admin == 1) {
                 localStorage.setItem('admin', 1);
                 window.location.href = '/operator'
             } else {

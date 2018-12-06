@@ -400,7 +400,7 @@ class DentistManage extends React.Component {
               subscriptionId,
               userId,
               available,
-              _id
+              _id,active
             }) => ({
               end: strFromDate(end),
               start: strFromDate(start),
@@ -409,7 +409,8 @@ class DentistManage extends React.Component {
               userId,
               count:parseInt(count),
               available,
-              _id
+              _id,
+              active
             })
           );
            
@@ -420,6 +421,11 @@ class DentistManage extends React.Component {
           );
         });
     });
+
+    this.setState(state=>({
+      ...state,
+      subscriptionDetails:data_billing[0]
+    }))
 
     console.log(useradmin);
   }
@@ -884,7 +890,7 @@ class DentistManage extends React.Component {
                   </span>
                 </Popover>
 
-                <Radio value={4} style={{ position: "absolute", right: 40 }} />
+                <Radio value={4} stactiveyle={{ position: "absolute", right: 40 }} />
                 <br />
                 <Popover
                   placement="leftTop"
@@ -995,8 +1001,10 @@ class DentistManage extends React.Component {
                                     }
                                   )
                                   .then(({ data }) => {
-                                    alert(data.message);
-                                    window.location.reload();
+                                    message.info(data.message,1,()=>{
+                                      window.location.reload();
+                                    })
+                                    
                                   });
                             }}
                           >
@@ -1120,7 +1128,7 @@ class DentistManage extends React.Component {
 
         <Modal
           centered={true}
-          title={"Upload Pdf"}
+          title={"Upload Files"}
           visible={this.state.drag}
           onOk={this.handleOk}
           onCancel={this.handleCancel}

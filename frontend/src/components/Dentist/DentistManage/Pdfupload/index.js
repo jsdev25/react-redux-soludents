@@ -234,7 +234,7 @@ class ManageFile extends Component {
           <div>
           <Dropzone onDrop={
                     (files)=> {
-                      if(files.length >= this.state.counter){
+                      if(files.length > this.state.counter){
                         
                         this.setState(
                           state =>({
@@ -242,6 +242,8 @@ class ManageFile extends Component {
                             exceed:true  
                           })
                         )
+
+                       message.error('upload limits exceeded')
                         
                       }else{
                           this.setState( state=>({
@@ -296,9 +298,9 @@ class ManageFile extends Component {
               const files = this.state.files
               //const userId = localStorage.getItem('UserAdmin') 
               if(this.state.counter <=0){
-                  if(window.confirm('Your upload limits has exceeds')){
+                  message.error('upload limits have been exceeded',1.5,()=>{
                     window.location.reload()
-                  }
+                  })
               }else{
                 files.forEach(
                   file=>{
@@ -325,7 +327,10 @@ class ManageFile extends Component {
                                   ({data})=>{
                                     console.log({doc,url:'/api/documents/document'})
                                     console.log(data)
-                                    window.location.reload()
+                                    message.info('files have been uploaded',1,()=>{
+                                      window.location.reload()
+                                    })
+                                    
                                   }
                                   
                               ).catch(err=>console.log(err))

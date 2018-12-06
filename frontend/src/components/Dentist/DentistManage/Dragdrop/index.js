@@ -65,6 +65,20 @@ const userId = JSON.parse(localStorage.getItem("UserAdmin"));
 }
  */
 
+
+const checkSubscription = (subscriptions, success, error) =>{
+    let count = 0;
+    for (const subscription of subscriptions) {
+        count += subscription.available
+    }
+
+    if(count > 0){
+        success()
+    }else{
+        error()
+    }
+}
+
 const ListDataProvider = (props)=>{
     const {data,term,column,sorted} = props
 
@@ -82,8 +96,17 @@ const ListDataProvider = (props)=>{
     ))
 }
 
+const canUpload = (subscriptions) =>{
+    return subscriptions.filter(
+        (sub) => {
+            console.log(sub)
+            return sub.active
+        }
+    ).length > 0
+}
+
 class Dragdrop extends Component {
-    state={files:[],formData:null,data_lists:[],sortFlag:false,term:""}
+    state={files:[],formData:null,data_lists:[],sortFlag:false,term:"",CanUpload:null}
 
     constructor(props){
         super(props)
@@ -97,10 +120,17 @@ class Dragdrop extends Component {
             this.setState({ data_lists });
             console.log(data_lists);
           });
+
+          const {subs} =  this.props
+          const CanUpload  = canUpload(subs)
+          this.setState(
+              state=>({...state,CanUpload})
+          )
     }
 
     render() {
-        const {files} = this.state
+        const {files,CanUpload} = this.state
+        
         return (
            <div>
                <Row>
@@ -151,14 +181,25 @@ class Dragdrop extends Component {
                                                     <Col xs={4}>
                                                             <a href="#" onClick={(e)=>{
                                                                 e.preventDefault()
-                                                                if(window.confirm('want to assign file to manage view section')){
-                                                                    axios.post(`http://localhost:5000/api/documents/archive/${item._id}`,{_id:item.dentist_id}).then(
-                                                                        ({data}) =>{
-                                                                            alert('file has been moved to manage view section')
-                                                                            window.location.reload()
+                                                                const {subs} = this.props
+                                                                checkSubscription(
+                                                                    subs,
+                                                                    ()=>{
+                                                                        if(window.confirm('want to assign file to manage view section')){
+                                                                            axios.post(`http://localhost:5000/api/documents/archive/${item._id}`,{_id:item.dentist_id}).then(
+                                                                                ({data}) =>{
+                                                                                    message.success('file have been moved to View file section',1,()=>{
+                                                                                        window.location.reload()
+                                                                                    })
+                                                                                }
+                                                                            )
                                                                         }
-                                                                    )
-                                                                }
+                                                                    },
+
+                                                                    ()=>{
+                                                                        message.error('you have exceeds the limits of your subscription Or you need to purchase  a new plan')
+                                                                    }
+                                                                )
                                                             }} style={{
                                                                 textDecoration:'none',
                                                                 background:'rgb(0, 169, 157)',
@@ -190,15 +231,24 @@ class Dragdrop extends Component {
                     }
                 }
                 style={{width:'100%',height:'200px',border:'1px dashed rgb(38, 141, 214)', textAlign:'center',justifyContent:'center',alignItems:'center', display:'flex', flexDirection:'column'}} 
-                disabled={false}
+                disabled={CanUpload==false}
                 accept ={"image/jpeg, image/png, image/jpg, application/pdf, application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
                 maxSize={10240000}
+                disabledStyle={{
+                    border:'1px dashed #d00'
+                }}
                 
                 >
                     <p className="ant-upload-drag-icon">
                             <Icon type="inbox" style={{color:'rgb(38, 141, 214)', fontSize:'50px'}}/>
                         </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                        <p className="ant-upload-text" style={{color:CanUpload==true?'#000':'#d00'}}>
+                            {
+                                CanUpload==true?
+                            `Click or drag file to this area to upload`
+                            :`You need to have one active subscription to use this feature`
+                          }
+                        </p>
                         <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
                 </Dropzone>
                 <ul style={{listStyle:'none',marginTop:'10px'}}>
@@ -215,7 +265,12 @@ class Dragdrop extends Component {
                     ()=>{
                         const files = this.state.files 
                         uploadTransaction(files, this.props.username).then(
-                            res => console.log(res)
+                            res => {
+                                message.success('file(s) have been uploaded',1.5,()=>{
+                                    window.location.reload()
+                                })
+                                
+                            }
                         )
                         
                     }

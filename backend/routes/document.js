@@ -193,16 +193,17 @@ router.post('/archive/:name', function(req, res){
      else {
        const {_id} = req.body
        const User = require('./../models/Member')
-        User.findOne({_id}, function(err,data){
+        User.findOne({_id}, (err,data)=>{
             if(!err)
             Subscription.find({userId:data.email,active:true}).sort('updated').exec(
-                function(err,data){
+                (err,data)=>{
                     if(!err){
                         for (const sub of data) {
                             if (sub.available > 0) {
                                 const available = sub.available > 0?sub.available -1 : 0
-                                Subscription.updateOne({_id:sub._id},{available},(err,res)=>{
+                                Subscription.updateOne({_id:sub._id},{available},(err,resp)=>{
                                     console.log(`deducted from ${sub.subscriptionId}`)
+                                    res.status(200).json({message:'file(s) have been moved successfully'})
                                     
                                 })
                                 break

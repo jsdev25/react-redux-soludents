@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios';
+import {message} from "antd"
 import StripeCheckout from 'react-stripe-checkout';
 
 import STRIPE_PUBLISHABLE from './constants/stripe';
@@ -14,11 +15,14 @@ const successPayment = data => {
   if(data){
     const {data:{code}} = data
     if(code=="400"){
-      alert('Payment Error');
-      window.location.reload()
+      message.error('payment was unsuccessfull',1,()=>{
+        window.location.reload()
+      })
     }else{
       localStorage.setItem('payment', 1);
-      alert('Payment Successful');
+       message.info('payment successful',1,()=>{
+         window.location.reload()
+       })
       //window.location.reload()
       console.log(data);
     } 
@@ -27,8 +31,9 @@ const successPayment = data => {
 };
 
 const errorPayment = data => {
-  alert('Payment Error');
-  window.location.reload()
+    message.error('payment error !',1,()=>{
+      window.location.reload()
+    })
   //console.log(data);
 };
 

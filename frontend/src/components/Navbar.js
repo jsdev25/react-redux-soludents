@@ -14,12 +14,16 @@ class Navbar extends Component {
   }
 
   goPanel() {
-    if (localStorage.getItem("admin") === 2) {
+    console.log(localStorage.getItem("admin"))
+    if (localStorage.getItem("admin") == 2) {
       window.location.href = "/admin";
-    } else if (localStorage.getItem("admin") === 1) {
+      console.log('admin')
+    } else if (localStorage.getItem("admin") == 1) {
       window.location.href = "/operator";
+      console.log('operator')
     } else {
       window.location.href = "/dentist";
+      console.log('admin')
     }
   }
 
