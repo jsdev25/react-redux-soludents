@@ -21,6 +21,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "reqwest": "^2.0.5",
+    "sweetalert2": "^7.30.0",
     "web3": "^0.20.0"
   },
   "scripts": {

@@ -7,7 +7,6 @@ import setAuthToken from '../setAuthToken';
 export const registerUser = (member, history) => dispatch => {
     axios.post('/api/members/register', member)
         .then(res => {
-            alert('Success Sign Up!!!')
             history.push('/login')
         })
 
