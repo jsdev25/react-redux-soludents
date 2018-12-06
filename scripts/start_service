@@ -1,5 +1,5 @@
 #!/bin/bash
 cd /var/www/vhosts/soludents/public/frontend
 npm start &
-/var/www/vhosts/soludents/public/backend
+cd /var/www/vhosts/soludents/public/backend
 forever start app.js
