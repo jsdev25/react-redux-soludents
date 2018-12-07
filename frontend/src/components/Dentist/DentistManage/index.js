@@ -13,7 +13,8 @@ import {
   Radio,
   message,
   Table,
-  Popover
+  Popover,
+  Alert
 } from "antd";
 import {
   logoutUser,
@@ -250,6 +251,21 @@ const content6 = (
   </div>
 );
 
+
+const checkNDisplay = (subscriptionState,fallback)=>{
+  const {cancelled,active} = subscriptionState
+  const showCancel = cancelled == false && active == true;
+  const showExpired = cancelled == false && active == false;
+  const showRenew = cancelled == true && active == true;
+  if (showCancel) {
+    return 'Cancel'
+  } else if(showExpired){
+    return 'plan expired'
+  }else if(showRenew){
+    return `auto renew cancelled`
+  }
+  return fallback
+}
 const trim = (item) => item.substr(1,item.length-2)
 
 class ComponentToPrint extends React.Component {
@@ -400,7 +416,8 @@ class DentistManage extends React.Component {
               subscriptionId,
               userId,
               available,
-              _id,active
+              _id,active,
+              cancelled
             }) => ({
               end: strFromDate(end),
               start: strFromDate(start),
@@ -410,11 +427,12 @@ class DentistManage extends React.Component {
               count:parseInt(count),
               available,
               _id,
-              active
+              active,
+              cancelled
             })
           );
            
-          console.log({data})
+          console.log({subs})
           this.setState(
             state => ({ ...state, subs }),
             () => console.log('subscriptions loaded')
@@ -558,6 +576,11 @@ class DentistManage extends React.Component {
     if (!this.state.password) {
       message.error("Your password is empty!");
       return false;
+    }
+
+    if (!(this.state.password.length >= 6)) {
+      message.error("password must be 6 chars long");
+      return false
     }
 
     if (!this.state.email) {
@@ -957,7 +980,7 @@ class DentistManage extends React.Component {
               <div className="card-view">
                 <Card style={{ width: "118%", marginLeft: "-42px" }}>
                   <Table
-                    rowKey="uid"
+                    rowKey="_id"
                     columns={[
                       {
                         title: "Offer Number",
@@ -978,7 +1001,7 @@ class DentistManage extends React.Component {
                       {
                         title: "Action",
                         key: "subscriptionId",
-                        render: ({ subscriptionId, OfferNumber, userId }) => (
+                        render: ({ subscriptionId, OfferNumber, userId,active,cancelled }) => (
                           <a
                             // href="#"
                             style={{
@@ -991,7 +1014,10 @@ class DentistManage extends React.Component {
                             }}
                             onClick={e => {
                               e.preventDefault();
-                              if (window.confirm("Are you sure ??"))
+                              if(cancelled == true){
+                                  message.info('you have already cancelled the subscription')
+                              }else{
+                                if (window.confirm("Are you sure ??"))
                                 axios
                                   .post(
                                     `api/subscription/cancel/${subscriptionId}`,
@@ -1006,9 +1032,13 @@ class DentistManage extends React.Component {
                                     })
                                     
                                   });
+                              }
                             }}
                           >
-                            Cancel
+                            {
+                              checkNDisplay({active,cancelled},'auto renew cancelled')
+
+                            }
                           </a>
                         )
                       }
@@ -1021,13 +1051,14 @@ class DentistManage extends React.Component {
                           end,
                           subscriptionId,
                           OfferNumber,
-                          userId
+                          userId,
+                          active,cancelled
                         }) => ({
                           OfferNumber,
                           start,
                           end,
                           subscriptionId,
-                          userId
+                          userId,active,cancelled
                         })
                       )
                     }

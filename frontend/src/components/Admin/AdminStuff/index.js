@@ -383,6 +383,11 @@ class AdminStuff extends React.Component {
       return false;
     }
 
+    if (!(this.state.password.length >=6)) {
+      message.error("le mot de passe doit être long de 6 caractères");
+      return false;
+    }
+
     let that = this;
     const InserData = {
       name: this.state.name,
@@ -497,7 +502,7 @@ class AdminStuff extends React.Component {
     }
 
     if (this.state.dentist_password.length < 6) {
-      message.error("password length must be over 6 characters.");
+      message.error("le mot de passe doit être long de 6 caractères");
       return false;
     }
 
@@ -885,8 +890,6 @@ class AdminStuff extends React.Component {
                   </button>
 
                 </div>
-      
-
               </div>
               <List
                 itemLayout="horizontal"

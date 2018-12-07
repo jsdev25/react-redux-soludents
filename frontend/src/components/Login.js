@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginAdmin } from "../actions/authentication";
 import classnames from "classnames";
+
 // import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 
@@ -17,6 +18,7 @@ class Login extends Component {
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    
   }
 
   handleInputChange(e) {
@@ -39,6 +41,7 @@ class Login extends Component {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/");
     }
+    
   }
 
   componentWillReceiveProps(nextProps) {

@@ -67,7 +67,7 @@ const BackgroundScheduler = () => {
                 ).forEach(
                     (obj) => {
                       if(obj){
-                        const {active,updated,_id} = obj
+                        const {active,updated,_id,cancelled} = obj
                         const next_date = moment.unix(updated).add('1','month').format('DD/MM/YYYY')
                         const timestamp = parseInt(new Date().getTime().toString().substr(0,10))
                         //update timestamp as it is in db 
@@ -77,14 +77,27 @@ const BackgroundScheduler = () => {
                         const supl2 = parseInt(today.split('/')[1]) 
                         if(active)
                           if(today === next_date){
-                              
+                             if(cancelled){  
+                              Subscription.updateOne({_id},{active:false},(err,success)=>{
+                                resolve({message:'updated', next_date,updated, today})
+                              })
+                             }else{
                               Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
                                 resolve({message:'updated', next_date,updated, today})
                               })
+                             }
+
                           }else if(supl1+1 == supl2){
-                            Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
-                              resolve({message:'updated', next_date,updated, today})
-                            })
+                            if (cancelled) {
+                              Subscription.updateOne({_id},{active:false},(err,success)=>{
+                                resolve({message:'updated', next_date,updated, today})
+                              })
+                              
+                            } else {
+                              Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
+                                resolve({message:'updated', next_date,updated, today})
+                              })
+                            }
                           }else{
                             resolve({message:'without updations'})
                           }
@@ -269,7 +282,7 @@ app.post('/api/subscription/cancel/:id', (req,res)=>{
   const {OfferNumber,userId} = req.body
   stripe.subscriptions.del(id,(err,response)=>{
     if(!err)
-      Subscription.updateOne({subscriptionId:id},{active:false},(err)=>{
+      Subscription.updateOne({subscriptionId:id},{cancelled:true},(err)=>{
         if(!err){
           getUserDetailsByEmail(userId).then(
             ({name,lastname}) =>{

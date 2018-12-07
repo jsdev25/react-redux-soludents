@@ -9,7 +9,6 @@ export const registerUser = (member, history) => dispatch => {
         .then(res => {
             history.push('/login')
         })
-
         .catch(err => {
 
             dispatch({

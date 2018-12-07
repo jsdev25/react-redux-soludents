@@ -42,6 +42,11 @@ const SubscriptionSchema = new mongoose.Schema({
   active:{
       type:Boolean,
       default:true
+  },
+
+  cancelled:{
+      type:Boolean,
+      default:false
   }
   
 })
