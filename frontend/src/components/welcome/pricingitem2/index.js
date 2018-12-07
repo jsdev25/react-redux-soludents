@@ -10,7 +10,7 @@ export class Pricingitem2 extends React.Component {
 
   handleClick() {
     this.setState();
-    if (localStorage.getItem("admin") === 500) {
+    if (localStorage.getItem("admin") == 500) {
       window.location.href = "/login";
     } else {
       window.location.href = "/dentist";

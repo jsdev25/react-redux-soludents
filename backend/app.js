@@ -1,25 +1,25 @@
 const express = require("express");
-const expressHandlebars = require('express-handlebars')
+const expressHandlebars = require("express-handlebars");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const config = require("./db");
 const path = require("path");
-const  Subscription = require('./models/Subscription')
+const Subscription = require("./models/Subscription");
 const documents = require("./routes/document");
 const members = require("./routes/member");
 const histories = require("./routes/history");
 const emails = require("./routes/email");
-const mailer = require('nodemailer')
-const mailConfig = require('./models/constants/email')
-const Member = require('./models/Member')
-const puppeteer = require('puppeteer')
+const mailer = require("nodemailer");
+const mailConfig = require("./models/constants/email");
+const Member = require("./models/Member");
+const puppeteer = require("puppeteer");
 //This is stripe mode.
 const stripe = require("./models/constants/stripe");
-const scheduler = require('node-cron')
+const scheduler = require("node-cron");
 mongoose
   .connect(
-    config.DB,
+    config.DB_DEV,
     { useNewUrlParser: true }
   )
   .then(
@@ -31,7 +31,7 @@ mongoose
     }
   );
 
-const moment = require('moment')
+const moment = require("moment");
 const app = express();
 app.use(passport.initialize());
 require("./passport")(passport);
@@ -44,7 +44,7 @@ app.use("/api/documents", documents);
 app.use("/api/members", members);
 app.use("/api/histories", histories);
 app.use("/api/emails", emails);
-app.engine('html',expressHandlebars())
+app.engine("html", expressHandlebars());
 
 // app.get('/', function(req, res) {
 //     res.send('hello');
@@ -53,333 +53,375 @@ app.engine('html',expressHandlebars())
 //////////////This is stripe test mode////////////////
 
 const BackgroundScheduler = () => {
- return new Promise((resolve,reject)=>{
-  Member.find((err,output)=>{
-    if(!err){
-     
-        output.filter(
-          ({admin}) => admin =='0'
-        ).forEach( ({email}) => {
-            Subscription.find({userId:email},(err,data)=>{
-        
-                data.filter(
-                  ({active}) => active
-                ).forEach(
-                    (obj) => {
-                      if(obj){
-                        const {active,updated,_id,cancelled} = obj
-                        const next_date = moment.unix(updated).add('1','month').format('DD/MM/YYYY')
-                        const timestamp = parseInt(new Date().getTime().toString().substr(0,10))
-                        //update timestamp as it is in db 
-                        const today = moment.unix(timestamp).add('0', 'month').format('DD/MM/YYYY')
-                        //const dummy = moment().unix(new Date().getDate()).format('DD/MM/YYYY')
-                        const supl1 = parseInt(next_date.split('/')[1])
-                        const supl2 = parseInt(today.split('/')[1]) 
-                        if(active)
-                          if(today === next_date){
-                             if(cancelled){  
-                              Subscription.updateOne({_id},{active:false},(err,success)=>{
-                                resolve({message:'updated', next_date,updated, today})
-                              })
-                             }else{
-                              Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
-                                resolve({message:'updated', next_date,updated, today})
-                              })
-                             }
-
-                          }else if(supl1+1 == supl2){
-                            if (cancelled) {
-                              Subscription.updateOne({_id},{active:false},(err,success)=>{
-                                resolve({message:'updated', next_date,updated, today})
-                              })
-                              
-                            } else {
-                              Subscription.updateOne({_id},{available:parseInt(obj.subscription.count)},(err,success)=>{
-                                resolve({message:'updated', next_date,updated, today})
-                              })
+  return new Promise((resolve, reject) => {
+    Member.find((err, output) => {
+      if (!err) {
+        output
+          .filter(({ admin }) => admin == "0")
+          .forEach(({ email }) => {
+            Subscription.find({ userId: email }, (err, data) => {
+              data
+                .filter(({ active }) => active)
+                .forEach(obj => {
+                  if (obj) {
+                    const { active, updated, _id, cancelled } = obj;
+                    const next_date = moment
+                      .unix(updated)
+                      .add("1", "month")
+                      .format("DD/MM/YYYY");
+                    const timestamp = parseInt(
+                      new Date()
+                        .getTime()
+                        .toString()
+                        .substr(0, 10)
+                    );
+                    //update timestamp as it is in db
+                    const today = moment
+                      .unix(timestamp)
+                      .add("0", "month")
+                      .format("DD/MM/YYYY");
+                    //const dummy = moment().unix(new Date().getDate()).format('DD/MM/YYYY')
+                    const supl1 = parseInt(next_date.split("/")[1]);
+                    const supl2 = parseInt(today.split("/")[1]);
+                    if (active)
+                      if (today === next_date) {
+                        if (cancelled) {
+                          Subscription.updateOne(
+                            { _id },
+                            { active: false },
+                            (err, success) => {
+                              resolve({
+                                message: "updated",
+                                next_date,
+                                updated,
+                                today
+                              });
                             }
-                          }else{
-                            resolve({message:'without updations'})
-                          }
+                          );
+                        } else {
+                          Subscription.updateOne(
+                            { _id },
+                            { available: parseInt(obj.subscription.count) },
+                            (err, success) => {
+                              resolve({
+                                message: "updated",
+                                next_date,
+                                updated,
+                                today
+                              });
+                            }
+                          );
                         }
+                      } else if (supl1 + 1 == supl2) {
+                        if (cancelled) {
+                          Subscription.updateOne(
+                            { _id },
+                            { active: false },
+                            (err, success) => {
+                              resolve({
+                                message: "updated",
+                                next_date,
+                                updated,
+                                today
+                              });
+                            }
+                          );
+                        } else {
+                          Subscription.updateOne(
+                            { _id },
+                            { available: parseInt(obj.subscription.count) },
+                            (err, success) => {
+                              resolve({
+                                message: "updated",
+                                next_date,
+                                updated,
+                                today
+                              });
+                            }
+                          );
+                        }
+                      } else {
+                        resolve({ message: "without updations" });
+                      }
                   }
-                )
-          
-            })
-        })
-    
-      
-    }
-  })
- })
-}
+                });
+            });
+          });
+      }
+    });
+  });
+};
 
-
-scheduler.schedule(/* "* * * * *" */"0 0 * * *",function(){
-  console.log('started')
-  BackgroundScheduler().then(
-    data => console.log(data)
-  )
-})
+scheduler.schedule(/* "* * * * *" */ "0 0 * * *", function() {
+  console.log("started");
+  BackgroundScheduler().then(data => console.log(data));
+});
 
 const Mail = config => options => callback => {
-  let connection =  mailer.createTransport({
-   host:config.host,
-   port:config.port,
-   auth: {
-       user:config.username ,
-       pass: config.password
-   },
-   tls: {
-       rejectUnauthorized: true
-   },
-   debug:true
-   })
+  let connection = mailer.createTransport({
+    host: config.host,
+    port: config.port,
+    auth: {
+      user: config.username,
+      pass: config.password
+    },
+    tls: {
+      rejectUnauthorized: true
+    },
+    debug: true
+  });
 
-   connection.sendMail(options, (error, info) => {
-       if (error) {
-       //    res.status(500).json({ code:'500',message:'fail',error: error });
-          return console.log(config);
-       } else {
-           console.log('Message %s sent: %s', info.messageId, info.response);
-           callback(info);
-           // res.status(200).json({ code:'200',message:'success'});
-       }
-   })
+  connection.sendMail(options, (error, info) => {
+    if (error) {
+      //    res.status(500).json({ code:'500',message:'fail',error: error });
+      return console.log(config);
+    } else {
+      console.log("Message %s sent: %s", info.messageId, info.response);
+      callback(info);
+      // res.status(200).json({ code:'200',message:'success'});
+    }
+  });
+};
 
-} 
+const computeUserData = ({
+  address: dentistaddress,
+  phone: dentistphone = "",
+  name,
+  lastname,
+  _id: dentistId
+}) => {
+  return {
+    dentistaddress,
+    dentistphone,
+    dentistfullname: `${name} ${lastname || ""}`,
+    dentistId
+  };
+};
 
-const computeUserData = ({address:dentistaddress,phone:dentistphone="",name,lastname,_id:dentistId})=>{
-  return {dentistaddress,dentistphone,dentistfullname:`${name} ${lastname || ''}`,dentistId}
-}
-
-const computeSubscription = ({_id:InvoiceNumber, start,subscription}) => {
-  const {price:amount,Offernumber:offerNumber} = subscription
+const computeSubscription = ({ _id: InvoiceNumber, start, subscription }) => {
+  const { price: amount, Offernumber: offerNumber } = subscription;
 
   return {
     InvoiceNumber,
-    InvoiceDate:moment.unix(start).add('0','days').format('DD/MM/YYYY'),
+    InvoiceDate: moment
+      .unix(start)
+      .add("0", "days")
+      .format("DD/MM/YYYY"),
     amount,
     offerNumber,
-    TotalHT:amount,
-    TotalTTC:amount
-  }
-}
+    TotalHT: amount,
+    TotalTTC: amount
+  };
+};
 
-const computePdf =  (_id, subId) =>{
- 
-  return new Promise(
-    (resolve,reject)=>{
-      Member.findOne({_id},(err,data)=>{
-        if(!err){
-          const userData = computeUserData(data)
-         // console.log(data)
-          Subscription.findOne({_id:subId},(err,resp)=>{
-            if(!err){
-              const subscriptionData = computeSubscription(resp)
-              resolve({...subscriptionData,...userData})
-            }
-          })
-        }
-    
-      })
-    
-    }
-  )
-  
-}
+const computePdf = (_id, subId) => {
+  return new Promise((resolve, reject) => {
+    Member.findOne({ _id }, (err, data) => {
+      if (!err) {
+        const userData = computeUserData(data);
+        // console.log(data)
+        Subscription.findOne({ _id: subId }, (err, resp) => {
+          if (!err) {
+            const subscriptionData = computeSubscription(resp);
+            resolve({ ...subscriptionData, ...userData });
+          }
+        });
+      }
+    });
+  });
+};
 
 const MailerWithConfig = Mail(mailConfig);
 
-app.get('/export/html/:id/:subId',(req,res)=>{
-  computePdf(req.params.id,req.params.subId).then(
-    d => {
-      res.render('output.html',d)
-    }
-  )
+app.get("/export/html/:id/:subId", (req, res) => {
+  computePdf(req.params.id, req.params.subId).then(d => {
+    res.render("output.html", d);
+  });
   //res.json({'message':'Done'})
-})
+});
 
-app.get('/export/pdf/:id/:subId',(req,res)=>{
+app.get("/export/pdf/:id/:subId", (req, res) => {
   (async () => {
-    const {id,subId} = req.params
-     
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
+    const { id, subId } = req.params;
 
-    await page.goto(`http://localhost:5000/export/html/${id}/${subId}`)
-    const buffer = await page.pdf({format: 'A4'})
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
 
-    res.type('application/pdf')
-    res.send(buffer)
+    await page.goto(`http://localhost:5000/export/html/${id}/${subId}`);
+    const buffer = await page.pdf({ format: "A4" });
 
-    browser.close()
-})()
+    res.type("application/pdf");
+    res.send(buffer);
+
+    browser.close();
+  })();
   //res.json({'message':'Done'})
-})
+});
 
-
-app.get('/api/subscriptions/:email', (req,res)=>{
-  Subscription.find({userId:req.params.email},(err, data)=>{
-    if(!err){
-      res.json(data)
+app.get("/api/subscriptions/:email", (req, res) => {
+  Subscription.find({ userId: req.params.email }, (err, data) => {
+    if (!err) {
+      res.json(data);
     }
-  })
-})
+  });
+});
 
-const getUserDetailsByEmail = (email) =>{
-  return new Promise(
-    (resolve,reject)=>{
-      Member.findOne({email},(err,data)=>{
-        if (err) {
-          reject(err)
-        } else {
-          resolve(data)
-        }
-      })
-    }
-  )
-}
-
-app.get('/api/get_users',(req,res)=>{
-  const UserWithSubscription = (user) => {
-    const {email} = user
-    return new Promise((resolve,reject)=>{
-        Subscription.findOne({userId:email},(err,res)=>{
-          if(!err){
-            const {active} = res || {active:'---'}
-            console.log(res)
-            resolve({...user,active})}
-          else
-            resolve(user)
-        })
-    })
-  }
-
-
-  app.get('/files/:name',(req,res)=>{
-    res.json({name:req.params.name})
-  })
-
-  Member.find((err,data)=>{
-    if(!err){
-        const users = Promise.all(data.filter(({admin})=> admin ==0).map(
-          ({email,name,lastname})=> UserWithSubscription({email,name,lastname}).then(data=>data)
-        ))
-
-        users.then(files=>{
-          res.json(files)
-        })
-          
+const getUserDetailsByEmail = email => {
+  return new Promise((resolve, reject) => {
+    Member.findOne({ email }, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
       }
-    else
-      res.json({'message':'Some error occured'})
- })
-})
+    });
+  });
+};
 
-app.post('/api/subscription/cancel/:id', (req,res)=>{
-  const {id} = req.params
-  const {OfferNumber,userId} = req.body
-  stripe.subscriptions.del(id,(err,response)=>{
-    if(!err)
-      Subscription.updateOne({subscriptionId:id},{cancelled:true},(err)=>{
-        if(!err){
-          getUserDetailsByEmail(userId).then(
-            ({name,lastname}) =>{
-              console.log({name,lastname})
+app.get("/api/get_users", (req, res) => {
+  const UserWithSubscription = user => {
+    const { email } = user;
+    return new Promise((resolve, reject) => {
+      Subscription.findOne({ userId: email }, (err, res) => {
+        if (!err) {
+          const { active } = res || { active: "---" };
+          console.log(res);
+          resolve({ ...user, active });
+        } else resolve(user);
+      });
+    });
+  };
+
+  app.get("/files/:name", (req, res) => {
+    res.json({ name: req.params.name });
+  });
+
+  Member.find((err, data) => {
+    if (!err) {
+      const users = Promise.all(
+        data
+          .filter(({ admin }) => admin == 0)
+          .map(({ email, name, lastname }) =>
+            UserWithSubscription({ email, name, lastname }).then(data => data)
+          )
+      );
+
+      users.then(files => {
+        res.json(files);
+      });
+    } else res.json({ message: "Some error occured" });
+  });
+});
+
+app.post("/api/subscription/cancel/:id", (req, res) => {
+  const { id } = req.params;
+  const { OfferNumber, userId } = req.body;
+  stripe.subscriptions.del(id, (err, response) => {
+    if (!err)
+      Subscription.updateOne(
+        { subscriptionId: id },
+        { cancelled: true },
+        err => {
+          if (!err) {
+            getUserDetailsByEmail(userId).then(({ name, lastname }) => {
+              console.log({ name, lastname });
               MailerWithConfig({
-                from: 'info@soludents.com', // sender address
+                from: "info@soludents.com", // sender address
                 to: userId,
-                subject: 'Soludents: Your subscription has been cancelled',
-                html:`
+                subject: "Soludents: Your subscription has been cancelled",
+                html: `
                 <b>
                 Hello, ${name} ${lastname || ""},
-                Your subscription ${ id } based on the ${ OfferNumber } has been successfully cancelled.
+                Your subscription ${id} based on the ${OfferNumber} has been successfully cancelled.
                 Best regards, Soludents team
                </b>
-                `                                
-            })(
-              rs=> res.json({message:'Your subscription has been cancelled'})
-            )
-            }
-          )
-          
+                `
+              })(rs =>
+                res.json({ message: "Your subscription has been cancelled" })
+              );
+            });
+          }
         }
-          
-      })
-    else
-      res.json({message:'Some Error has been Occured'})
-  })
-})
-
+      );
+    else res.json({ message: "Some Error has been Occured" });
+  });
+});
 
 app.post("/api/stripe", (req, res) => {
   //stripe.charges.create(req.body, postStripeCharge(res));
-  
+
   try {
-    const {planId,source,email,subscription} = req.body
-    const {count} = subscription
-    stripe.customers.create({
-      description: `Customer for ${email}`,
-      source,
-      email
-    }, function(err, {id}) {
-      console.log(` customer is created with ${id}`)
-        stripe.subscriptions.create({
-          customer:id,
-          items: [
-            {
-              plan: planId,
-            },
-          ]
-        }, function(err, sub) {
-
-          if(err){
-            res.json({message:`Some error has occured while in between transaction`})
-            return
-          }else{
-            const {customer,id,current_period_end:end,current_period_start:start} = sub
-            //console.log({sub,subscription,email,customer,id,start,end})
-             const s = new Subscription({
-              start,
-              end,
-              updated:start,
-              userId:email,
-              customerId:customer,
-              subscription,
-              subscriptionId:id,
-              available:parseInt(count)
-            })
-
-            s.save().then(
-              ss => {
-                getUserDetailsByEmail(email).then(
-                  ({name,lastname})=> {
-                    MailerWithConfig({
-                        from: 'info@soludents.com', // sender address
-                        to: email,
-                        subject: 'Soludents: Your subscription has been processed',
-                        html: `
-                        <b>
-                        Hello, ${name} ${lastname || ""}, Your subscription ${id} based on the ${ subscription.Offernumber } has been processed and confirmed.Best regards, Soludents team  
-                        </b>
-                        `                                
-                    })(
-                      rs=> res.json({message:`subscription added successfully`})
-                    )
-                  }
-                )
-                
+    const { planId, source, email, subscription } = req.body;
+    const { count } = subscription;
+    stripe.customers.create(
+      {
+        description: `Customer for ${email}`,
+        source,
+        email
+      },
+      function(err, { id }) {
+        console.log(` customer is created with ${id}`);
+        stripe.subscriptions.create(
+          {
+            customer: id,
+            items: [
+              {
+                plan: planId
               }
-            )
+            ]
+          },
+          function(err, sub) {
+            if (err) {
+              res.json({
+                message: `Some error has occured while in between transaction`
+              });
+              return;
+            } else {
+              const {
+                customer,
+                id,
+                current_period_end: end,
+                current_period_start: start
+              } = sub;
+              //console.log({sub,subscription,email,customer,id,start,end})
+              const s = new Subscription({
+                start,
+                end,
+                updated: start,
+                userId: email,
+                customerId: customer,
+                subscription,
+                subscriptionId: id,
+                available: parseInt(count)
+              });
+
+              s.save().then(ss => {
+                getUserDetailsByEmail(email).then(({ name, lastname }) => {
+                  MailerWithConfig({
+                    from: "info@soludents.com", // sender address
+                    to: email,
+                    subject: "Soludents: Your subscription has been processed",
+                    html: `
+                        <b>
+                        Hello, ${name} ${lastname ||
+                      ""}, Your subscription ${id} based on the ${
+                      subscription.Offernumber
+                    } has been processed and confirmed.Best regards, Soludents team  
+                        </b>
+                        `
+                  })(rs =>
+                    res.json({ message: `subscription added successfully` })
+                  );
+                });
+              });
+            }
           }
-          })
-  });
+        );
+      }
+    );
   } catch (error) {
-     res.json({message:'payment error', code:'400'})
+    res.json({ message: "payment error", code: "400" });
   }
-
-
 });
 
 const postStripeCharge = res => (stripeErr, stripeRes) => {
@@ -390,11 +432,9 @@ const postStripeCharge = res => (stripeErr, stripeRes) => {
   }
 };
 
-app.get('/emails/test/',(req,res)=>{
-  BackgroundScheduler().then(
-    data=>res.json(data)
-  )
-})
+app.get("/emails/test/", (req, res) => {
+  BackgroundScheduler().then(data => res.json(data));
+});
 //////////////////////////////////////////////////////
 
 const PORT = process.env.PORT || 5000;
