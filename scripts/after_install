@@ -1,2 +1,2 @@
 #!/bin/bash
-bash /root/after_install.sh
+bash /root/after_install.sh &
