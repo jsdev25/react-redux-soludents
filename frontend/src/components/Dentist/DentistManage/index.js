@@ -11,10 +11,8 @@ import {
   Divider,
   Collapse,
   Radio,
-  message,
   Table,
   Popover,
-  Alert
 } from "antd";
 import {
   logoutUser,
@@ -30,7 +28,7 @@ import Dragdrop from "./Dragdrop";
 import axios from "axios";
 import Checkout from "../../Stripe/Checkout";
 import "./index.css";
-
+import {message} from "./../../../components/alerts"
 const Panel = Collapse.Panel;
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
@@ -1015,7 +1013,7 @@ class DentistManage extends React.Component {
                             onClick={e => {
                               e.preventDefault();
                               if(cancelled == true){
-                                  message.info('you have already cancelled the subscription')
+                                  message.error('you have already cancelled the subscription')
                               }else{
                                 if (window.confirm("Are you sure ??"))
                                 axios
