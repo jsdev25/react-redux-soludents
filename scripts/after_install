@@ -1,11 +1,11 @@
 #!/bin/bash
 mkdir -p /var/www/vhosts/soludents/public/
 cd /var/www/vhosts/soludents/public/frontend
-npm install -unsafe-perm=true &
+npm install -unsafe-perm=true &> /dev/null
 sleep 1m
-npm start &
+npm start &> /dev/null
 cd /var/www/vhosts/soludents/public/backend
-npm install -unsafe-perm=true &
+npm install -unsafe-perm=true &> /dev/null
 sleep 1m
 forever start app.js &> /dev/null
 service mongod restart
