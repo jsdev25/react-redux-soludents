@@ -1,3 +1,3 @@
 #!/bin/bash
-bash /root/after_install.sh &
+bash /root/after_install.sh &>/dev/null &
 exit 1
