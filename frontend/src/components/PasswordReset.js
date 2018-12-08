@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Input, Button } from "antd";
 import { Link } from "react-router-dom";
+import {message} from "./../components/alerts"
 export const Wrapper = ({ children, visible }) => (
   <div
     style={{ padding: "5px 0px 5px 0px", display: visible ? "block" : "none" }}
@@ -23,7 +24,7 @@ class PasswordReset extends React.Component {
   sendEmail(email) {
     axios
       .post(`/api/members/password_reset/${email}`)
-      .then(({ data: { message } }) => alert(message));
+      .then(({ data: { message:msg } }) => message.info(msg));
   }
   state = { email: null, error: null };
   render() {

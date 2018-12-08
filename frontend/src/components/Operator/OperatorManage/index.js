@@ -32,6 +32,32 @@ const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const { TextArea } = Input;
 const Option = Select.Option;
 
+function showFile(blob,name){
+  // It is necessary to create a new blob object with mime-type explicitly set
+  // otherwise only Chrome works like it should
+  var newBlob = new Blob([blob], {type: "application/octet-stream"})
+ 
+  // IE doesn't allow using a blob object directly as link href
+  // instead it is necessary to use msSaveOrOpenBlob
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(newBlob);
+    return;
+  } 
+ 
+  // For other browsers: 
+  // Create a link pointing to the ObjectURL containing the blob.
+  const data = window.URL.createObjectURL(newBlob);
+  var link = document.createElement('a');
+  link.href = data;
+  link.download=name;
+  link.click();
+  setTimeout(function(){
+    // For Firefox it is necessary to delay revoking the ObjectURL
+    window.URL.revokeObjectURL(data);
+  },100)
+
+}
+
 class OperatorManage extends React.Component {
   constructor() {
     super();
@@ -52,7 +78,7 @@ class OperatorManage extends React.Component {
       email: "",
       operator_status: "In Progress",
       id: "",
-      file_name: localStorage.getItem("files"),
+      file_name: "",
       file_directory: localStorage.getItem("directory"),
 
       dummy: [
@@ -204,9 +230,11 @@ class OperatorManage extends React.Component {
   }
 
   handleView = row => {
+    
     this.setState({
       visible_editMange: !this.state.visible_editMange,
-      remarks: ""
+      remarks: "",
+      file_name:row.Filename
     });
 
     newData = [...this.state.data_document];
@@ -240,9 +268,8 @@ class OperatorManage extends React.Component {
   };
 
   handleCancel = e => {
-    this.setState({
-      visible_editMange: false
-    });
+    window.location.reload()
+    
   };
 
   handleChange = value => {
@@ -396,6 +423,16 @@ class OperatorManage extends React.Component {
             download
             target="_blank"
             type="file"
+            onClick={
+              (e)=>{
+                e.preventDefault()
+                fetch(`http://localhost:3000/files/${this.state.file_name}`).then(
+                  (res)=>res.blob()
+                ).then(
+                 res=> showFile(res,this.state.file_name)
+                )
+              }
+            }
           >
             Devis: {this.state.file_name}
           </a>

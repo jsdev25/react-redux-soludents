@@ -33,7 +33,7 @@ const Panel = Collapse.Panel;
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const pwa = JSON.parse(localStorage.getItem("pwa"));
 const RadioGroup = Radio.Group;
-
+const {data_billing} = require('./../../../components/subLocal')
 function timeConverter(UNIX_timestamp) {
   var a = new Date(UNIX_timestamp * 1000);
   var months = [
@@ -60,56 +60,7 @@ const strFromDate = str => {
   return timeConverter(str);
 };
 
-const data_billing = [
-  {
-    key: "1",
-    Offernumber: "Subscription 1",
-    day: "30",
-    count: "10",
-    price: "390",
-    planId: "plan_E39fwV05g02Cb2"
-  },
-  {
-    key: "2",
-    Offernumber: "Subscription 2",
-    day: "365",
-    count: "10",
-    price: "750",
-    planId: "plan_E39fS2RccKR32t"
-  },
-  {
-    key: "3",
-    Offernumber: "Subscription 3",
-    day: "30",
-    count: "20",
-    price: "990",
-    planId: "plan_E3A2IsyawGftyG"
-  },
-  {
-    key: "4",
-    Offernumber: "Subscription 4",
-    day: "365",
-    count: "20",
-    price: "3900",
-    planId: "plan_E39heLSMTrmgz2"
-  },
-  {
-    key: "5",
-    Offernumber: "Subscription 5",
-    day: "30",
-    count: "30",
-    price: "7500",
-    planId: "plan_E39hqMhI66scAu"
-  },
-  {
-    key: "6",
-    Offernumber: "Subscription 6",
-    day: "365",
-    count: "30",
-    price: "9900",
-    planId: "plan_E39iI5My03ajch"
-  }
-];
+
 
 const content1 = (
   <div style={{ lineHeight: -5 }}>
@@ -179,6 +130,32 @@ const content4 = (
     </span>
   </div>
 );
+
+function showFile(blob){
+  // It is necessary to create a new blob object with mime-type explicitly set
+  // otherwise only Chrome works like it should
+  var newBlob = new Blob([blob], {type: "application/pdf"})
+ 
+  // IE doesn't allow using a blob object directly as link href
+  // instead it is necessary to use msSaveOrOpenBlob
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(newBlob);
+    return;
+  } 
+ 
+  // For other browsers: 
+  // Create a link pointing to the ObjectURL containing the blob.
+  const data = window.URL.createObjectURL(newBlob);
+  var link = document.createElement('a');
+  link.href = data;
+  window.open(data)
+  setTimeout(function(){
+    // For Firefox it is necessary to delay revoking the ObjectURL
+    window.URL.revokeObjectURL(data);
+  },100)
+
+}
+
 
 const content3 = (
   <div style={{ lineHeight: -5 }}>
@@ -911,7 +888,7 @@ class DentistManage extends React.Component {
                   </span>
                 </Popover>
 
-                <Radio value={4} stactiveyle={{ position: "absolute", right: 40 }} />
+                <Radio value={4} style={{ position: "absolute", right: 40 }} />
                 <br />
                 <Popover
                   placement="leftTop"
@@ -944,7 +921,7 @@ class DentistManage extends React.Component {
                 <Checkout
                   name={"Payment Subscription"}
                   description={this.state.offer_content}
-                  amount={this.state.offer_pay}
+                  amount={this.state.subscriptionDetails && this.state.subscriptionDetails.price}
                   planId={
                     this.state.subscriptionDetails &&
                     this.state.subscriptionDetails.planId
@@ -1015,8 +992,8 @@ class DentistManage extends React.Component {
                               if(cancelled == true){
                                   message.error('you have already cancelled the subscription')
                               }else{
-                                if (window.confirm("Are you sure ??"))
-                                axios
+                                message.warninig('cancel now',()=>{
+                                  axios
                                   .post(
                                     `api/subscription/cancel/${subscriptionId}`,
                                     {
@@ -1030,6 +1007,9 @@ class DentistManage extends React.Component {
                                     })
                                     
                                   });
+
+                                })
+                                
                               }
                             }}
                           >
@@ -1099,9 +1079,15 @@ class DentistManage extends React.Component {
                               }}
                               onClick={e => {
                                 e.preventDefault();
-                                if (window.confirm("Print Invoice"))
-                                //console.log(obj)
-                                  window.open(`http://localhost:5000/export/pdf/${trim(localStorage.getItem('UserAdmin'))}/${_id}`)
+                                message.promptWithMessage("print your invoice",()=>{
+                                  const url = `http://localhost:3000/export/pdf/${trim(localStorage.getItem('UserAdmin'))}/${_id}`
+                                  console.log(url)
+                                  fetch(url).then(
+                                    res => res.blob()
+                                  ).then(showFile)
+                                  
+                                })
+                                  
                               }}
                             >
                               Print
@@ -1137,6 +1123,8 @@ class DentistManage extends React.Component {
               <br />
             </Panel>
           </Collapse>
+        
+        
         </Modal>
 
         <Modal

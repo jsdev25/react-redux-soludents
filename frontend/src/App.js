@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch,Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
@@ -17,6 +17,7 @@ import Operator from "./components/Operator";
 import Dentist from "./components/Dentist";
 import { Button, Input } from "antd";
 import { Wrapper } from "./components/PasswordReset";
+import {message} from "./components/alerts"
 if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
   const decoded = jwt_decode(localStorage.jwtToken);
@@ -35,9 +36,14 @@ const resetPasswordUtil = (password, email) => {
       password
     })
     .then(({ data }) => {
-      if (window.confirm("continue to login")) {
+      message.ask({
+        title:'message',
+        text:'continue to login',
+        confirmTitle:'continue'
+      },()=>{
         window.location.href = "/login";
-      }
+      })
+
     });
 };
 
@@ -146,6 +152,36 @@ class LoadOrFail extends React.Component {
   }
 }
 
+class ResourceDownloader extends React.Component{
+    componentDidMount(){
+      const {url} = this.props
+      axios.get(url).then(
+        ({data}) => console.log(data)
+      )
+    }
+
+  render = ()=>{
+    return <p>
+      Testing
+    </p>
+  }
+}
+
+class PDFDownloader extends React.Component{
+  componentDidMount(){
+    const {url} = this.props
+    axios.get(url).then(
+      ({data}) => console.log(data)
+    )
+  }
+
+  render = ()=>{
+    return <p>
+      Testing
+    </p>
+  }
+}
+
 class App extends Component {
   render() {
     return (
@@ -167,6 +203,15 @@ class App extends Component {
             <Route path="/admin" component={Admin} />
             <Route path="/operator" component={Operator} />
             <Route path="/dentist" component={Dentist} />
+            <Route path="/export/pdf/:id/:subId" render ={
+              ({match})=>(<PDFDownloader url={match.url}/>)
+            }  exact />
+
+            <Route 
+              path="/files/:name" render={
+                ({match})=>(<ResourceDownloader url={match.url}/>)
+              }
+            />
             <Route
               path="/reset/:email/:token"
               render={({

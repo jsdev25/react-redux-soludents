@@ -41,7 +41,7 @@ router.post('/send', function (req, res) {
         const {html,email} = req.body
         MailerWithConfig(
             {
-                from: email, // sender address
+                from: 'support@soludents.com', // sender address
                 to: "support@soludents.com",
                 subject: `You have recieved query from ${email}`,
                 html:`

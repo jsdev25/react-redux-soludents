@@ -14,9 +14,10 @@ import {
   Modal,
   Radio,
   Table,
-  message,
   Progress,
 } from "antd";
+
+import Checkout from "../../Stripe/Checkout"
 import { customPanelStyle } from "./const";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -30,6 +31,9 @@ import {
 } from "../../../actions/authentication";
 import axios from "axios";
 import { CSVLink } from "react-csv";
+import {message} from "../../../components/alerts"
+import {data_billing} from "./../../subLocal"
+import { relativeTimeThreshold } from "moment";
 
 const RadioGroup = Radio.Group;
 const confirm = Modal.confirm;
@@ -97,13 +101,87 @@ const columns_history = [
         : 0
   }
 ];
-function callback(key) {}
+function callback(key) {
+  console.log(key)
+
+}
+
+
+function showFile(blob){
+  // It is necessary to create a new blob object with mime-type explicitly set
+  // otherwise only Chrome works like it should
+  var newBlob = new Blob([blob],{type:'application/pdf'})
+ 
+  // IE doesn't allow using a blob object directly as link href
+  // instead it is necessary to use msSaveOrOpenBlob
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(newBlob);
+    return;
+  } 
+ 
+  // For other browsers: 
+  // Create a link pointing to the ObjectURL containing the blob.
+  const data = window.URL.createObjectURL(newBlob);
+  window.open(data)
+  setTimeout(function(){
+    // For Firefox it is necessary to delay revoking the ObjectURL
+    window.URL.revokeObjectURL(data);
+  },100)
+
+}
+
+
+
+const checkNDisplay = (subscriptionState,fallback)=>{
+  const {cancelled,active} = subscriptionState
+  const showCancel = cancelled == false && active == true;
+  const showExpired = cancelled == false && active == false;
+  const showRenew = cancelled == true && active == true;
+  if (showCancel) {
+    return 'Cancel'
+  } else if(showExpired){
+    return 'plan expired'
+  }else if(showRenew){
+    return `auto renew cancelled`
+  }
+  return fallback
+}
+const trim = (item) => item.substr(1,item.length-2)
+
+function timeConverter(UNIX_timestamp) {
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  return `${date}/${month}/${year}`;
+}
+
+const strFromDate = str => {
+  return timeConverter(str);
+};
+
 
 class AdminStuff extends React.Component {
   constructor() {
     super();
     this.search = React.createRef()
     this.Osearch = React.createRef()
+    const [subscriptionDetails] = data_billing.filter(({key})=>key==1)
+    
     this.state = {
       name: "",
       Oname: "",
@@ -128,7 +206,7 @@ class AdminStuff extends React.Component {
       update_name_0: "",
       update_email_0: "",
       update_password_0: "",
-
+      subscriptionDetails,
       users_list: [],
       data_dentists: [],
       data_operators: [],
@@ -143,7 +221,7 @@ class AdminStuff extends React.Component {
       download_csv: false,
       hidden_d: true,
       hidden_o: true,
-
+      subs:[],
       csv_data: [
         { firstname: "1111", lastname: "Tomi", email: "ah@smthing.co.com" },
         { firstname: "2222", lastname: "Labes", email: "rl@smthing.co.com" },
@@ -156,6 +234,7 @@ class AdminStuff extends React.Component {
       ]
     };
 
+    
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubmitO = this.handleSubmitO.bind(this);
@@ -173,9 +252,15 @@ class AdminStuff extends React.Component {
 
   onChange = e => {
     //console.log('radio checked', e.target.value);
-    this.setState({
-      subscription: e.target.value
-    });
+    if(e.target.value){
+      const [subscriptionDetails] = data_billing.filter(({key})=> key==e.target.value)
+      console.log(subscriptionDetails)
+      this.setState({
+        subscription: e.target.value,
+        subscriptionDetails
+      });
+    }
+    
   };
 
   state = {
@@ -196,8 +281,10 @@ class AdminStuff extends React.Component {
     });
   }
 
+
+  
   componentDidMount() {
-    axios.get("/api/members/dentist").then(res => {
+    axios.get("/api/get_users/").then(res => {
       const data_dentists = res.data;
       this.setState({ data_dentists,dentistsV2:data_dentists,tmpSnapshot:data_dentists});
       //console.log('this is my dentist data', data_dentists)
@@ -209,9 +296,11 @@ class AdminStuff extends React.Component {
     });
 
 
-   /*  axios.get("/api/get_users/").then(res => {
+    /* axios.get("/api/get_users/").then(res => {
       const dentistsV2 = res.data;
-      this.setState({ dentistsV2,tmpSnapshot:dentistsV2 });
+      const old = this.state.dentistsV2
+      console.log([dentistsV2,old])
+      // this.setState({ dentistsV2,tmpSnapshot:dentistsV2 });
     }); */
 
     
@@ -349,7 +438,7 @@ class AdminStuff extends React.Component {
   };
 
   handleCancel = e => {
-    this.setState({
+    this.setState(state=>({
       visible: false,
       visible_opertor: false,
       Update_dentist_visible: false,
@@ -358,8 +447,11 @@ class AdminStuff extends React.Component {
       update_subscription_byadmin_visible: false,
       visible_opertor_byadmin: false,
       visible_history: false,
-      download_csv: false
-    });
+      download_csv: false,
+    }),()=>window.location.reload());
+
+
+
   };
 
   handleSubmit() {
@@ -408,9 +500,7 @@ class AdminStuff extends React.Component {
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
       .then(function(response) {
-        if (response.status === 200) {
-        }
-
+        window.location.reload()
         that.setState(
           {
             data_dentists: [...that.state.data_dentists, InserData],
@@ -420,8 +510,8 @@ class AdminStuff extends React.Component {
         );
       })
 
-      .catch(function(response) {
-        return;
+      .catch(function(error) {
+        console.log(error)
       });
   }
 
@@ -438,17 +528,17 @@ class AdminStuff extends React.Component {
           url: `/api/members/` + e._id
         })
           .then(function(response) {
-            if (response.status === 200) {
-            }
+            window.location.reload()
           })
 
           .catch(function(response) {
-            return;
+            window.location.reload()
           });
-
-        var array = [...that.state.data_dentists];
+          
+        var array = [...that.state.data_operators];
         array.splice(index, 1);
-        that.setState({ data_dentists: array });
+        that.setState({ data_operators: array });
+        window.location.href = "/admin";
       },
       onCancel() {}
     });
@@ -473,16 +563,19 @@ class AdminStuff extends React.Component {
   }
 
   UpdateSubscription(e, wholedata) {
+    console.log({e,wholedata})
     this.setState({
       update_subscription_byadmin_visible: true
     });
 
     localStorage.setItem("update_dentist", e._id);
+    localStorage.setItem("dentist_email", e.email);
     const index = wholedata.findIndex(item => item._id === e._id);
-
     this.setState({
       subscription: wholedata[index].subscription
     });
+
+
   }
 
   handleUpdateDentist() {
@@ -556,13 +649,15 @@ class AdminStuff extends React.Component {
 
   handleUpdateSubscription() {
     const mydata = {
-      subscription: this.state.subscription
+      subscription: this.state.subscription,
+      subscriptionDetails:this.state.subscriptionDetails,
+      email:localStorage.getItem('dentist_email')
     };
 
-    this.props.UpdateDentistSubscriptionByadmin(mydata, this.props.history);
+    /* this.props.UpdateDentistSubscriptionByadmin(mydata, this.props.history);
     this.setState({
       update_subscription_byadmin_visible: false
-    });
+    }); */
   }
 
   DeleteOperator(e, wholedata) {
@@ -577,11 +672,14 @@ class AdminStuff extends React.Component {
           method: "delete",
           url: `/api/members/` + e._id
         })
-          .then(function(response) {})
+          .then(function(response) {
+            window.location.reload()
+          })
 
           .catch(function(response) {
-            return;
+            window.location.reload()
           });
+          
         var array = [...that.state.data_operators];
         array.splice(index, 1);
         that.setState({ data_operators: array });
@@ -592,6 +690,11 @@ class AdminStuff extends React.Component {
   }
 
   handleSubmitO() {
+    if (this.state.Opassword.length < 6) {
+      message.error("Le mot de passe de l'opérateur ne peut être vide !");
+      return false;
+    }
+    
     if (!this.state.Oname) {
       message.error("Le nom de l'opérateur ne peut être vide !");
       return false;
@@ -645,7 +748,7 @@ class AdminStuff extends React.Component {
 
   render() {
 
-    console.log(this.state.dentistsV2)
+   
     return (
       <div>
         <Row gutter={12}>
@@ -737,11 +840,13 @@ class AdminStuff extends React.Component {
                             </span>
                             <Icon
                               type="file-pdf"
-                              onClick={(e, data) =>
+                              onClick={(e, data) =>{
+                                console.log(item)
+
                                 this.HandleHistories(
                                   item,
                                   this.state.data_histories
-                                )
+                                )}
                               }
                               theme="outlined"
                               style={{
@@ -863,6 +968,7 @@ class AdminStuff extends React.Component {
                         break;
                       case '3':
                           if(this.state.dentistsV2){
+                            console.log(this.state.dentistsV2)
                             const list = this.state.dentistsV2.filter(
                               ({active}) => {
                                 return active==true
@@ -898,7 +1004,42 @@ class AdminStuff extends React.Component {
                   <List.Item>
                     <List.Item.Meta
                       title={
-                        <Collapse bordered={false} onChange={callback}>
+                        <Collapse bordered={false} onChange={()=>{
+                          axios
+                                .get(`/api/subscriptions/${item.email}`)
+                                .then(({ data }) => {
+                                  const subs = data.filter(({active})=>active).map(
+                                    ({
+                                      end,
+                                      start,
+                                      subscription: { Offernumber: OfferNumber,count },
+                                      subscriptionId,
+                                      userId,
+                                      available,
+                                      _id,active,
+                                      cancelled
+                                    }) => ({
+                                      end: strFromDate(end),
+                                      start: strFromDate(start),
+                                      subscriptionId,
+                                      OfferNumber,
+                                      userId,
+                                      count:parseInt(count),
+                                      available,
+                                      _id,
+                                      active,
+                                      cancelled
+                                    })
+                                  );
+                                   
+                                  console.log({subs})
+                                  this.setState(
+                                    state => ({ ...state, subs }),
+                                    () => console.log('subscriptions loaded')
+                                  );
+                                });
+
+                        }}>
                           <Panel
                             header={
                               <div>
@@ -927,12 +1068,12 @@ class AdminStuff extends React.Component {
                             </span>
                             <Icon
                               type="file-pdf"
-                              onClick={(e, data) =>
+                              onClick={(e, data) =>{
                                 this.UpdateSubscription(
                                   item,
                                   this.state.data_dentists
                                 )
-                              }
+                              }}
                               theme="outlined"
                               style={{
                                 color: "#666",
@@ -1097,6 +1238,7 @@ class AdminStuff extends React.Component {
                   placeholder="********"
                   style={{ border: "none" }}
                   name="password"
+                  type={'password'}
                   value={this.state.password}
                   onChange={this.handleInputChange}
                 />
@@ -1312,6 +1454,7 @@ class AdminStuff extends React.Component {
                   style={{ border: "none" }}
                   name="Opassword"
                   value={this.state.Opassword}
+                  type={'password'}
                   onChange={this.handleInputChange}
                 />
               </Col>
@@ -1372,18 +1515,210 @@ class AdminStuff extends React.Component {
                 <Radio value={6} style={{ position: "absolute", right: 40 }} />
               </RadioGroup>
               <br />
-              <br />
-
-              <button
-                style={{ width: "100%" }}
-                onClick={this.handleUpdateSubscription}
-                className="btn btn-primary"
-              >
-                Mettre à Jour l'Abonnement
-              </button>
+              
+              {
+                this.state.subscriptionDetails
+                ?
+                <Checkout
+                name={"Payment Subscription"}
+                description={this.state.subscriptionDetails.Offernumber}
+                amount={this.state.subscriptionDetails.price}
+                planId={
+                      this.state.subscriptionDetails.planId
+                }
+                email={localStorage.getItem('dentist_email')}
+                subscription={
+                    this.state.subscriptionDetails
+                }
+              />
+              :
+              <p>Loading ...</p>
+              }
+             
               <br />
             </Panel>
           </Collapse>
+        
+
+
+          {/* Subscription Area */}
+          <Collapse bordered={false}>
+            <Panel header="Subscription Area" key="2">
+              <div className="card-view">
+                <Card style={{ width: "118%", marginLeft: "-42px" }}>
+                  <Table
+                    rowKey="_id"
+                    columns={[
+                      {
+                        title: "Offer Number",
+                        dataIndex: "OfferNumber",
+                        key: "OfferNumber"
+                      },
+                      {
+                        title: "Subscription Date",
+                        dataIndex: "start",
+                        key: "start"
+                      },
+                      {
+                        title: "Renew Date",
+                        dataIndex: "end",
+                        key: "end"
+                      },
+
+                      {
+                        title: "Action",
+                        key: "subscriptionId",
+                        render: ({ subscriptionId, OfferNumber, userId,active,cancelled }) => (
+                          <a
+                            // href="#"
+                            style={{
+                              textDecoration: "none",
+                              padding: "8px",
+                              border: "1px solid #eee",
+                              borderRadius: "7px",
+                              color: "#fff",
+                              background: "#d00"
+                            }}
+                            onClick={e => {
+                              e.preventDefault();
+                              if(cancelled == true){
+                                  message.error('you have already cancelled the subscription')
+                              }else{
+                                message.warninig('cancel now',()=>{
+                                  axios
+                                  .post(
+                                    `api/subscription/cancel/${subscriptionId}`,
+                                    {
+                                      userId,
+                                      OfferNumber
+                                    }
+                                  )
+                                  .then(({ data }) => {
+                                    message.info(data.message,1,()=>{
+                                      window.location.reload();
+                                    })
+                                    
+                                  });
+
+                                })
+                                
+                              }
+                            }}
+                          >
+                            {
+                              checkNDisplay({active,cancelled},'auto renew cancelled')
+
+                            }
+                          </a>
+                        )
+                      }
+                    ]}
+                    dataSource={
+                      this.state.subs &&
+                      this.state.subs.map(
+                        ({
+                          start,
+                          end,
+                          subscriptionId,
+                          OfferNumber,
+                          userId,
+                          active,cancelled
+                        }) => ({
+                          OfferNumber,
+                          start,
+                          end,
+                          subscriptionId,
+                          userId,active,cancelled
+                        })
+                      )
+                    }
+                  />
+
+                  {/* dataSource={this.state.data_document}  */}
+                </Card>
+              </div>
+              <br />
+            </Panel>
+          </Collapse>
+
+          {/* Billing Area */}
+          <Collapse bordered={false}>
+            <Panel header="Billing Area" key="2">
+              <div className="card-view">
+                <Card style={{ width: "118%", marginLeft: "-42px" }}>
+                  <Table
+                    rowKey="uid"
+                    columns={
+                      [
+                        {
+                          title: "Billing",
+                          dataIndex: "OfferNumber",
+                          key: "OfferNumber"
+                        },
+                        {
+                          title: "Action",
+                          key: "subscriptionId",
+                          render: ({_id}) => (
+                            <a
+                              // href="#"
+                              style={{
+                                textDecoration: "none",
+                                padding: " 5px 18px",
+                                border: "1px solid #eee",
+                                borderRadius: "7px",
+                                color: "#fff",
+                                background: "#aed100"
+                              }}
+                              onClick={e => {
+                                e.preventDefault();
+                                message.promptWithMessage("Print Invoice",()=>{
+                                  const url = `http://localhost:3000/export/pdf/${trim(localStorage.getItem('UserAdmin'))}/${_id}`
+                                  // error prone area
+                                   fetch(url).then(
+                                      res => res.blob()
+                                    ).then(showFile)
+
+                                })
+                                //console.log(obj)
+                                 
+                              }}
+                            >
+                              Print
+                            </a>
+                          )
+                        }
+                      ]
+                    }
+                    dataSource={
+                      this.state.subs &&
+                      this.state.subs.map(
+                        ({
+                          start,
+                          end,
+                          subscriptionId,
+                          OfferNumber,
+                          userId,
+                          _id
+                        }) => ({
+                          OfferNumber,
+                          start,
+                          end,
+                          subscriptionId,
+                          userId,
+                          _id
+                        })
+                      )
+                    }
+                  />
+                  {/* dataSource={this.state.data_document}  */}
+                </Card>
+              </div>
+              <br />
+            </Panel>
+          </Collapse>
+        
+
+
         </Modal>
 
         <Modal

@@ -14,6 +14,7 @@ const mailer = require('nodemailer')
 const mailConfig = require('./models/constants/email')
 const Member = require('./models/Member')
 const puppeteer = require('puppeteer')
+const Invoice = require('./models/Invoice')
 //This is stripe mode.
 const stripe = require("./models/constants/stripe");
 const scheduler = require('node-cron')
@@ -50,6 +51,103 @@ app.engine('html',expressHandlebars())
 //     res.send('hello');
 // });
 
+const GenerateInvoice = (object,Subscription) =>
+{
+  const {start,end,cancelled,active,subscriptionId,subscription:{price, Offernumber:description}} = Subscription
+  const {email,name,lastname,phone ,address} = object
+  stripe.subscriptions.retrieve(subscriptionId, (err,response)=>{
+    const {status,current_period_end,plan:{nickname}} = response
+    if(status == 'active' && cancelled !=true && active==true){
+      console.log('_____________create invoice_______________')
+      const endCurrentPeriod = moment.unix(current_period_end).add('0','month').format('DD/MM/YYYY')
+      const today = moment().format('DD/MM/YYYY')
+      console.log({endCurrentPeriod, today})
+      Invoice.find({subscriptionId,email}, (err,data)=>{
+        if (err) {
+          console.log('Database Error !')
+        } else {
+          if(data.length > 0){
+            const inv = data.reverse()[0]
+            const InvoiceNum = parseInt(inv.InvoiceNumber)+1;
+            const amt = parseInt(price)
+            const ttc = amt*0.2
+            const tva = amt-ttc
+            const TvaPer = '20%'
+            const Invoice = new Invoice({InvoiceNumber:InvoiceNum,OfferNumber:nickname,subscriptionId,description,amount:amt,TTC:ttc,TVA:tva,tvaPer:TvaPer,InvoiceDate:today,email,phone,address,FullName:`${name} ${lastname}`})
+                  Invoice.save().then(
+                    ()=>console.log('Invoices generated')
+                  ) 
+
+          }else{
+            const InvoiceNumber = 1;
+            const amount = parseInt(price)
+            const TTC = amount*0.2
+            const TVA = amount-TTC
+            const tvaPer = '20%'
+            const invoice = new Invoice({InvoiceNumber,OfferNumber:nickname,subscriptionId,description,amount,TTC,TVA,amount,tvaPer,InvoiceDate:today,email,phone,address,InvoiceNumber,FullName:`${name} ${lastname}`})
+                  invoice.save().then(
+                    ()=>console.log('Invoices generated')
+                  )
+          }
+        }
+      })
+      
+      console.log('__________________________________________________')
+
+    }
+  })
+
+}
+
+
+const GenerateInvoiceGeneral = (object,Subscription) =>
+{
+  const {start,end,cancelled,active,subscriptionId,subscription:{price, Offernumber:description}} = Subscription
+  const {email,name,lastname,phone ,address} = object
+  stripe.subscriptions.retrieve(subscriptionId, (err,response)=>{
+    const {status,current_period_end,plan:{nickname}} = response
+    if(status == 'active'){
+      console.log('_____________create invoice_______________')
+      const endCurrentPeriod = moment.unix(current_period_end).add('0','month').format('DD/MM/YYYY')
+      const today = moment().format('DD/MM/YYYY')
+      console.log({endCurrentPeriod, today})
+      Invoice.find({subscriptionId,email}, (err,data)=>{
+        if (err) {
+          console.log('Database Error !')
+        } else {
+          if(data.length > 0){
+            const inv = data.reverse()[0]
+            const InvoiceNum = parseInt(inv.InvoiceNumber)+1;
+            const amt = parseInt(price)
+            const ttc = amt*0.2
+            const tva = amt-ttc
+            const TvaPer = '20%'
+            const nvoice = new Invoice({InvoiceNumber:InvoiceNum,OfferNumber:nickname,subscriptionId,description,amount:amt,TTC:ttc,TVA:tva,tvaPer:TvaPer,InvoiceDate:today,email,phone,address,FullName:`${name} ${lastname}`})
+                  nvoice.save().then(
+                    ()=>console.log('Invoices generated 2')
+                  ) 
+
+          }else{
+            const InvoiceNumber = 1;
+            const amount = parseInt(price)
+            const TTC = amount*0.2
+            const TVA = amount-TTC
+            const tvaPer = '20%'
+            const invoice = new Invoice({InvoiceNumber,OfferNumber:nickname,subscriptionId,description,amount,TTC,TVA,amount,tvaPer,InvoiceDate:today,email,phone,address,InvoiceNumber,FullName:`${name} ${lastname}`})
+                  invoice.save().then(
+                    ()=>console.log('Invoices generated')
+                  )
+          }
+        }
+      })
+      
+      console.log('__________________________________________________')
+
+    }
+  })
+
+}
+
 //////////////This is stripe test mode////////////////
 
 const BackgroundScheduler = () => {
@@ -59,14 +157,17 @@ const BackgroundScheduler = () => {
      
         output.filter(
           ({admin}) => admin =='0'
-        ).forEach( ({email}) => {
+        ).forEach( (customer) => {
+            const {email} = customer
             Subscription.find({userId:email},(err,data)=>{
-        
                 data.filter(
                   ({active}) => active
                 ).forEach(
                     (obj) => {
                       if(obj){
+
+                        GenerateInvoice(customer,obj)
+                        resolve('invoice generated')
                         const {active,updated,_id,cancelled} = obj
                         const next_date = moment.unix(updated).add('1','month').format('DD/MM/YYYY')
                         const timestamp = parseInt(new Date().getTime().toString().substr(0,10))
@@ -74,8 +175,9 @@ const BackgroundScheduler = () => {
                         const today = moment.unix(timestamp).add('0', 'month').format('DD/MM/YYYY')
                         //const dummy = moment().unix(new Date().getDate()).format('DD/MM/YYYY')
                         const supl1 = parseInt(next_date.split('/')[1])
-                        const supl2 = parseInt(today.split('/')[1]) 
-                        if(active)
+                        const supl2 = parseInt(today.split('/')[1])
+                        GenerateInvoice(output,obj) 
+                        if(active==true)
                           if(today === next_date){
                              if(cancelled){  
                               Subscription.updateOne({_id},{active:false},(err,success)=>{
@@ -102,7 +204,7 @@ const BackgroundScheduler = () => {
                             resolve({message:'without updations'})
                           }
                         }
-                  }
+                 }
                 )
           
             })
@@ -153,17 +255,22 @@ const computeUserData = ({address:dentistaddress,phone:dentistphone="",name,last
   return {dentistaddress,dentistphone,dentistfullname:`${name} ${lastname || ''}`,dentistId}
 }
 
-const computeSubscription = ({_id:InvoiceNumber, start,subscription}) => {
-  const {price:amount,Offernumber:offerNumber} = subscription
-
-  return {
-    InvoiceNumber,
-    InvoiceDate:moment.unix(start).add('0','days').format('DD/MM/YYYY'),
-    amount,
-    offerNumber,
-    TotalHT:amount,
-    TotalTTC:amount
-  }
+const computeSubscription = ({email}, subscription) => {
+  console.log(subscription)
+  const {subscriptionId} = subscription
+   return new Promise((resolve,reject)=>{
+    Invoice.find({subscriptionId},(error,data)=>{
+      if(!error)
+        if(data.length > 0){
+           resolve(data)
+          
+        }else{
+          console.log({subscriptionId,data})
+          reject("Error =>"+"Invoices cannot be generated at this time")
+        }
+          
+    })
+  })
 }
 
 const computePdf =  (_id, subId) =>{
@@ -176,8 +283,12 @@ const computePdf =  (_id, subId) =>{
          // console.log(data)
           Subscription.findOne({_id:subId},(err,resp)=>{
             if(!err){
-              const subscriptionData = computeSubscription(resp)
-              resolve({...subscriptionData,...userData})
+              computeSubscription(data,resp).then(
+                data => {
+                  resolve({data,...userData})
+                }
+              )
+              
             }
           })
         }
@@ -194,7 +305,7 @@ const MailerWithConfig = Mail(mailConfig);
 app.get('/export/html/:id/:subId',(req,res)=>{
   computePdf(req.params.id,req.params.subId).then(
     d => {
-      res.render('output.html',d)
+      res.render('template.html',{data:d})
     }
   )
   //res.json({'message':'Done'})
@@ -247,24 +358,20 @@ app.get('/api/get_users',(req,res)=>{
     return new Promise((resolve,reject)=>{
         Subscription.findOne({userId:email},(err,res)=>{
           if(!err){
+            const {_doc} = user
             const {active} = res || {active:'---'}
             console.log(res)
-            resolve({...user,active})}
+            resolve({..._doc,active})}
           else
             resolve(user)
         })
     })
   }
-
-
-  app.get('/files/:name',(req,res)=>{
-    res.json({name:req.params.name})
-  })
-
+  
   Member.find((err,data)=>{
     if(!err){
         const users = Promise.all(data.filter(({admin})=> admin ==0).map(
-          ({email,name,lastname})=> UserWithSubscription({email,name,lastname}).then(data=>data)
+          (user)=> UserWithSubscription(user).then(data=>data)
         ))
 
         users.then(files=>{
@@ -276,6 +383,17 @@ app.get('/api/get_users',(req,res)=>{
       res.json({'message':'Some error occured'})
  })
 })
+
+
+app.get('/files/:name',(req,res)=>{
+  const fs = require('fs')
+  const filePath = (path.join(__dirname,'public','files',req.params.name))
+  // const stat = fs.statSync(filePath)
+    
+  res.sendFile(filePath)
+})
+
+
 
 app.post('/api/subscription/cancel/:id', (req,res)=>{
   const {id} = req.params
@@ -353,6 +471,11 @@ app.post("/api/stripe", (req, res) => {
 
             s.save().then(
               ss => {
+                Member.findOne({email},(err,member)=>{
+                  if(!err){
+                    GenerateInvoiceGeneral(member,ss)
+                  }
+                })
                 getUserDetailsByEmail(email).then(
                   ({name,lastname})=> {
                     MailerWithConfig({

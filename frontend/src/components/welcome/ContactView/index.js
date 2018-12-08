@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Button, Input, message } from "antd";
+import { Button, Input} from "antd";
 import { messageSend } from "../../../actions/authentication";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./index.css";
+import {message} from "./../../../components/alerts"
 import axios from "axios"
 
 const { TextArea } = Input;
@@ -42,7 +43,7 @@ class Contactview extends Component {
         this.setState(
           state=>({...state,email:"",html:""})
         )
-        alert('Your mail has been sent successfully')
+        message.info('Your mail has been sent successfully')
       }
     )
     

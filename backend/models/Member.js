@@ -45,7 +45,13 @@ const MemberSchema = new Schema({
   },
   update_date: {
     type: Date
+  },
+
+  stripeId:{
+    type:String,
+    default:null
   }
+
 });
 
 const Member = mongoose.model("members", MemberSchema);

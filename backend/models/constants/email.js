@@ -1,15 +1,15 @@
-/* const EMAIL_CONFIG = {
-    username:'AKIAJAMZ7EB7FE2PD2PQ',
-    password:'AuR6dmLvFF//ye3lLOX9YKmu+qvR49z+4cXRxvSud7px',
+const EMAIL_CONFIG = {
+    username:'AKIAIOI37CYI336STR6Q',
+    password:'As0oZtw8E8EbzuKLH7td47hu7WyEIraGUiQwjMVvWuSE',
     host:'email-smtp.us-west-2.amazonaws.com',
     port:587
-} */
+}
 
-const EMAIL_CONFIG = {
+/* const EMAIL_CONFIG = {
     username:'ar31213@gmail.com',
     password:'ankitmegha',
     host:'smtp.gmail.com',
     port:587
-}
+} */
 
 module.exports = EMAIL_CONFIG;

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import { Row, Col, List, Card, Progress, message,Icon, Input } from "antd";
+import { Row, Col, List, Card, Progress,Icon, Input } from "antd";
 import Dropzone from "react-dropzone"
 import axios from "axios";
-
+import {message} from "./../../../../components/alerts"
 const  uploadTransaction = (files, username)=>{
     return new Promise((res,reject)=>{
         const filePromise = files.map(
@@ -100,7 +100,7 @@ const canUpload = (subscriptions) =>{
     return subscriptions.filter(
         (sub) => {
             console.log(sub)
-            return sub.active
+            return !sub.cancelled && sub.active
         }
     ).length > 0
 }
@@ -185,7 +185,7 @@ class Dragdrop extends Component {
                                                                 checkSubscription(
                                                                     subs,
                                                                     ()=>{
-                                                                        if(window.confirm('want to assign file to manage view section')){
+                                                                        message.prompt('move',()=>{
                                                                             axios.post(`http://localhost:5000/api/documents/archive/${item._id}`,{_id:item.dentist_id}).then(
                                                                                 ({data}) =>{
                                                                                     message.success('file have been moved to View file section',1,()=>{
@@ -193,7 +193,7 @@ class Dragdrop extends Component {
                                                                                     })
                                                                                 }
                                                                             )
-                                                                        }
+                                                                        })
                                                                     },
 
                                                                     ()=>{

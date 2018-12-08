@@ -22,3 +22,4 @@ yarn-error.log*
 backend/public/files/DEADLINE 29TH NOVEMBER 2018.docx
 backend/public/files/example invoice how it should look like.docx
 backend/testPdf.js
+backend/db.js

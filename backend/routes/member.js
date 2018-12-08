@@ -12,6 +12,8 @@ const mailConfig = require('./../models/constants/email')
 const PasswordReset = require('./../models/PasswordReset')
 const uuid = require('uuid/v1')
 const updateLink = require('./../models/constants/frontend')
+const stripe = require('stripe')
+const Subscription = require('./../models/Subscription')
 /* 
 email defination
 */
@@ -111,7 +113,7 @@ router.post('/password_reset/:email', (req, res)=>{
                         HookPasswordToTable(data.email,uuid(),({email,token})=>{
                             const {name,lastname=""} = data
                             const linkURL = `${updateLink}/reset/${email}/${token}`
-                            console.log({linkURL,name,lastname})
+                            console.log({linkURL,name,lastname,email})
                             MailerWithConfig({
                                 from: 'info@soludents.com', // sender address
                                 to: email,
@@ -461,6 +463,43 @@ router.post('/verifyEmail/:token',(req,res)=>{
             res.json({isValid:validDate && validHours && validYear})
         }
     })
+})
+
+
+const getMembers = () =>{
+    return new Promise(
+        (resolve,reject) =>{
+            Member.find((err,data)=>{
+                if(!err)
+                   var withActive =  Promise.all(
+                    data.map(
+                        (user) =>{
+                            const {email} = user 
+                            return new Promise(
+                                (res,rej) =>{
+                                 Subscription.findOne({userId:email},(err,data)=>{
+                                     const {active} = data || {active:'NA'}
+                                         resolve({...user,active})
+                                 })
+                                }
+                            )
+                        }
+                    )
+                   )
+
+                 resolve(withActive)  
+
+
+            })
+        }
+    )
+}
+
+
+router.get('/subscription/withUser',(req,res)=>{
+        getMembers().then(
+            resp => res.json(resp)
+        )
 })
 
 module.exports = router;

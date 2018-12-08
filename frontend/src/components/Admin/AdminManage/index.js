@@ -10,7 +10,6 @@ import {
   Collapse,
   Select,
   Progress,
-  message
 } from "antd";
 import {
   logoutUser,
@@ -23,12 +22,43 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import AdminStuff from "../AdminStuff";
-
+import {message} from "./../../../components/alerts"
 const Panel = Collapse.Panel;
 var newData;
 var item, index;
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));
 const Option = Select.Option;
+
+
+function showFile(blob,name){
+  // It is necessary to create a new blob object with mime-type explicitly set
+  // otherwise only Chrome works like it should
+  var newBlob = new Blob([blob])
+ 
+  // IE doesn't allow using a blob object directly as link href
+  // instead it is necessary to use msSaveOrOpenBlob
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(newBlob);
+    return;
+  } 
+ 
+  // For other browsers: 
+  // Create a link pointing to the ObjectURL containing the blob.
+  const data = window.URL.createObjectURL(newBlob);
+    var link = document.createElement('a');
+    link.href = data;
+    link.download=name;
+    link.click();
+    setTimeout(function(){
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(data);
+    },100)
+  
+  }
+  
+  
+
+
 
 class AdminManage extends React.Component {
   constructor() {
@@ -408,7 +438,25 @@ class AdminManage extends React.Component {
           onCancel={this.handleCancel}
           footer={[]}
         >
-          <a href={this.state.file_directory} target="_blank" type="file">
+           <a
+            href={this.state.file_directory}
+            download
+            target="_blank"
+            type="file"
+            onClick={
+              (e)=>{
+                e.preventDefault()
+                fetch(`http://localhost:3000/files/${this.state.file_name}`).then(
+                  (res)=>res.blob()
+                ).then(
+                 res=> {
+                   console.log({res, name:this.state.file_name})
+                   showFile(res,this.state.file_name)
+                 }
+                )
+              }
+            }
+          >
             Devis: {this.state.file_name}
           </a>
 

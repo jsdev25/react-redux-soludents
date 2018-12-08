@@ -20,12 +20,12 @@ const Mail = config => options => callback => {
 }
 
 const MailWithConfig = Mail(configuration)({
-    from: 'ar31213@gmail.com', // sender address
-    to: 'info@soludents.com',
+    from: 'info@soludents.com', // sender address
+    to: 'Support@soludents.com ',
     subject: 'Soludents: Your subscription has been cancelled',
     html:`
     <b>
-    Hello, ${'Ankit'} ${'Rathore' || ""},
+    Hello, ${'Tester'} ${'testing' || ""},
     Your subscription ${ 'Test Subscription' } based on the ${ 'Offer Number 1' } has been successfully cancelled.
     Best regards, Soludents team
    </b>

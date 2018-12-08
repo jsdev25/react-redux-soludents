@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { registerUser } from "../actions/authentication";
 import classnames from "classnames";
-import { Row, Col, message, Modal, Checkbox } from "antd";
+import { Row, Col, Modal, Checkbox } from "antd";
 import { Link } from "react-router-dom";
-
+import {message} from "./../components/alerts"
 function info() {
   Modal.info({
     title: "Termes et Conditions",
@@ -52,6 +52,12 @@ class Register extends Component {
       message.error("Les mots de passes ne sont pas identiques !");
       return false;
     }
+
+    if (this.state.password.length < 6) {
+      message.error("Les mots de passes ne sont pas identiques !");
+      return false;
+    }
+
 
     if (!this.state.checkbox) {
       message.info("Veuillez accepter les termes et conditions");

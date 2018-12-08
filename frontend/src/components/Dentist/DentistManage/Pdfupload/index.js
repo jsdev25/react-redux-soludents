@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, List, Card, Progress, message } from "antd";
+import { Row, Col, List, Card, Progress } from "antd";
 import axios from "axios";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -8,7 +8,7 @@ import { addDocument } from "../../../../actions/authentication";
 import {Upload,Icon} from "antd"
 // import { Z_ASCII } from 'zlib';
 import Dropzone from "react-dropzone"
-
+import {message} from "./../../../../components/alerts"
 
 const endpoint = "http://localhost:5000/api/documents/upload/";
 const useradmin = JSON.parse(localStorage.getItem("UserAdmin"));

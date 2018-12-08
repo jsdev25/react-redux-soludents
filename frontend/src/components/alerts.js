@@ -2,38 +2,6 @@ import Swal from "sweetalert2"
 import withReactContent from "sweetalert2-react-content"
 import React from "react"
 const swal = withReactContent(Swal)
-
-
-
-const AlertProvider = config => title => message => {
-    swal.fire({...config,title:null,text:message})
-}
-
-const ConfigureSuccess = AlertProvider({
-    type:'success'
-})('Success !')
-
-
-const ConfigureInfo = AlertProvider({
-    type:'info'
-})('Info!')
-
-
-const ConfigureWarning = AlertProvider({
-    type:'warning'
-})('Warning!')
-
-
-const ConfigureError = AlertProvider({
-    type:'error'
-})('Error !')
-
-const success = message => ConfigureSuccess(message)
-const error = message => ConfigureError(message)
-const info = message => ConfigureInfo(message)
-const warning = message => ConfigureWarning(message)
-
-
 const message = {
     info:(message,duration,callback=null)=>{
         swal.fire({
@@ -44,7 +12,87 @@ const message = {
         })
     },
 
-    error
+    success:(message,duration,callback=null)=>{
+        swal.fire({
+            text:message,
+            type:'success',
+            onAfterClose:callback ? callback: null,
+            timer:duration*1000 || 1000
+        })
+    },
+
+    error:(message,duration,callback=null)=>{
+        swal.fire({
+            text:message,
+            type:'error',
+            onAfterClose:callback ? callback: null,
+            timer:duration*1000 || 1000
+        })
+    },
+
+    prompt:(confirmTitle,callback)=>{
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirmTitle
+          }).then((result) => {
+            if (result.value) {
+              callback()
+            }
+          })
+    },
+
+    ask:({confirmTitle,text,title},callback)=>{
+        swal.fire({
+            title: title,
+            text: text,
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirmTitle
+          }).then((result) => {
+            if (result.value) {
+              callback()
+            }
+          })
+    },
+
+    promptWithMessage:(message,callback)=>{
+        swal.fire({
+            title: 'print Invoice',
+            text: message,
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: "ok"
+          }).then((result) => {
+            if (result.value) {
+              callback()
+            }
+          })
+    },
+
+    warninig:(confirmTitle,callback)=>{
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirmTitle
+          }).then((result) => {
+            if (result.value) {
+              callback()
+            }
+          })
+    }
 }
 
-export {success,error,info,warning,message}
+export {message}
