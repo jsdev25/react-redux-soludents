@@ -1,8 +1,8 @@
 const FRONTEND_DEV_URLS = [ 'https://soludents.com' ];
 
 const FRONTEND_PROD_URLS = [
-  'https://www.yourdomain.com',
-  'https://yourdomain.com'
+  'https://soludents.com',
+  'http://soludents.com'
 ];
 
 module.exports = process.env.NODE_ENV === 'production'
